@@ -1,0 +1,41 @@
+name: Lint
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - '.github/actions/setup-frontend/**'
+      - '.github/workflows/lint.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '.github/actions/setup-frontend/**'
+      - '.github/workflows/lint.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  eslint:
+    name: ESLint + Typecheck
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
+
+      - name: TypeScript
+        working-directory: app
+        run: npm run typecheck
+
+      - name: ESLint
+        working-directory: app
+        run: npm run lint

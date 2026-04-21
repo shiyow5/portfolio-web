@@ -1,0 +1,56 @@
+name: Deploy Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'wrangler.toml'
+      - '.github/actions/setup-frontend/**'
+      - '.github/workflows/deploy.yml'
+      - '.github/workflows/deploy-preflight.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-preflight-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: Validate config + dry build
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CF_PAGES_PROJECT: ${{ vars.CF_PAGES_PROJECT }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate required deploy secrets
+        run: |
+          missing=0
+          for key in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID; do
+            if [ -z "${!key}" ]; then
+              echo "::warning::Missing secret ${key} — deploy workflow will fail until it is configured."
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "See docs/SETUP_CLOUDFLARE.md for how to add these secrets."
+          fi
+
+      - name: Validate required deploy variables
+        run: |
+          if [ -z "${CF_PAGES_PROJECT}" ]; then
+            echo "::warning::Missing repo variable CF_PAGES_PROJECT (e.g. 'shiyow-portfolio'). Set it at Settings → Variables."
+          fi
+
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
+
+      - name: Dry production build
+        working-directory: app
+        run: npm run build

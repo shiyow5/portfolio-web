@@ -1,0 +1,61 @@
+name: Playwright Smoke
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - '.github/actions/setup-frontend/**'
+      - '.github/workflows/playwright-smoke.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '.github/actions/setup-frontend/**'
+      - '.github/workflows/playwright-smoke.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Playwright Smoke
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('app/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers
+        working-directory: app
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright smoke tests
+        working-directory: app
+        run: npm run e2e
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-smoke-artifacts
+          if-no-files-found: ignore
+          path: |
+            app/playwright-report
+            app/test-results
+          retention-days: 7

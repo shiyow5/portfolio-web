@@ -1,0 +1,37 @@
+name: Format Check
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - '.github/actions/setup-frontend/**'
+      - '.github/workflows/format.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '.github/actions/setup-frontend/**'
+      - '.github/workflows/format.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: format-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  prettier:
+    name: Prettier
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
+
+      - name: Run prettier --check
+        working-directory: app
+        run: npm run format:check

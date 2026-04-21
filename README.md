@@ -50,18 +50,24 @@ Pixel-art / indie-game themed portfolio site. Dynamic-first architecture on Clou
 
 ## CI / CD
 
-- `.github/workflows/ci.yml` — runs on PRs into `main` and pushes to any
-  non-main branch. Fans out into parallel jobs: **typecheck · lint ·
-  format · test · build**. Coverage and dist are uploaded as artifacts.
-- `.github/workflows/deploy.yml` — runs on pushes to `main` and on
-  manual dispatch. Re-executes the quality gate, builds, and deploys to
-  Cloudflare Pages.
-- Required repo secrets (Settings → Secrets → Actions):
-  - `CLOUDFLARE_API_TOKEN` — scope: Account · Cloudflare Pages · Edit
-  - `CLOUDFLARE_ACCOUNT_ID`
-- The Cloudflare Pages project name is **`shiyow-portfolio`**. Create it
-  once in the dashboard (or via `wrangler pages project create`) before
-  the first deploy.
+Inspired by the workflow structure in `shiyow5/sosu`:
+
+| Workflow              | Trigger                                                 | What it does                                                        |
+| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------- |
+| `format.yml`          | PR / push to main / manual (path-filtered on `app/**`)  | `prettier --check`                                                  |
+| `lint.yml`            | same                                                    | `tsc --noEmit` + `eslint`                                            |
+| `test.yml`            | same                                                    | `vitest run` with coverage (uploaded as artifact)                   |
+| `playwright-smoke.yml`| same                                                    | Playwright smoke tests with screenshots / traces on failure         |
+| `deploy-preflight.yml`| PR                                                      | Warns early on missing deploy secrets; runs a dry production build  |
+| `deploy.yml`          | push to main / manual                                   | Verifies Format/Lint/Test passed for this SHA, builds, deploys to Cloudflare Pages |
+| `gemini-review.yml`   | PR opened / synchronize                                 | Optional Gemini auto-review (skipped if `GEMINI_API_KEY` unset)     |
+
+- Shared setup lives in `.github/actions/setup-frontend/` (composite action: Node 20 + `npm ci` with cache).
+- Every PR workflow only runs for **same-repo PRs** — forks don't leak secrets.
+- Required repo **Secrets**: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `GEMINI_API_KEY`, `TURNSTILE_SECRET`
+- Required repo **Variables**: `CF_PAGES_PROJECT` (e.g. `shiyow-portfolio`), `PRODUCTION_URL`, `VITE_TURNSTILE_SITEKEY`
+
+**Full step-by-step setup (domain, API tokens, Turnstile, Gemini): [`docs/SETUP_CLOUDFLARE.md`](docs/SETUP_CLOUDFLARE.md).**
 
 ## Phases
 
