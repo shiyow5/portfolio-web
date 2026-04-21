@@ -5,13 +5,16 @@
     "category": "game",
     "tagline": "手描き 16-bit タイルで組むプロシージャル雲上アクション。",
     "description": "カスタムシェーダと独自タイルセットで実装したプロシージャル・プラットフォーマー。HSL ベースの時間帯サイクルで空の色が変化します。",
-    "cover": "/rooms/placeholder-1.png",
+    "cover": "/rooms/simple_room.png",
+    "gallery": ["/rooms/simple_room.png"],
     "tags": ["Platformer", "Pixel Art", "Custom Shader"],
+    "tech": ["TypeScript", "WebGL", "Aseprite"],
     "version": "1.0.4",
     "status": "new",
+    "year": 2026,
     "links": {
-      "play": "#",
-      "github": "#"
+      "play": "https://example.com/aether-drift",
+      "github": "https://github.com/shiyow5/aether-drift"
     }
   },
   {
@@ -20,13 +23,16 @@
     "category": "uiux",
     "tagline": "サイバーパンク UI キット＋アイソメ環境。",
     "description": "ネオン基板から着想した UI コンポーネント集。ダークモード固定、発光はすべて 2px 以内のストロークで表現。",
-    "cover": "/rooms/placeholder-2.png",
+    "cover": "/rooms/simple_room.png",
+    "gallery": ["/rooms/simple_room.png"],
     "tags": ["UI Toolkit", "Isometric", "Design System"],
+    "tech": ["Figma", "Framer Motion", "Tailwind"],
     "version": "2.1.0",
     "status": "stable",
+    "year": 2025,
     "links": {
-      "demo": "#",
-      "github": "#"
+      "demo": "https://example.com/neon-circuit",
+      "github": "https://github.com/shiyow5/neon-circuit"
     }
   },
   {
@@ -35,12 +41,15 @@
     "category": "prototype",
     "tagline": "RPG のインベントリ管理システム試作。",
     "description": "グリッド配置・スタック数・重量制約を 1 ファイルで検証できる最小プロトタイプ。テトリス風の自動パッキング機能を検証中。",
-    "cover": "/rooms/placeholder-3.png",
+    "cover": "/rooms/simple_room.png",
+    "gallery": ["/rooms/simple_room.png"],
     "tags": ["Prototype", "State Machine"],
+    "tech": ["React", "Zustand"],
     "version": "alpha",
     "status": "wip",
+    "year": 2026,
     "links": {
-      "demo": "#"
+      "demo": "https://example.com/loot-logic"
     }
   },
   {
@@ -49,12 +58,15 @@
     "category": "art",
     "tagline": "32x32 の CC0 ファンタジーアイコン集。",
     "description": "武器・ポーション・食料など 120 種の 32x32 アイコン。インディー開発者向けに CC0 で公開。",
-    "cover": "/rooms/placeholder-4.png",
+    "cover": "/rooms/simple_room.png",
+    "gallery": ["/rooms/simple_room.png"],
     "tags": ["2D Art", "CC0", "Icons"],
+    "tech": ["Aseprite", "Photoshop"],
     "version": "1.2",
     "status": "stable",
+    "year": 2024,
     "links": {
-      "demo": "#"
+      "demo": "https://example.com/asset-pack-01"
     }
   },
   {
@@ -63,13 +75,16 @@
     "category": "web",
     "tagline": "ピクセル職人のための Web 制作実験場。",
     "description": "本ポートフォリオそのもの。Cloudflare Pages + Pages Functions + Gemini で将来のクローンエージェントを動かす基盤。",
-    "cover": "/rooms/placeholder-5.png",
+    "cover": "/rooms/simple_room.png",
+    "gallery": ["/rooms/simple_room.png"],
     "tags": ["Web", "React", "Cloudflare"],
+    "tech": ["Vite", "React 19", "Tailwind v4", "Cloudflare Pages", "Gemini"],
     "version": "0.1.0",
     "status": "wip",
+    "year": 2026,
     "links": {
       "demo": "https://shiyow.dev",
-      "github": "#"
+      "github": "https://github.com/shiyow5/portfolio-web"
     }
   }
 ]

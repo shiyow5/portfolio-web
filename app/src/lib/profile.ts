@@ -1,0 +1,41 @@
+import raw from '../data/profile.json';
+
+export type StatColor = 'primary' | 'secondary' | 'tertiary';
+
+export interface Stat {
+  label: string;
+  value: number;
+  max: number;
+  color: StatColor;
+}
+
+export interface Skill {
+  id: string;
+  name: string;
+  icon: string;
+  rank: string;
+  progress: number;
+  tools: string[];
+}
+
+export interface HistoryEntry {
+  year: number;
+  title: string;
+  detail: string;
+}
+
+export interface Profile {
+  name: string;
+  classTitle: string;
+  level: number;
+  xp: number;
+  xpNext: number;
+  location: string;
+  bioQuote: string;
+  stats: Stat[];
+  skills: Skill[];
+  perks: string[];
+  history: HistoryEntry[];
+}
+
+export const PROFILE: Profile = raw as Profile;

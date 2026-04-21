@@ -1,0 +1,78 @@
+{
+  "name": "Shiyow",
+  "classTitle": "Pixel Craftsperson / UI Engineer",
+  "level": 28,
+  "xp": 12450,
+  "xpNext": 15000,
+  "location": "Digital Highlands, JP",
+  "bioQuote": "デジタル高原の職人。ピクセルの形と UX の流れを磨き続けてはや何月。今は広い Web 平原を旅しながら、帰宅した時みたいに落ち着く体験を作っています。",
+  "stats": [
+    { "label": "HP", "value": 92, "max": 100, "color": "secondary" },
+    { "label": "Focus", "value": 74, "max": 100, "color": "primary" },
+    { "label": "Creativity", "value": 88, "max": 100, "color": "tertiary" }
+  ],
+  "skills": [
+    {
+      "id": "frontend",
+      "name": "Frontend Forging",
+      "icon": "code",
+      "rank": "Grandmaster",
+      "progress": 96,
+      "tools": ["React", "TypeScript", "Tailwind"]
+    },
+    {
+      "id": "pixel",
+      "name": "Pixel Art",
+      "icon": "brush",
+      "rank": "Expert",
+      "progress": 82,
+      "tools": ["Aseprite", "Photoshop"]
+    },
+    {
+      "id": "uiux",
+      "name": "UI/UX Design",
+      "icon": "polyline",
+      "rank": "Expert",
+      "progress": 88,
+      "tools": ["Figma", "FigJam"]
+    },
+    {
+      "id": "gamedev",
+      "name": "Game Dev",
+      "icon": "sports_esports",
+      "rank": "Apprentice",
+      "progress": 58,
+      "tools": ["Unity", "Godot"]
+    },
+    {
+      "id": "ai",
+      "name": "AI Plumbing",
+      "icon": "smart_toy",
+      "rank": "Journeyman",
+      "progress": 66,
+      "tools": ["Gemini", "Claude", "LangChain"]
+    },
+    {
+      "id": "cloud",
+      "name": "Cloud Crafting",
+      "icon": "cloud",
+      "rank": "Journeyman",
+      "progress": 62,
+      "tools": ["Cloudflare", "GCP"]
+    }
+  ],
+  "perks": [
+    "Passive: 新しいピクセルフォントを見ると HP +5",
+    "Passive: 太ボーダー+角丸0pxに耐性",
+    "Active: ダークモード → ライトモード往復で CSS 変数を自動整理"
+  ],
+  "history": [
+    {
+      "year": 2026,
+      "title": "shiyow.dev を公開",
+      "detail": "Cloudflare Pages + Gemini クローンエージェント"
+    },
+    { "year": 2025, "title": "Neon Circuit リリース", "detail": "ネオン UI キットを OSS 公開" },
+    { "year": 2024, "title": "Asset Pack 01 リリース", "detail": "CC0 ファンタジーアイコン 120 種" }
+  ]
+}
