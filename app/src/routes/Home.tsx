@@ -12,7 +12,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { PixelCharacter } from '../components/pixel/PixelCharacter';
-import { IsometricRoom } from '../components/pixel/IsometricRoom';
+import { IsometricBedroom } from '../components/pixel/IsometricBedroom';
 
 const SIDE_NAV = [
   { icon: Swords, label: 'Adventure', to: '/gallery' },
@@ -107,18 +107,20 @@ export function Home() {
           </div>
 
           <div className="relative w-full max-w-[600px] aspect-square bg-surface-container-high pixel-border overflow-hidden">
-            {/* placeholder isometric scene rendered with CSS until art assets arrive */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <IsometricRoom color="#a5c1ff" size={340}>
-                <motion.div
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                  className="pointer-events-auto"
-                >
-                  <PixelCharacter scale={5} animation="wave" />
-                </motion.div>
-              </IsometricRoom>
-            </div>
+            <IsometricBedroom />
+            {/* chibi character standing on the rug — iso(0, -0.4, 0) ≈ (280, 412) in a 600-wide viewBox */}
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute pointer-events-none"
+              style={{
+                left: '46.7%',
+                top: '68.7%',
+                transform: 'translate(-50%, -100%)',
+              }}
+            >
+              <PixelCharacter scale={3.5} animation="wave" />
+            </motion.div>
           </div>
         </div>
 
