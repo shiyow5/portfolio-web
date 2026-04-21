@@ -11,10 +11,7 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-50 bg-surface/90 backdrop-blur-sm border-b-4 border-tertiary shadow-[0_4px_0_0_rgba(126,87,46,0.2)]">
       <div className="flex justify-between items-center w-full px-6 py-4 max-w-[1440px] mx-auto">
-        <NavLink
-          to="/"
-          className="text-2xl font-black text-tertiary tracking-tighter uppercase"
-        >
+        <NavLink to="/" className="text-2xl font-black text-tertiary tracking-tighter uppercase">
           Shiyow
         </NavLink>
 
@@ -48,10 +45,16 @@ export function TopNav() {
             Resume
           </button>
           <div className="flex gap-2 text-tertiary">
-            <span className="material-symbols-outlined cursor-pointer hover:text-primary" aria-hidden>
+            <span
+              className="material-symbols-outlined cursor-pointer hover:text-primary"
+              aria-hidden
+            >
               settings
             </span>
-            <span className="material-symbols-outlined cursor-pointer hover:text-primary" aria-hidden>
+            <span
+              className="material-symbols-outlined cursor-pointer hover:text-primary"
+              aria-hidden
+            >
               account_circle
             </span>
           </div>

@@ -1,6 +1,16 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowRight, Swords, User, LayoutGrid, Brush, Code2, Palette, Gem, Lock } from 'lucide-react';
+import {
+  ArrowRight,
+  Swords,
+  User,
+  LayoutGrid,
+  Brush,
+  Code2,
+  Palette,
+  Gem,
+  Lock,
+} from 'lucide-react';
 import { PixelCharacter } from '../components/pixel/PixelCharacter';
 import { IsometricRoom } from '../components/pixel/IsometricRoom';
 

@@ -20,7 +20,8 @@ export function ChatWidget() {
     {
       id: 'greeting',
       role: 'assistant',
-      content: 'Hey Traveler! この旅人ボットはまだ準備中。もうすぐ本物のクローンエージェントと話せるようになります。',
+      content:
+        'Hey Traveler! この旅人ボットはまだ準備中。もうすぐ本物のクローンエージェントと話せるようになります。',
     },
   ]);
 

@@ -7,10 +7,7 @@ export function NotFound() {
       <p className="mt-4 text-on-surface-variant uppercase tracking-widest text-sm">
         Map not found in this world.
       </p>
-      <Link
-        to="/"
-        className="inline-block mt-8 pixel-button"
-      >
+      <Link to="/" className="inline-block mt-8 pixel-button">
         Return to Atelier
       </Link>
     </section>
