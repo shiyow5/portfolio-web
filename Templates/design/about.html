@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#5e605a",
+                        "outline": "#7a7b75",
+                        "error-dim": "#70030f",
+                        "surface-container": "#efeee8",
+                        "on-primary": "#f9f8ff",
+                        "on-primary-fixed-variant": "#004292",
+                        "surface-container-low": "#f5f4ee",
+                        "surface-container-high": "#e9e8e1",
+                        "on-tertiary-container": "#502f09",
+                        "tertiary-dim": "#704b23",
+                        "secondary-fixed": "#9bfc96",
+                        "primary-fixed-dim": "#8eb3ff",
+                        "primary-container": "#a5c1ff",
+                        "background": "#fbf9f4",
+                        "tertiary-container": "#e1af7e",
+                        "on-background": "#31332e",
+                        "inverse-primary": "#4c8eff",
+                        "on-tertiary": "#fff7f4",
+                        "on-primary-fixed": "#002659",
+                        "primary-fixed": "#a5c1ff",
+                        "tertiary-fixed-dim": "#d3a272",
+                        "on-error": "#fff7f6",
+                        "secondary-dim": "#006118",
+                        "inverse-surface": "#0e0e0c",
+                        "primary": "#005bc3",
+                        "surface-bright": "#fbf9f4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#004d11",
+                        "surface": "#fbf9f4",
+                        "outline-variant": "#b2b2ab",
+                        "on-tertiary-fixed-variant": "#5a3811",
+                        "on-tertiary-fixed": "#331b00",
+                        "surface-tint": "#005bc3",
+                        "primary-dim": "#004fac",
+                        "inverse-on-surface": "#9e9d99",
+                        "surface-dim": "#dadad2",
+                        "on-surface": "#31332e",
+                        "error-container": "#f56965",
+                        "tertiary-fixed": "#e1af7e",
+                        "on-secondary-container": "#006218",
+                        "secondary": "#006f1c",
+                        "surface-container-highest": "#e3e3db",
+                        "on-secondary-fixed-variant": "#006d1c",
+                        "tertiary": "#7e572e",
+                        "on-secondary": "#eaffe2",
+                        "secondary-fixed-dim": "#8ded89",
+                        "on-primary-container": "#003a81",
+                        "error": "#ac3434",
+                        "secondary-container": "#9bfc96",
+                        "on-error-container": "#65000b",
+                        "surface-variant": "#e3e3db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        body {
+            image-rendering: pixelated;
+        }
+        .pixel-border-outer {
+            box-shadow: 
+                0 -4px 0 0 #7e572e,
+                0 4px 0 0 #7e572e,
+                -4px 0 0 0 #7e572e,
+                4px 0 0 0 #7e572e;
+        }
+        .parchment-texture {
+            background-image: radial-gradient(#e9e8e1 1px, transparent 1px);
+            background-size: 4px 4px;
+        }
+
+        /* Animated Pixel Background */
+        .retro-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background-color: #fbf9f4;
+            pointer-events: none;
+        }
+
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .pixel-stars {
+            position: absolute;
+            width: 100%;
+            height: 200%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #e1af7e, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #a5c1ff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #9bfc96, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 80px 120px, #e1af7e, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 110px 10px, #a5c1ff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 150px 150px, #9bfc96, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: scroll-up 60s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scroll-up {
+            from { transform: translateY(0); }
+            to { transform: translateY(-50%); }
+        }
+
+        .floating-pixels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .pixel-particle {
+            position: absolute;
+            background: #7e572e;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, 50px) rotate(90deg); }
+            66% { transform: translate(-20px, 100px) rotate(180deg); }
+            100% { transform: translate(0, 150px) rotate(270deg); }
+        }
+
+        /* Dark mode adjustments for background */
+        .dark .retro-bg { background-color: #31332e; }
+        .dark .scanlines { background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(255, 255, 255, 0.02) 50%); }
+        .dark .pixel-particle { background: #e1af7e; opacity: 0.05; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body relative">
+<!-- Animated Retro Background Elements -->
+<div class="retro-bg">
+<div class="scanlines"></div>
+<div class="pixel-stars"></div>
+<div class="floating-pixels">
+<div class="pixel-particle w-2 h-2" style="top: 10%; left: 15%; animation-duration: 25s; animation-delay: -2s;"></div>
+<div class="pixel-particle w-3 h-3" style="top: 30%; left: 80%; animation-duration: 35s; animation-delay: -5s;"></div>
+<div class="pixel-particle w-2 h-2" style="top: 70%; left: 45%; animation-duration: 45s; animation-delay: -10s;"></div>
+<div class="pixel-particle w-4 h-4" style="top: 50%; left: 10%; animation-duration: 30s; animation-delay: -15s;"></div>
+<div class="pixel-particle w-2 h-2" style="top: 85%; left: 90%; animation-duration: 40s; animation-delay: -8s;"></div>
+</div>
+</div>
+<!-- TopNavBar -->
+<header class="bg-[#fbf9f4]/90 dark:bg-[#31332e]/90 backdrop-blur-sm border-b-4 border-[#7e572e] shadow-[0_4px_0_0_rgba(126,87,46,0.2)] sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-[1440px] mx-auto">
+<div class="text-2xl font-black text-[#7e572e] dark:text-[#e9e8e1] tracking-tighter uppercase font-headline">
+                The Atélier
+            </div>
+<nav class="hidden md:flex space-x-8">
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Home</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#005bc3] border-b-4 border-[#005bc3] pb-1 hover:translate-y-[-2px] transition-transform duration-100" href="#">About</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Skills</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">My Work</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">ChangeLog</a>
+</nav>
+<div class="flex items-center space-x-4">
+<button class="bg-primary text-on-primary px-6 py-2 font-bold uppercase tracking-tighter border-b-4 border-primary-dim hover:translate-y-[-2px] active:translate-y-[2px] transition-all">
+                    Resume
+                </button>
+<span class="material-symbols-outlined text-tertiary cursor-pointer hover:scale-110 transition-transform">settings</span>
+<span class="material-symbols-outlined text-tertiary cursor-pointer hover:scale-110 transition-transform">account_circle</span>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto p-8 lg:p-12 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Side: Character Profile -->
+<div class="lg:col-span-5 space-y-8">
+<section class="bg-surface-container-high border-4 border-tertiary p-1 shadow-[8px_8px_0_0_rgba(126,87,46,0.2)]">
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-6">
+<div class="flex flex-col items-center mb-8 relative">
+<div class="w-48 h-48 bg-surface-container-high border-4 border-tertiary relative overflow-hidden group">
+<img class="w-full h-full object-cover hover:grayscale-0 transition-all duration-300 grayscale-0" data-alt="pixel art style illustration of a professional creative character with glasses and a stylish scarf, cozy studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEVg6grbyIiAf8Q2snq52MLz3Hf41ZKjtFviJgf6JGPFVgmsUBr5JsYnf7E3mWIWYVPs062oZAkjhrLwOREXhT84odVrmaXollX6CLbyDTls9_NYXC0wrCMZGcTPqVu5OgFYUqQzF89F9v49j6p5fEaXYwciI-OxpZV9Ad0zpcrsvgDFnQBpJcy7FlHJ2zXfDXs6kfu9tzk02RwhFQvsfN4sTnHQGYU4ONVKOA2kbUmI0Rf22tMDRkM8HstdKIFPGuYKDZ4A1ZKwbX"/>
+<div class="absolute bottom-0 left-0 right-0 bg-tertiary/90 text-on-tertiary text-center text-[10px] py-1 font-bold uppercase tracking-widest">
+                                    Status: Creative
+                                </div>
+</div>
+<div class="absolute -top-4 -right-4 bg-secondary text-on-secondary px-3 py-1 font-black text-xl border-4 border-on-secondary-fixed-variant shadow-[4px_4px_0_0_rgba(0,109,28,0.3)]">
+                                LVL 28
+                            </div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-end border-b-4 border-surface-container-high pb-2">
+<span class="text-xs font-bold uppercase tracking-widest text-tertiary">Name</span>
+<span class="text-xl font-black uppercase text-on-background">Atélier Master</span>
+</div>
+<div class="flex justify-between items-end border-b-4 border-surface-container-high pb-2">
+<span class="text-xs font-bold uppercase tracking-widest text-tertiary">Class</span>
+<span class="text-xl font-black uppercase text-primary">UI Designer</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-tighter">
+<span>Experience Points</span>
+<span>12,450 / 15,000 EXP</span>
+</div>
+<div class="h-4 bg-surface-container-high border-2 border-outline w-full overflow-hidden">
+<div class="h-full bg-primary w-[83%] border-r-2 border-primary-dim"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dialogue Box Biography -->
+<section class="relative bg-tertiary-container border-4 border-tertiary p-6 shadow-[8px_8px_0_0_rgba(126,87,46,0.2)]">
+<div class="absolute -top-4 left-6 bg-tertiary text-on-tertiary px-3 py-1 text-xs font-bold uppercase tracking-widest">
+                        Biography
+                    </div>
+<div class="parchment-texture p-4 border-2 border-tertiary/20 min-h-[160px]">
+<p class="text-lg leading-relaxed font-medium text-on-tertiary-container">
+                            "A craftsperson from the digital highlands. Spent many moons refining the art of the pixel and the flow of the user. Now wanders the vast web-plains seeking to build experiences that feel like home."
+                        </p>
+<div class="mt-4 flex justify-end">
+<span class="material-symbols-outlined text-tertiary animate-bounce">arrow_drop_down</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Side: Skill Tree / Ability Board -->
+<div class="lg:col-span-7">
+<section class="bg-surface-container p-8 border-4 border-outline shadow-[12px_12px_0_0_rgba(122,123,117,0.1)]">
+<header class="mb-10 flex items-center justify-between">
+<div>
+<h2 class="text-3xl font-black uppercase tracking-tighter text-on-background">Ability Board</h2>
+<p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Mastery progression &amp; unlocked traits</p>
+</div>
+<div class="flex space-x-2">
+<div class="w-8 h-8 bg-secondary-container border-2 border-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="w-8 h-8 bg-primary-container border-2 border-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Skill Item: Figma -->
+<div class="bg-surface-container-lowest border-4 border-outline p-5 hover:border-primary transition-colors group">
+<div class="flex items-start space-x-4 mb-4">
+<div class="p-3 bg-surface-container-high border-2 border-outline-variant group-hover:bg-primary-container group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-primary-container">polyline</span>
+</div>
+<div class="flex-1">
+<h3 class="font-black uppercase tracking-tight text-lg leading-none mb-1">Figma Mastery</h3>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Rank: Grandmaster</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-3 bg-surface-container-high border-2 border-outline overflow-hidden">
+<div class="h-full bg-secondary w-full"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-widest text-secondary">
+<span>Skill Maxed</span>
+<span>100%</span>
+</div>
+</div>
+</div>
+<!-- Skill Item: HTML/CSS -->
+<div class="bg-surface-container-lowest border-4 border-outline p-5 hover:border-primary transition-colors group">
+<div class="flex items-start space-x-4 mb-4">
+<div class="p-3 bg-surface-container-high border-2 border-outline-variant group-hover:bg-primary-container group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-primary-container">code</span>
+</div>
+<div class="flex-1">
+<h3 class="font-black uppercase tracking-tight text-lg leading-none mb-1">Web Forging</h3>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Rank: Expert</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-3 bg-surface-container-high border-2 border-outline overflow-hidden">
+<div class="h-full bg-primary w-[92%] border-r-2 border-primary-dim"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+<span>Progress</span>
+<span>92%</span>
+</div>
+</div>
+</div>
+<!-- Skill Item: Motion Design -->
+<div class="bg-surface-container-lowest border-4 border-outline p-5 hover:border-primary transition-colors group">
+<div class="flex items-start space-x-4 mb-4">
+<div class="p-3 bg-surface-container-high border-2 border-outline-variant group-hover:bg-primary-container group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-primary-container">movie_filter</span>
+</div>
+<div class="flex-1">
+<h3 class="font-black uppercase tracking-tight text-lg leading-none mb-1">Kinetic Arts</h3>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Rank: Advanced</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-3 bg-surface-container-high border-2 border-outline overflow-hidden">
+<div class="h-full bg-tertiary w-[75%] border-r-2 border-tertiary-container"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+<span>Progress</span>
+<span>75%</span>
+</div>
+</div>
+</div>
+<!-- Skill Item: Typography -->
+<div class="bg-surface-container-lowest border-4 border-outline p-5 hover:border-primary transition-colors group opacity-60 hover:grayscale-0 hover:opacity-100">
+<div class="flex items-start space-x-4 mb-4">
+<div class="p-3 bg-surface-container-high border-2 border-outline-variant">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant text-primary">font_download</span>
+</div>
+<div class="flex-1">
+<h3 class="font-black uppercase tracking-tight text-lg leading-none mb-1">Glyph Magic</h3>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Rank: Locked</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-3 bg-surface-container-high border-2 border-outline overflow-hidden">
+<div class="h-full bg-outline-variant w-[15%]"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+<span>Required: LVL 30</span>
+<span class="material-symbols-outlined text-[12px] text-primary">lock</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 p-6 bg-tertiary/5 border-4 border-dashed border-tertiary/30">
+<h4 class="text-sm font-black uppercase text-tertiary mb-3 flex items-center">
+<span class="material-symbols-outlined mr-2 text-base">info</span>
+                            Passive Perks
+                        </h4>
+<ul class="space-y-2">
+<li class="flex items-center text-xs font-bold uppercase tracking-tighter text-on-surface-variant">
+<span class="w-2 h-2 bg-secondary mr-3"></span>
+                                +15% Efficiency in Dark Mode projects
+                            </li>
+<li class="flex items-center text-xs font-bold uppercase tracking-tighter text-on-surface-variant">
+<span class="w-2 h-2 bg-primary mr-3"></span>
+                                Double EXP earned on pixel-perfect deliverables
+                            </li>
+<li class="flex items-center text-xs font-bold uppercase tracking-tighter text-on-surface-variant">
+<span class="w-2 h-2 bg-error mr-3"></span>
+                                Resistance to "Scope Creep" status effects
+                            </li>
+</ul>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f5f4ee]/90 dark:bg-[#1a1b18]/90 border-t-4 border-[#7e572e] mt-12 relative z-10">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 space-y-4 md:space-y-0 max-w-[1440px] mx-auto">
+<span class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70">
+                © 2024 The 16-Bit Atélier - Handcrafted with Pixels
+            </span>
+<div class="flex space-x-6">
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">GitHub</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">LinkedIn</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Itch.io</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Twitter</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Discord</a>
+</div>
+</div>
+</footer>
+</body></html>

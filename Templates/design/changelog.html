@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Atélier - ChangeLog &amp; SNS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#5e605a",
+                        "outline": "#7a7b75",
+                        "error-dim": "#70030f",
+                        "surface-container": "#efeee8",
+                        "on-primary": "#f9f8ff",
+                        "on-primary-fixed-variant": "#004292",
+                        "surface-container-low": "#f5f4ee",
+                        "surface-container-high": "#e9e8e1",
+                        "on-tertiary-container": "#502f09",
+                        "tertiary-dim": "#704b23",
+                        "secondary-fixed": "#9bfc96",
+                        "primary-fixed-dim": "#8eb3ff",
+                        "primary-container": "#a5c1ff",
+                        "background": "#fbf9f4",
+                        "tertiary-container": "#e1af7e",
+                        "on-background": "#31332e",
+                        "inverse-primary": "#4c8eff",
+                        "on-tertiary": "#fff7f4",
+                        "on-primary-fixed": "#002659",
+                        "primary-fixed": "#a5c1ff",
+                        "tertiary-fixed-dim": "#d3a272",
+                        "on-error": "#fff7f6",
+                        "secondary-dim": "#006118",
+                        "inverse-surface": "#0e0e0c",
+                        "primary": "#005bc3",
+                        "surface-bright": "#fbf9f4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#004d11",
+                        "surface": "#fbf9f4",
+                        "outline-variant": "#b2b2ab",
+                        "on-tertiary-fixed-variant": "#5a3811",
+                        "on-tertiary-fixed": "#331b00",
+                        "surface-tint": "#005bc3",
+                        "primary-dim": "#004fac",
+                        "inverse-on-surface": "#9e9d99",
+                        "surface-dim": "#dadad2",
+                        "on-surface": "#31332e",
+                        "error-container": "#f56965",
+                        "tertiary-fixed": "#e1af7e",
+                        "on-secondary-container": "#006218",
+                        "secondary": "#006f1c",
+                        "surface-container-highest": "#e3e3db",
+                        "on-secondary-fixed-variant": "#006d1c",
+                        "tertiary": "#7e572e",
+                        "on-secondary": "#eaffe2",
+                        "secondary-fixed-dim": "#8ded89",
+                        "on-primary-container": "#003a81",
+                        "error": "#ac3434",
+                        "secondary-container": "#9bfc96",
+                        "on-error-container": "#65000b",
+                        "surface-variant": "#e3e3db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #fbf9f4;
+            color: #31332e;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .pixel-border-thicker {
+            border: 4px solid #7e572e;
+        }
+        .pixel-border-primary {
+            border: 3px solid #005bc3;
+        }
+        .pixel-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(126, 87, 46, 0.2);
+        }
+        .pixel-shadow-pressed {
+            box-shadow: 0px 0px 0px 0px rgba(126, 87, 46, 0.2);
+            transform: translate(2px, 2px);
+        }
+
+        /* Animated Pixel Background Effect */
+        .retro-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(126, 87, 46, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(126, 87, 46, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: bgScroll 60s linear infinite;
+        }
+
+        .retro-scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            opacity: 0.5;
+        }
+
+        .pixel-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .pixel-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #7e572e;
+            opacity: 0.15;
+            animation: floatParticle 20s linear infinite;
+        }
+
+        @keyframes bgScroll {
+            from { background-position: 0 0; }
+            to { background-position: 40px 40px; }
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translate(100px, -100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Retro Background Elements -->
+<div class="retro-bg"></div>
+<div class="retro-scanlines"></div>
+<div class="pixel-dust" id="pixelDust">
+<!-- Generated via inline script for variety -->
+<script>
+            const dustContainer = document.getElementById('pixelDust');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'pixel-particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = (Math.random() * 50 + 100) + 'vh';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.opacity = Math.random() * 0.2;
+                dustContainer.appendChild(particle);
+            }
+        </script>
+</div>
+<!-- TopNavBar -->
+<header class="bg-[#fbf9f4]/90 backdrop-blur-sm dark:bg-[#31332e]/90 docked full-width top-0 border-b-4 border-[#7e572e] shadow-[0_4px_0_0_rgba(126,87,46,0.2)] z-50">
+<nav class="flex justify-between items-center w-full px-6 py-4 max-w-[1440px] mx-auto">
+<div class="text-2xl font-black text-[#7e572e] dark:text-[#e9e8e1] tracking-tighter">
+                The Atélier
+            </div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Home</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">About</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Skills</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">My Work</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#005bc3] border-b-4 border-[#005bc3] pb-1 hover:translate-y-[-2px] transition-transform duration-100" href="#">ChangeLog</a>
+</div>
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-[#7e572e] cursor-pointer" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-[#7e572e] cursor-pointer" data-icon="account_circle">account_circle</span>
+<button class="bg-[#005bc3] text-on-primary font-bold uppercase tracking-widest text-xs px-4 py-2 border-b-4 border-[#004fac] hover:translate-y-[-2px] active:translate-y-[2px] transition-all">
+                    Resume
+                </button>
+</div>
+</nav>
+</header>
+<main class="flex-grow max-w-[1200px] mx-auto w-full px-6 py-12 relative z-10">
+<!-- Page Header -->
+<div class="mb-16 relative">
+<div class="inline-block bg-tertiary-container px-6 py-2 border-4 border-tertiary mb-4">
+<span class="font-headline font-black text-on-tertiary-container uppercase tracking-tighter text-xl">System Terminal</span>
+</div>
+<h1 class="font-headline text-5xl md:text-7xl font-black text-on-background tracking-tight leading-none">
+                Development <br/> <span class="text-primary">Chronicles</span>
+</h1>
+<div class="absolute -top-4 -right-4 hidden lg:block opacity-20">
+<span class="material-symbols-outlined text-9xl text-tertiary" data-icon="terminal">terminal</span>
+</div>
+</div>
+<!-- Vertical Timeline Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24">
+<div class="lg:col-span-8">
+<div class="bg-surface-container-low/95 border-l-8 border-tertiary p-8 pixel-shadow">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-tertiary" data-icon="history">history</span>
+<h2 class="font-headline text-2xl font-bold uppercase tracking-wider text-tertiary">Patch Notes &amp; History</h2>
+</div>
+<div class="space-y-0 relative">
+<!-- Timeline Line -->
+<div class="absolute left-[11px] top-4 bottom-4 w-1 bg-outline-variant opacity-30"></div>
+<!-- Entry 1 -->
+<div class="relative pl-10 pb-12 group">
+<div class="absolute left-0 top-1 w-6 h-6 bg-primary border-4 border-surface-container-low ring-4 ring-primary-container z-10"></div>
+<div class="flex flex-col md:flex-row md:items-baseline md:justify-between mb-2">
+<h3 class="font-headline font-bold text-xl text-primary">v2.4.0: The Alchemist Update</h3>
+<span class="font-label text-xs font-bold uppercase bg-surface-container-highest px-3 py-1 text-on-surface-variant">OCT 24, 2023</span>
+</div>
+<div class="bg-surface-container-lowest p-6 border-2 border-outline-variant hover:border-primary transition-colors">
+<p class="text-on-surface mb-4 leading-relaxed">Integrated new dynamic lighting system for the main gallery view. Refined the pixel-grid alignment algorithm to ensure 100% sharp rendering across all displays.</p>
+<ul class="space-y-2 font-label text-sm text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg" data-icon="check_circle">check_circle</span> Added 14 new custom pixel icons for "Skills" section</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg" data-icon="check_circle">check_circle</span> Optimized asset loading by 40% using custom sprite sheets</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-error text-lg" data-icon="bug_report">bug_report</span> Fixed z-index layering bug in dialogue boxes</li>
+</ul>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="relative pl-10 pb-12 group">
+<div class="absolute left-0 top-1 w-6 h-6 bg-tertiary border-4 border-surface-container-low ring-4 ring-tertiary-container z-10"></div>
+<div class="flex flex-col md:flex-row md:items-baseline md:justify-between mb-2">
+<h3 class="font-headline font-bold text-xl text-on-background">v2.3.5: UI Refinement</h3>
+<span class="font-label text-xs font-bold uppercase bg-surface-container-highest px-3 py-1 text-on-surface-variant">SEP 12, 2023</span>
+</div>
+<div class="bg-surface-container-lowest p-6 border-2 border-outline-variant hover:border-tertiary transition-colors">
+<p class="text-on-surface mb-4 leading-relaxed">System-wide typography update. Transitioned to Space Grotesk for improved editorial feel while maintaining pixel-perfect headers.</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] uppercase font-bold px-2 py-0.5">[Visual Enhancement]</span>
+<span class="bg-primary-container text-on-primary-container text-[10px] uppercase font-bold px-2 py-0.5">[Core Logic]</span>
+</div>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="relative pl-10 group">
+<div class="absolute left-0 top-1 w-6 h-6 bg-outline-variant border-4 border-surface-container-low ring-4 ring-surface-variant z-10"></div>
+<div class="flex flex-col md:flex-row md:items-baseline md:justify-between mb-2">
+<h3 class="font-headline font-bold text-xl text-on-background">v2.0.0: The Great Migration</h3>
+<span class="font-label text-xs font-bold uppercase bg-surface-container-highest px-3 py-1 text-on-surface-variant">AUG 01, 2023</span>
+</div>
+<div class="bg-surface-container-lowest p-6 border-2 border-outline-variant">
+<p class="text-on-surface leading-relaxed">Full architectural rewrite. Moved from flat HTML/CSS to a structured Design System approach. Rebranded the portfolio as "The Atélier".</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Info -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Status Card -->
+<div class="bg-tertiary text-on-tertiary p-6 pixel-shadow border-4 border-[#502f09]">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="text-[10px] uppercase font-bold tracking-widest opacity-80 mb-1">Current Build</div>
+<div class="text-3xl font-black">STABLE 2.4.0</div>
+</div>
+<span class="material-symbols-outlined text-4xl" data-icon="cloud_done">cloud_done</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs font-bold uppercase">
+<span>Integrity</span>
+<span>99%</span>
+</div>
+<div class="w-full h-4 bg-[#502f09] p-0.5">
+<div class="h-full bg-secondary-fixed w-[99%]"></div>
+</div>
+</div>
+</div>
+<!-- Lore / Mini Dialogue -->
+<div class="relative pt-12">
+<div class="absolute top-0 left-6 z-20">
+<img alt="Vibrant 2-headed chibi pixel art character icon" class="w-20 h-20 border-4 border-tertiary object-cover bg-primary-container" data-alt="pixel art style character portrait of a friendly robot archivist in a cozy library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEVg6grbyIiAf8Q2snq52MLz3Hf41ZKjtFviJgf6JGPFVgmsUBr5JsYnf7E3mWIWYVPs062oZAkjhrLwOREXhT84odVrmaXollX6CLbyDTls9_NYXC0wrCMZGcTPqVu5OgFYUqQzF89F9v49j6p5fEaXYwciI-OxpZV9Ad0zpcrsvgDFnQBpJcy7FlHJ2zXfDXs6kfu9tzk02RwhFQvsfN4sTnHQGYU4ONVKOA2kbUmI0Rf22tMDRkM8HstdKIFPGuYKDZ4A1ZKwbX"/>
+</div>
+<div class="border-4 border-tertiary p-6 pt-10 text-sm italic leading-relaxed relative bg-tertiary-container text-on-tertiary-container">
+<span class="material-symbols-outlined absolute top-4 right-4 text-tertiary opacity-30" data-icon="format_quote">format_quote</span>
+                        "Every single pixel added to this log is a memory forged in the digital furnace. We keep these records not just for performance, but to remember how far we've traveled from the first line of code."
+                    </div>
+</div>
+</div>
+</section>
+<!-- Social Links Section -->
+<section class="border-t-8 border-surface-container-high pt-16 mb-16">
+<div class="text-center mb-12">
+<h2 class="font-headline text-3xl font-black uppercase tracking-tight mb-2">Connect With The Party</h2>
+<p class="font-label text-on-surface-variant max-w-xl mx-auto uppercase tracking-wider text-xs">Join our global network across the digital realms</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<!-- GitHub Item -->
+<a class="group relative bg-surface-container-low border-4 border-outline-variant p-6 flex flex-col items-center hover:border-primary hover:bg-primary-container transition-all hover:-translate-y-2" href="#">
+<div class="mb-4 bg-surface-container-lowest p-4 border-2 border-outline group-hover:border-primary group-hover:rotate-6 transition-transform">
+<span class="material-symbols-outlined text-4xl text-on-surface" data-icon="terminal">terminal</span>
+</div>
+<span class="font-headline font-bold uppercase text-on-background group-hover:text-on-primary-container transition-colors">Source Code</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase mt-1">LVL. 99 Forge</span>
+<!-- Stats Badge -->
+<div class="absolute -top-3 -right-3 bg-secondary px-2 py-1 border-2 border-on-secondary text-[8px] font-bold text-on-secondary uppercase">
+                        +150 Rep
+                    </div>
+</a>
+<!-- Twitter Item -->
+<a class="group relative bg-surface-container-low border-4 border-outline-variant p-6 flex flex-col items-center hover:border-primary hover:bg-primary-container transition-all hover:-translate-y-2" href="#">
+<div class="mb-4 bg-surface-container-lowest p-4 border-2 border-outline group-hover:border-primary group-hover:-rotate-6 transition-transform">
+<span class="material-symbols-outlined text-4xl text-on-surface" data-icon="flutter_dash">flutter_dash</span>
+</div>
+<span class="font-headline font-bold uppercase text-on-background group-hover:text-on-primary-container transition-colors">Broadcasts</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase mt-1">LVL. 42 Scout</span>
+</a>
+<!-- Discord Item -->
+<a class="group relative bg-surface-container-low border-4 border-outline-variant p-6 flex flex-col items-center hover:border-primary hover:bg-primary-container transition-all hover:-translate-y-2" href="#">
+<div class="mb-4 bg-surface-container-lowest p-4 border-2 border-outline group-hover:border-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl text-on-surface" data-icon="forum">forum</span>
+</div>
+<span class="font-headline font-bold uppercase text-on-background group-hover:text-on-primary-container transition-colors">Guild Hall</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase mt-1">LVL. 80 Bard</span>
+</a>
+<!-- Itch.io Item -->
+<a class="group relative bg-surface-container-low border-4 border-outline-variant p-6 flex flex-col items-center hover:border-primary hover:bg-primary-container transition-all hover:-translate-y-2" href="#">
+<div class="mb-4 bg-surface-container-lowest p-4 border-2 border-outline group-hover:border-primary group-hover:translate-y-[-2px] transition-transform">
+<span class="material-symbols-outlined text-4xl text-on-surface" data-icon="joystick">joystick</span>
+</div>
+<span class="font-headline font-bold uppercase text-on-background group-hover:text-on-primary-container transition-colors">Playables</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase mt-1">LVL. 65 Hero</span>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f5f4ee]/90 backdrop-blur-sm dark:bg-[#1a1b18]/90 border-t-4 border-[#7e572e] w-full px-8 py-10 relative z-10">
+<div class="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+<p class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70">
+                © 2024 The 16-Bit Atélier - Handcrafted with Pixels
+            </p>
+<div class="flex items-center space-x-6">
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">GitHub</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">LinkedIn</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Itch.io</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Twitter</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Discord</a>
+</div>
+</div>
+</footer>
+</body></html>

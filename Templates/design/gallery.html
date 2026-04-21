@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#005bc3",
+                    "surface-bright": "#fbf9f4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#004d11",
+                    "surface": "#fbf9f4",
+                    "on-tertiary-fixed-variant": "#5a3811",
+                    "outline-variant": "#b2b2ab",
+                    "on-tertiary-fixed": "#331b00",
+                    "surface-tint": "#005bc3",
+                    "inverse-on-surface": "#9e9d99",
+                    "primary-dim": "#004fac",
+                    "on-surface": "#31332e",
+                    "surface-dim": "#dadad2",
+                    "error-container": "#f56965",
+                    "tertiary-fixed": "#e1af7e",
+                    "on-secondary-container": "#006218",
+                    "secondary": "#006f1c",
+                    "surface-container-highest": "#e3e3db",
+                    "on-secondary-fixed-variant": "#006d1c",
+                    "tertiary": "#7e572e",
+                    "on-secondary": "#eaffe2",
+                    "secondary-fixed-dim": "#8ded89",
+                    "error": "#ac3434",
+                    "on-primary-container": "#003a81",
+                    "secondary-container": "#9bfc96",
+                    "on-error-container": "#65000b",
+                    "surface-variant": "#e3e3db",
+                    "on-surface-variant": "#5e605a",
+                    "outline": "#7a7b75",
+                    "error-dim": "#70030f",
+                    "surface-container": "#efeee8",
+                    "on-primary": "#f9f8ff",
+                    "on-primary-fixed-variant": "#004292",
+                    "surface-container-low": "#f5f4ee",
+                    "surface-container-high": "#e9e8e1",
+                    "on-tertiary-container": "#502f09",
+                    "tertiary-dim": "#704b23",
+                    "secondary-fixed": "#9bfc96",
+                    "primary-fixed-dim": "#8eb3ff",
+                    "primary-container": "#a5c1ff",
+                    "background": "#fbf9f4",
+                    "tertiary-container": "#e1af7e",
+                    "on-background": "#31332e",
+                    "inverse-primary": "#4c8eff",
+                    "on-tertiary": "#fff7f4",
+                    "on-primary-fixed": "#002659",
+                    "primary-fixed": "#a5c1ff",
+                    "tertiary-fixed-dim": "#d3a272",
+                    "on-error": "#fff7f6",
+                    "secondary-dim": "#006118",
+                    "inverse-surface": "#0e0e0c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Space Grotesk"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #fbf9f4;
+        }
+        .pixel-border-thick {
+            box-shadow: 
+                0 -4px 0 0 #7e572e,
+                0 4px 0 0 #7e572e,
+                -4px 0 0 0 #7e572e,
+                4px 0 0 0 #7e572e;
+        }
+        .pixel-border-primary {
+            box-shadow: 
+                0 -3px 0 0 #005bc3,
+                0 3px 0 0 #005bc3,
+                -3px 0 0 0 #005bc3,
+                4px 0 0 0 #005bc3;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-[#fbf9f4] dark:bg-[#31332e] border-b-4 border-[#7e572e] shadow-[0_4px_0_0_rgba(126,87,46,0.2)] sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-[1440px] mx-auto">
+<div class="text-2xl font-black text-[#7e572e] dark:text-[#e9e8e1] tracking-tighter">
+                The Atélier
+            </div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Portfolio</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#005bc3] border-b-4 border-[#005bc3] pb-1 hover:translate-y-[-2px] transition-transform duration-100" href="#">Gallery</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">About</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-[#7e572e] cursor-pointer hover:translate-y-[-2px] transition-transform">settings</span>
+<span class="material-symbols-outlined text-[#7e572e] cursor-pointer hover:translate-y-[-2px] transition-transform">account_circle</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 font-bold uppercase tracking-widest text-sm border-b-4 border-primary-dim hover:translate-y-[-2px] active:translate-y-[2px] transition-all">
+                    Resume
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto flex flex-col md:flex-row min-h-screen">
+<!-- Sidebar Filter -->
+<aside class="w-full md:w-64 bg-surface-container-low border-r-4 border-tertiary/20 p-8 flex flex-col gap-8">
+<section>
+<h3 class="font-bold text-tertiary uppercase tracking-tighter text-lg mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">filter_alt</span>
+                    Genre
+                </h3>
+<ul class="space-y-4">
+<li>
+<button class="w-full flex items-center gap-3 p-3 bg-surface-container-highest border-b-4 border-outline-variant hover:bg-primary-container hover:border-primary transition-colors text-left group">
+<span class="material-symbols-outlined text-tertiary group-hover:text-primary">brush</span>
+<span class="font-bold text-sm uppercase tracking-widest">2D Art</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-3 p-3 bg-primary text-on-primary border-b-4 border-primary-dim text-left group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-bold text-sm uppercase tracking-widest">UI/UX</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-3 p-3 bg-surface-container-highest border-b-4 border-outline-variant hover:bg-primary-container hover:border-primary transition-colors text-left group">
+<span class="material-symbols-outlined text-tertiary group-hover:text-primary">deployed_code</span>
+<span class="font-bold text-sm uppercase tracking-widest">Prototypes</span>
+</button>
+</li>
+</ul>
+</section>
+<section class="mt-auto hidden md:block">
+<div class="relative bg-tertiary-container p-4 border-4 border-tertiary shadow-[4px_4px_0_0_rgba(126,87,46,0.3)]">
+<p class="text-xs font-bold leading-tight uppercase text-on-tertiary-container">
+                        "Need to see the source? Check out my GitHub in the footer!"
+                    </p>
+<div class="absolute -bottom-2 left-6 w-4 h-4 bg-tertiary-container border-r-4 border-b-4 border-tertiary rotate-45"></div>
+</div>
+<div class="mt-4 flex justify-center">
+<img alt="Chibi character" class="w-16 h-16 pixelated" data-alt="Small 16-bit pixel art character with blue hair and a workshop apron, waving happily" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEVg6grbyIiAf8Q2snq52MLz3Hf41ZKjtFviJgf6JGPFVgmsUBr5JsYnf7E3mWIWYVPs062oZAkjhrLwOREXhT84odVrmaXollX6CLbyDTls9_NYXC0wrCMZGcTPqVu5OgFYUqQzF89F9v49j6p5fEaXYwciI-OxpZV9Ad0zpcrsvgDFnQBpJcy7FlHJ2zXfDXs6kfu9tzk02RwhFQvsfN4sTnHQGYU4ONVKOA2kbUmI0Rf22tMDRkM8HstdKIFPGuYKDZ4A1ZKwbX"/>
+</div>
+</section>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 p-8 md:p-12 bg-surface">
+<header class="mb-12">
+<h1 class="text-6xl font-black text-tertiary tracking-tighter uppercase mb-2">Collection</h1>
+<p class="text-on-surface-variant font-medium tracking-wide">Archived works from the 16-bit creative laboratory.</p>
+</header>
+<!-- Game Card Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+<!-- Card 1 -->
+<div class="bg-surface-container-highest border-4 border-outline-variant hover:translate-y-[-4px] transition-transform duration-200 flex flex-col group">
+<div class="h-48 overflow-hidden border-b-4 border-outline-variant relative">
+<img class="w-full h-full object-cover transition-all duration-300 object-[0%_0%]" data-alt="Top-down pixel art game screenshot of a cozy retro laboratory with green plants and copper machinery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+<div class="absolute top-2 right-2 bg-secondary text-on-secondary text-[10px] font-bold px-2 py-1 uppercase tracking-tighter">New</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h2 class="text-xl font-black text-tertiary uppercase leading-none">Aether Drift</h2>
+<span class="text-[10px] font-black bg-tertiary/10 px-2 py-1 uppercase text-tertiary">v1.0.4</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 flex-1">A procedural cloud-runner built with custom shaders and 16-bit tilesets.</p>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Type</span>
+<span class="text-xs font-bold text-primary uppercase">Platformer</span>
+</div>
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Difficulty</span>
+<span class="text-xs font-bold text-error uppercase">Hardcore</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-highest border-4 border-outline-variant hover:translate-y-[-4px] transition-transform duration-200 flex flex-col group">
+<div class="h-48 overflow-hidden border-b-4 border-outline-variant">
+<img class="w-full h-full object-cover transition-all duration-300 object-[100%_0%]" data-alt="Vibrant 2D pixel art landscape of a futuristic neon city at night with floating cars and glowing billboards" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzFuW5lC_u0tpLVttZtONKI7E9Sj3ji4CYERQR7yGkZWfXS9DxIZ2HP5vu7Jxwp5tY7Ux9FPEy8w0_uTPuQfS0HUhO_2MEYpNcgO6zQykzwN5W1RDk_IK-g6L1KWa-tvzEVuLaYOY8nr-IscoPeV7lpjETHyawx-jnyd8VBhLvtDSVXYsRWESgWX0jvbQmAq7LbnYA7SWaxyHHpBeCzAw838bS01_1QO9meL-6tkWOO8BmAbm0eSdrcLLXAbjEydinzS-rWhfQxvLG"/>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h2 class="text-xl font-black text-tertiary uppercase leading-none">Neon Circuit</h2>
+<span class="text-[10px] font-black bg-tertiary/10 px-2 py-1 uppercase text-tertiary">v2.1.0</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 flex-1">Cyberpunk UI kit and isometric environment exploration.</p>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Type</span>
+<span class="text-xs font-bold text-primary uppercase">UI Toolkit</span>
+</div>
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Difficulty</span>
+<span class="text-xs font-bold text-secondary uppercase">Casual</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-highest border-4 border-outline-variant hover:translate-y-[-4px] transition-transform duration-200 flex flex-col group">
+<div class="h-48 overflow-hidden border-b-4 border-outline-variant">
+<img class="w-full h-full object-cover transition-all duration-300 object-[0%_100%]" data-alt="Pixel art dungeon interior with stone brick walls, glowing torches, and a wooden chest in the center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h2 class="text-xl font-black text-tertiary uppercase leading-none">Loot Logic</h2>
+<span class="text-[10px] font-black bg-tertiary/10 px-2 py-1 uppercase text-tertiary">Alpha</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 flex-1">An inventory management system prototype for RPG enthusiasts.</p>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Type</span>
+<span class="text-xs font-bold text-primary uppercase">Prototype</span>
+</div>
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Difficulty</span>
+<span class="text-xs font-bold text-primary-dim uppercase">Normal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-highest border-4 border-outline-variant hover:translate-y-[-4px] transition-transform duration-200 flex flex-col group">
+<div class="h-48 overflow-hidden border-b-4 border-outline-variant">
+<img class="w-full h-full object-cover transition-all duration-300 object-[100%_100%]" data-alt="A collection of colorful pixel art icons representing different fruits and potions on a dark wood background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h2 class="text-xl font-black text-tertiary uppercase leading-none">Asset Pack 01</h2>
+<span class="text-[10px] font-black bg-tertiary/10 px-2 py-1 uppercase text-tertiary">Free</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 flex-1">Complete set of 32x32 fantasy item icons for indie devs.</p>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Type</span>
+<span class="text-xs font-bold text-primary uppercase">2D Art</span>
+</div>
+<div class="bg-surface-container-low p-2 flex flex-col">
+<span class="text-[9px] uppercase font-bold text-outline">Usage</span>
+<span class="text-xs font-bold text-secondary uppercase">Permissive</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f5f4ee] dark:bg-[#1a1b18] border-t-4 border-[#7e572e]">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 space-y-4 md:space-y-0 max-w-[1440px] mx-auto">
+<div class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] dark:text-[#e9e8e1]">
+                © 2024 The 16-Bit Atélier - Handcrafted with Pixels
+            </div>
+<div class="flex gap-8">
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">GitHub</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#006f1c] font-bold hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">LinkedIn</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Itch.io</a>
+</div>
+</div>
+</footer>
+<!-- Help Character (Bottom Right) -->
+<div class="fixed bottom-8 right-8 flex flex-col items-end gap-2 group cursor-pointer z-[100]">
+<div class="bg-surface-container-lowest p-3 border-4 border-primary shadow-[4px_4px_0_0_rgba(0,91,195,0.2)] opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-[10px] font-black uppercase text-primary">"Click any card to play the demo!"</p>
+</div>
+<div class="bg-primary p-1 border-2 border-on-primary">
+<img alt="Helpful ghost" class="w-10 h-10 pixelated" data-alt="Small cute pixel art ghost with a lightbulb above its head, floating gently" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtyrqfiockTqIxS7YBgftVyQVb2ceaR91d_P3wMWTXzENvexaSzh1Da_0ap1hneBwqCBhamp0q1yttjg-xF612DJyqot_BrTvs7RrX79eIgCA8py-XGcb8DS2R58uXE2P92lQEJbww5-1Ss7tZcjhXZN5XLkz-ibT6UmaSv5CFA0eXwM6y3XVxYB0aetPz57ZwzSpqnjUUpJ3y-9XRjFHUGYQhLK34HA8E0flZ8wzBoR2DydPOb9oKvg915ZqXl6HlpeZHx2X8sebA"/>
+</div>
+</div>
+</body></html>

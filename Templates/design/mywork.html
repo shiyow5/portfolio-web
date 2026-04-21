@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#5e605a",
+                        "outline": "#7a7b75",
+                        "error-dim": "#70030f",
+                        "surface-container": "#efeee8",
+                        "on-primary": "#f9f8ff",
+                        "on-primary-fixed-variant": "#004292",
+                        "surface-container-low": "#f5f4ee",
+                        "surface-container-high": "#e9e8e1",
+                        "on-tertiary-container": "#502f09",
+                        "tertiary-dim": "#704b23",
+                        "secondary-fixed": "#9bfc96",
+                        "primary-fixed-dim": "#8eb3ff",
+                        "primary-container": "#a5c1ff",
+                        "background": "#fbf9f4",
+                        "tertiary-container": "#e1af7e",
+                        "on-background": "#31332e",
+                        "inverse-primary": "#4c8eff",
+                        "on-tertiary": "#fff7f4",
+                        "on-primary-fixed": "#002659",
+                        "primary-fixed": "#a5c1ff",
+                        "tertiary-fixed-dim": "#d3a272",
+                        "on-error": "#fff7f6",
+                        "secondary-dim": "#006118",
+                        "inverse-surface": "#0e0e0c",
+                        "primary": "#005bc3",
+                        "surface-bright": "#fbf9f4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#004d11",
+                        "surface": "#fbf9f4",
+                        "outline-variant": "#b2b2ab",
+                        "on-tertiary-fixed-variant": "#5a3811",
+                        "on-tertiary-fixed": "#331b00",
+                        "surface-tint": "#005bc3",
+                        "primary-dim": "#004fac",
+                        "inverse-on-surface": "#9e9d99",
+                        "surface-dim": "#dadad2",
+                        "on-surface": "#31332e",
+                        "error-container": "#f56965",
+                        "tertiary-fixed": "#e1af7e",
+                        "on-secondary-container": "#006218",
+                        "secondary": "#006f1c",
+                        "surface-container-highest": "#e3e3db",
+                        "on-secondary-fixed-variant": "#006d1c",
+                        "tertiary": "#7e572e",
+                        "on-secondary": "#eaffe2",
+                        "secondary-fixed-dim": "#8ded89",
+                        "on-primary-container": "#003a81",
+                        "error": "#ac3434",
+                        "secondary-container": "#9bfc96",
+                        "on-error-container": "#65000b",
+                        "surface-variant": "#e3e3db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            image-rendering: pixelated;
+        }
+        .pixel-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(126, 87, 46, 0.2);
+        }
+        .pressed-effect:active {
+            transform: translateY(2px);
+            box-shadow: 0px 0px 0px 0px rgba(126, 87, 46, 0.2);
+        }
+
+        /* Retro Background Effects */
+        .pixel-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+            background-color: #fbf9f4;
+        }
+        
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.03) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.01),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.01)
+            );
+            background-size: 100% 4px, 3px 100%;
+            z-index: 1;
+        }
+
+        .pixel-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(126, 87, 46, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(126, 87, 46, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: scroll-grid 60s linear infinite;
+        }
+
+        @keyframes scroll-grid {
+            from { background-position: 0 0; }
+            to { background-position: 40px 40px; }
+        }
+
+        .floating-pixels {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #7e572e;
+            opacity: 0.15;
+            box-shadow: 4px 4px 0 rgba(126, 87, 46, 0.1);
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translate(100px, -100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-transparent text-on-background selection:bg-primary-container selection:text-on-primary-container">
+<!-- Animated Background Layer -->
+<div class="pixel-bg-container">
+<div class="pixel-grid"></div>
+<div class="scanlines"></div>
+<!-- Decorative floating pixels -->
+<div class="floating-pixels" style="left: 10%; bottom: -20px; animation-delay: 0s;"></div>
+<div class="floating-pixels" style="left: 30%; bottom: -20px; animation-delay: 5s;"></div>
+<div class="floating-pixels" style="left: 55%; bottom: -20px; animation-delay: 2s;"></div>
+<div class="floating-pixels" style="left: 80%; bottom: -20px; animation-delay: 8s;"></div>
+<div class="floating-pixels" style="left: 95%; bottom: -20px; animation-delay: 12s;"></div>
+</div>
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#fbf9f4]/95 backdrop-blur-sm dark:bg-[#31332e]/95 border-b-4 border-[#7e572e] shadow-[0_4px_0_0_rgba(126,87,46,0.2)]">
+<nav class="flex justify-between items-center w-full px-6 py-4 max-w-[1440px] mx-auto">
+<div class="text-2xl font-black text-[#7e572e] dark:text-[#e9e8e1] tracking-tighter">The Atélier</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Home</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">About</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">Skills</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#005bc3] border-b-4 border-[#005bc3] pb-1 hover:translate-y-[-2px] transition-transform duration-100" href="#">My Work</a>
+<a class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-sm text-[#7e572e] dark:text-[#e9e8e1] hover:text-[#006f1c] hover:translate-y-[-2px] transition-transform duration-100" href="#">ChangeLog</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="bg-primary text-on-primary px-6 py-2 font-bold uppercase tracking-widest text-xs border-b-4 border-primary-dim hover:translate-y-[-2px] active:translate-y-[2px] transition-all">Resume</button>
+<div class="flex space-x-2 text-[#7e572e]">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">account_circle</span>
+</div>
+</div>
+</nav>
+</header>
+<main class="pt-32 pb-20 px-6 max-w-[1440px] mx-auto min-h-screen relative z-10">
+<!-- Header Section -->
+<section class="mb-16 relative">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div>
+<h2 class="text-label-md uppercase tracking-[0.2em] text-secondary font-bold mb-2">[ QUEST LOG ]</h2>
+<h1 class="text-5xl md:text-7xl font-black text-tertiary tracking-tighter leading-none">THE ARCHIVE OF <br/>COMPLETED TASKS</h1>
+</div>
+<div class="bg-surface-container-high/90 border-4 border-tertiary p-6 max-w-sm relative pixel-shadow backdrop-blur-sm">
+<span class="absolute -top-4 -left-4 bg-tertiary text-on-tertiary px-3 py-1 text-xs font-bold uppercase tracking-widest">NPC Dialogue</span>
+<p class="text-body-md font-medium text-on-surface italic">"Welcome back, Traveller! Here lie the spoils of my digital escapades. Each scroll contains a tale of design and code."</p>
+</div>
+</div>
+</section>
+<!-- Quest Filter Bar -->
+<div class="mb-12 flex flex-wrap items-center gap-4 border-b-4 border-surface-container-highest pb-6">
+<span class="text-xs font-black uppercase tracking-widest text-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter Quests:
+            </span>
+<button class="bg-primary text-on-primary px-4 py-2 text-xs font-bold uppercase tracking-widest border-b-4 border-primary-dim pressed-effect">All Quests</button>
+<button class="bg-surface-container-low text-tertiary px-4 py-2 text-xs font-bold uppercase tracking-widest border-b-4 border-outline-variant hover:border-tertiary transition-colors pressed-effect">UI Design</button>
+<button class="bg-surface-container-low text-tertiary px-4 py-2 text-xs font-bold uppercase tracking-widest border-b-4 border-outline-variant hover:border-tertiary transition-colors pressed-effect">Pixel Art</button>
+<button class="bg-surface-container-low text-tertiary px-4 py-2 text-xs font-bold uppercase tracking-widest border-b-4 border-outline-variant hover:border-tertiary transition-colors pressed-effect">Prototypes</button>
+<button class="bg-surface-container-low text-tertiary px-4 py-2 text-xs font-bold uppercase tracking-widest border-b-4 border-outline-variant hover:border-tertiary transition-colors pressed-effect">Web Dev</button>
+</div>
+<!-- Project Grid (The Dungeon Map) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+<!-- Project Card 1 -->
+<div class="group flex flex-col bg-surface-container-lowest/90 border-4 border-tertiary pixel-shadow hover:-translate-y-2 transition-transform duration-200 backdrop-blur-sm">
+<div class="h-64 overflow-hidden bg-surface-container-high relative border-b-4 border-tertiary">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 object-left-top" data-alt="retro pixel art style isometric room with floating computer screens and neon violet and teal lighting accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">RANK: S</div>
+</div>
+<div class="p-6 flex-grow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-black text-tertiary leading-tight uppercase">Crystal Kingdom Dashboard</h3>
+<span class="material-symbols-outlined text-tertiary">auto_awesome</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">A high-fidelity interface for managing alchemy recipes and guild resources in a fantasy simulation.</p>
+<div class="space-y-4">
+<h4 class="text-[10px] font-black uppercase tracking-tighter text-outline-variant border-b border-outline-variant pb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">redeem</span> Loot / Rewards
+                        </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Figma</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Unity</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">C# Scripting</span>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-tertiary-container text-on-tertiary-container font-black uppercase tracking-widest text-xs border-t-4 border-tertiary hover:bg-tertiary hover:text-on-tertiary transition-colors">Open Quest Log</button>
+</div>
+<!-- Project Card 2 -->
+<div class="group flex flex-col bg-surface-container-lowest/90 border-4 border-tertiary pixel-shadow hover:-translate-y-2 transition-transform duration-200 backdrop-blur-sm">
+<div class="h-64 overflow-hidden bg-surface-container-high relative border-b-4 border-tertiary">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 object-right-top" data-alt="abstract procedural patterns in earth tones mimicking a 16-bit world map with mountains and forests" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">RANK: A</div>
+</div>
+<div class="p-6 flex-grow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-black text-tertiary leading-tight uppercase">Procedural Terrain Tileset</h3>
+<span class="material-symbols-outlined text-tertiary">map</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">A comprehensive 16x16 tileset system with auto-tiling logic for classic top-down adventure games.</p>
+<div class="space-y-4">
+<h4 class="text-[10px] font-black uppercase tracking-tighter text-outline-variant border-b border-outline-variant pb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">redeem</span> Loot / Rewards
+                        </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Aseprite</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Tilemap</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Pixel Art</span>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-tertiary-container text-on-tertiary-container font-black uppercase tracking-widest text-xs border-t-4 border-tertiary hover:bg-tertiary hover:text-on-tertiary transition-colors">Open Quest Log</button>
+</div>
+<!-- Project Card 3 -->
+<div class="group flex flex-col bg-surface-container-lowest/90 border-4 border-tertiary pixel-shadow hover:-translate-y-2 transition-transform duration-200 backdrop-blur-sm">
+<div class="h-64 overflow-hidden bg-surface-container-high relative border-b-4 border-tertiary">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 object-left-bottom" data-alt="overhead view of a vibrant colorful mechanical keyboard with glowing RGB and pixelated artisan keycaps" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">RANK: S</div>
+</div>
+<div class="p-6 flex-grow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-black text-tertiary leading-tight uppercase">Mech-Keys Inventory UI</h3>
+<span class="material-symbols-outlined text-tertiary">inventory_2</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">An e-commerce prototype focused on the tactile experience of selecting mechanical switch types.</p>
+<div class="space-y-4">
+<h4 class="text-[10px] font-black uppercase tracking-tighter text-outline-variant border-b border-outline-variant pb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">redeem</span> Loot / Rewards
+                        </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">React</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Tailwind</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Framer</span>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-tertiary-container text-on-tertiary-container font-black uppercase tracking-widest text-xs border-t-4 border-tertiary hover:bg-tertiary hover:text-on-tertiary transition-colors">Open Quest Log</button>
+</div>
+<!-- Project Card 4 -->
+<div class="group flex flex-col bg-surface-container-lowest/90 border-4 border-tertiary pixel-shadow hover:-translate-y-2 transition-transform duration-200 backdrop-blur-sm">
+<div class="h-64 overflow-hidden bg-surface-container-high relative border-b-4 border-tertiary">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 object-right-bottom" data-alt="misty deep green forest with soft light rays piercing through heavy pixelated branches and mossy ground" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+<div class="absolute top-4 left-4 bg-tertiary text-on-tertiary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">RANK: B</div>
+</div>
+<div class="p-6 flex-grow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-black text-tertiary leading-tight uppercase">The Verdant Woods AR</h3>
+<span class="material-symbols-outlined text-tertiary">forest</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">Augmented reality application for identifying local flora with a gamified collection system.</p>
+<div class="space-y-4">
+<h4 class="text-[10px] font-black uppercase tracking-tighter text-outline-variant border-b border-outline-variant pb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">redeem</span> Loot / Rewards
+                        </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">ARCore</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Kotlin</span>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-tertiary-container text-on-tertiary-container font-black uppercase tracking-widest text-xs border-t-4 border-tertiary hover:bg-tertiary hover:text-on-tertiary transition-colors">Open Quest Log</button>
+</div>
+<!-- Project Card 5 -->
+<div class="group flex flex-col bg-surface-container-lowest/90 border-4 border-tertiary pixel-shadow hover:-translate-y-2 transition-transform duration-200 backdrop-blur-sm">
+<div class="h-64 overflow-hidden bg-surface-container-high relative border-b-4 border-tertiary">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 object-left-top" data-alt="abstract low poly landscape with golden hour lighting and long pixelated shadows on purple mountains" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe-ghre6MXfmdXSAmrmaO91UdNyfSoFZp1HC8tjAXoMfHQ0PIj05rfVp6GAkGlP-OKlaIh06xMbbMSrzmGshSYRFCjGbB_NE7P2nU85SBoNhILg3YtiTryFdyteAii1nR4gm3EskD9ZDMUNq12-d71L6NUs48ITwkjRxcW1av4rIfA4Z_RA9R-md0MK45Hls6rC5B3dsfMd_w--I1XLU2ZvJ42eRimQR5YFsrdXYwnT7_OVsn6ouRguaLI05Owna5agpFDT5MOU4KH"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">RANK: S</div>
+</div>
+<div class="p-6 flex-grow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-black text-tertiary leading-tight uppercase">Ethereal Realm Builder</h3>
+<span class="material-symbols-outlined text-tertiary">foundation</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">A low-code tool for building narrative branching structures in pixel-art RPGs.</p>
+<div class="space-y-4">
+<h4 class="text-[10px] font-black uppercase tracking-tighter text-outline-variant border-b border-outline-variant pb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">redeem</span> Loot / Rewards
+                        </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Vue.js</span>
+<span class="bg-surface-container text-tertiary px-2 py-1 text-[10px] font-bold uppercase border-2 border-outline-variant">Canvas API</span>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-tertiary-container text-on-tertiary-container font-black uppercase tracking-widest text-xs border-t-4 border-tertiary hover:bg-tertiary hover:text-on-tertiary transition-colors">Open Quest Log</button>
+</div>
+<!-- Project Card 6 - Locked/Coming Soon State -->
+<div class="group flex flex-col bg-surface-container-low/90 border-4 border-outline-variant opacity-60 pixel-shadow grayscale backdrop-blur-sm">
+<div class="h-64 flex items-center justify-center bg-surface-container-high border-b-4 border-outline-variant">
+<span class="material-symbols-outlined text-6xl text-outline-variant">lock</span>
+</div>
+<div class="p-6 flex-grow">
+<h3 class="text-2xl font-black text-outline-variant leading-tight uppercase">Locked Mission</h3>
+<p class="text-on-surface-variant text-sm mt-2 italic">Earn more XP to unlock this project...</p>
+</div>
+<div class="w-full py-4 bg-surface-container-high text-outline-variant font-black uppercase tracking-widest text-xs border-t-4 border-outline-variant text-center">Restricted Access</div>
+</div>
+</div>
+<!-- Experience Bar -->
+<div class="mt-20 max-w-2xl mx-auto relative z-20">
+<div class="flex justify-between items-end mb-2">
+<div class="flex flex-col">
+<span class="text-[10px] font-black text-tertiary uppercase tracking-widest">Portfolio Level</span>
+<span class="text-2xl font-black text-tertiary uppercase">Lvl. 16 Master Artisan</span>
+</div>
+<span class="text-xs font-bold text-tertiary">8,450 / 10,000 XP</span>
+</div>
+<div class="h-8 w-full bg-surface-container-high border-4 border-tertiary p-1 shadow-[4px_4px_0_0_rgba(126,87,46,0.3)]">
+<div class="h-full bg-primary border-r-4 border-primary-dim" style="width: 84.5%"></div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f5f4ee]/95 dark:bg-[#1a1b18]/95 border-t-4 border-[#7e572e] backdrop-blur-sm relative z-10">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 space-y-4 md:space-y-0 max-w-[1440px] mx-auto">
+<div class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] dark:text-[#e9e8e1]">
+                © 2024 The 16-Bit Atélier - Handcrafted with Pixels
+            </div>
+<div class="flex space-x-6">
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">GitHub</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">LinkedIn</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Itch.io</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Twitter</a>
+<a class="font-['Space_Grotesk'] text-xs uppercase font-medium text-[#7e572e] opacity-70 hover:opacity-100 hover:text-[#005bc3] transition-all" href="#">Discord</a>
+</div>
+</div>
+</footer>
+</body></html>
