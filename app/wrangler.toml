@@ -1,0 +1,17 @@
+name = "shiyow-portfolio"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+# KV namespace used by functions/api/chat.ts for per-IP rate limiting.
+# The id/preview_id must be set via the Cloudflare dashboard or `wrangler kv:namespace create`.
+# See docs/SETUP_CLOUDFLARE.md §9.
+#
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT_KV"
+# id = "REPLACE_WITH_KV_ID"
+# preview_id = "REPLACE_WITH_PREVIEW_KV_ID"
+
+# Runtime secrets are stored via the Pages dashboard, NOT this file:
+#   GEMINI_API_KEY
+#   TURNSTILE_SECRET

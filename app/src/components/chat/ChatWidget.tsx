@@ -1,51 +1,96 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Send, X } from 'lucide-react';
+import { streamChat, type ChatMessage } from '../../lib/chat';
 
 const CHARACTER_SRC = '/characters/uxtuu.png';
+const TURNSTILE_SITEKEY = import.meta.env.VITE_TURNSTILE_SITEKEY as string | undefined;
 
-interface Message {
+interface DisplayMessage extends ChatMessage {
   id: string;
-  role: 'user' | 'assistant';
-  content: string;
+  pending?: boolean;
+  error?: boolean;
 }
 
-/**
- * Floating chat widget — placeholder for the future clone-agent.
- * Phase 1: local echo only. Phase 2: wires to /api/chat (Gemini via Pages Functions).
- */
+const GREETING: DisplayMessage = {
+  id: 'greeting',
+  role: 'assistant',
+  content: 'やぁ旅人！ UxtuU です。shiyow のサイト案内、よろしく。何でも聞いて。',
+};
+
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'greeting',
-      role: 'assistant',
-      content:
-        'Hey Traveler! この旅人ボットはまだ準備中。もうすぐ本物のクローンエージェントと話せるようになります。',
-    },
-  ]);
+  const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
+  const [sending, setSending] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages]);
+
+  useEffect(() => {
+    return () => abortRef.current?.abort();
+  }, []);
 
   const handleSend = () => {
     const trimmed = input.trim();
-    if (!trimmed) return;
-    const userMsg: Message = {
+    if (!trimmed || sending) return;
+
+    const history: ChatMessage[] = messages
+      .filter((m) => !m.error)
+      .map(({ role, content }) => ({ role, content }));
+
+    const userMsg: DisplayMessage = {
       id: `u-${Date.now()}`,
       role: 'user',
       content: trimmed,
     };
-    const stubReply: Message = {
-      id: `a-${Date.now()}`,
+    const assistantId = `a-${Date.now()}`;
+    const assistantMsg: DisplayMessage = {
+      id: assistantId,
       role: 'assistant',
-      content: '（ここにクローンエージェントの返答が入ります。現在は Phase 1 スタブです）',
+      content: '',
+      pending: true,
     };
-    setMessages((prev) => [...prev, userMsg, stubReply]);
+    setMessages((prev) => [...prev, userMsg, assistantMsg]);
     setInput('');
+    setSending(true);
+
+    abortRef.current?.abort();
+    abortRef.current = streamChat([...history, userMsg], undefined, {
+      onDelta: (delta) => {
+        setMessages((prev) =>
+          prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + delta } : m)),
+        );
+      },
+      onDone: () => {
+        setMessages((prev) =>
+          prev.map((m) => (m.id === assistantId ? { ...m, pending: false } : m)),
+        );
+        setSending(false);
+      },
+      onError: (message) => {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId
+              ? {
+                  ...m,
+                  content: `⚠ 応答取得に失敗しました: ${message}`,
+                  pending: false,
+                  error: true,
+                }
+              : m,
+          ),
+        );
+        setSending(false);
+      },
+    });
   };
 
   return (
     <>
-      {/* FAB + bubble hint */}
       <div className="fixed bottom-8 right-8 flex flex-col items-end gap-3 z-[90]">
         <AnimatePresence>
           {!open && (
@@ -83,7 +128,6 @@ export function ChatWidget() {
         </button>
       </div>
 
-      {/* Panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -96,7 +140,7 @@ export function ChatWidget() {
           >
             <div className="flex items-center justify-between border-b-4 border-tertiary bg-tertiary-container px-4 py-2">
               <span className="font-black uppercase text-xs tracking-widest text-on-tertiary-container">
-                Companion · Clone v0
+                Companion · UxtuU v0
               </span>
               <button
                 type="button"
@@ -107,7 +151,8 @@ export function ChatWidget() {
                 <X size={18} />
               </button>
             </div>
-            <div className="flex-1 overflow-auto p-4 space-y-3">
+
+            <div ref={listRef} className="flex-1 overflow-auto p-4 space-y-3">
               {messages.map((m) => (
                 <div
                   key={m.id}
@@ -115,17 +160,29 @@ export function ChatWidget() {
                 >
                   <div
                     className={[
-                      'max-w-[85%] p-3 text-sm leading-relaxed border-4',
+                      'max-w-[85%] p-3 text-sm leading-relaxed border-4 whitespace-pre-wrap',
                       m.role === 'user'
                         ? 'bg-primary-container border-primary text-on-primary-container'
-                        : 'bg-surface-container-low border-outline-variant text-on-surface',
+                        : m.error
+                          ? 'bg-error-container border-error text-on-error'
+                          : 'bg-surface-container-low border-outline-variant text-on-surface',
                     ].join(' ')}
                   >
-                    {m.content}
+                    {m.content || (m.pending ? '…' : '')}
+                    {m.pending && m.content && (
+                      <span className="inline-block w-2 h-4 bg-current ml-1 animate-pulse align-text-bottom" />
+                    )}
                   </div>
                 </div>
               ))}
             </div>
+
+            {!TURNSTILE_SITEKEY && (
+              <div className="px-4 py-1 text-[10px] font-black uppercase tracking-widest bg-error-container text-on-error border-t-2 border-error">
+                Turnstile 未設定 — 保護なしで動作中
+              </div>
+            )}
+
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -139,12 +196,13 @@ export function ChatWidget() {
                 placeholder="メッセージを入力..."
                 className="flex-1 bg-surface-container-lowest border-2 border-outline px-3 py-2 text-sm focus:border-primary focus:border-4 outline-none transition-all"
                 maxLength={500}
+                disabled={sending}
               />
               <button
                 type="submit"
                 aria-label="Send"
-                className="pixel-button"
-                disabled={!input.trim()}
+                className="pixel-button disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!input.trim() || sending}
               >
                 <Send size={14} />
               </button>
