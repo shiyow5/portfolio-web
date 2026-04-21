@@ -48,6 +48,21 @@ Pixel-art / indie-game themed portfolio site. Dynamic-first architecture on Clou
 
 16-Bit Atelier — cream surface, sky-blue primary, forest-green secondary, wood-brown tertiary. Zero border-radius, 2/3/4 px strokes only, no pure black shadows. See `Templates/design/DESIGN_home.md` for the full spec.
 
+## CI / CD
+
+- `.github/workflows/ci.yml` — runs on PRs into `main` and pushes to any
+  non-main branch. Fans out into parallel jobs: **typecheck · lint ·
+  format · test · build**. Coverage and dist are uploaded as artifacts.
+- `.github/workflows/deploy.yml` — runs on pushes to `main` and on
+  manual dispatch. Re-executes the quality gate, builds, and deploys to
+  Cloudflare Pages.
+- Required repo secrets (Settings → Secrets → Actions):
+  - `CLOUDFLARE_API_TOKEN` — scope: Account · Cloudflare Pages · Edit
+  - `CLOUDFLARE_ACCOUNT_ID`
+- The Cloudflare Pages project name is **`shiyow-portfolio`**. Create it
+  once in the dashboard (or via `wrangler pages project create`) before
+  the first deploy.
+
 ## Phases
 
 - **Phase 0 (done)** — scaffold, design tokens, layout shell
