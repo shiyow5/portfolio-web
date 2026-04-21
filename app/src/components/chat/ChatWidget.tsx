@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Send, X } from 'lucide-react';
-import { PixelCharacter } from '../pixel/PixelCharacter';
+
+const CHARACTER_SRC = '/characters/uxtuu.png';
 
 interface Message {
   id: string;
@@ -72,9 +73,12 @@ export function ChatWidget() {
           {open ? (
             <X size={28} className="text-tertiary" />
           ) : (
-            <div className="pointer-events-none">
-              <PixelCharacter scale={2} animation="idle" ariaLabel="Chat" />
-            </div>
+            <img
+              src={CHARACTER_SRC}
+              alt="Open chat with UxtuU"
+              className="h-12 w-auto object-contain pointer-events-none"
+              draggable={false}
+            />
           )}
         </button>
       </div>

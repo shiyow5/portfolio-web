@@ -11,8 +11,8 @@ import {
   Gem,
   Lock,
 } from 'lucide-react';
-import { PixelCharacter } from '../components/pixel/PixelCharacter';
-import { IsometricBedroom } from '../components/pixel/IsometricBedroom';
+const CHARACTER_SRC = '/characters/uxtuu.png';
+const ROOM_SRC = '/rooms/simple_room.png';
 
 const SIDE_NAV = [
   { icon: Swords, label: 'Adventure', to: '/gallery' },
@@ -66,14 +66,18 @@ export function Home() {
           <div className="pixel-border bg-tertiary-container p-6 space-y-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-14 h-14 bg-surface pixel-border-thin flex items-center justify-center overflow-hidden">
-                <PixelCharacter scale={3} animation="idle" />
+                <img
+                  src={CHARACTER_SRC}
+                  alt="UxtuU companion"
+                  className="h-full w-auto object-contain"
+                />
               </div>
               <div>
                 <p className="text-[10px] uppercase font-black tracking-widest text-tertiary">
                   Companion
                 </p>
                 <p className="text-sm font-black uppercase text-on-tertiary-container">
-                  Pixie · Lvl 99
+                  UxtuU · Lvl 99
                 </p>
               </div>
             </div>
@@ -107,20 +111,26 @@ export function Home() {
           </div>
 
           <div className="relative w-full max-w-[600px] aspect-square bg-surface-container-high pixel-border overflow-hidden">
-            <IsometricBedroom />
-            {/* chibi character standing on the rug — iso(0, -0.4, 0) ≈ (280, 412) in a 600-wide viewBox */}
-            <motion.div
-              animate={{ y: [0, -3, 0] }}
+            <img
+              src={ROOM_SRC}
+              alt="Cozy isometric workshop"
+              className="absolute inset-0 w-full h-full object-contain"
+              draggable={false}
+            />
+            <motion.img
+              src={CHARACTER_SRC}
+              alt="UxtuU waving"
+              draggable={false}
+              animate={{ y: [0, -4, 0] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute pointer-events-none"
+              className="absolute pixelated pointer-events-none"
               style={{
-                left: '46.7%',
-                top: '68.7%',
+                width: '22%',
+                left: '49%',
+                top: '72%',
                 transform: 'translate(-50%, -100%)',
               }}
-            >
-              <PixelCharacter scale={3.5} animation="wave" />
-            </motion.div>
+            />
           </div>
         </div>
 
