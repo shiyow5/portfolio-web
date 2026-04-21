@@ -1,0 +1,260 @@
+@import "tailwindcss";
+
+/* ==============================================================
+   16-Bit Atélier — Design Tokens (Tailwind v4 @theme)
+   Color palette: warm cream + sky blue + forest green + wood brown
+   See Templates/design/DESIGN_home.md for the source of truth.
+   ============================================================== */
+
+@theme {
+  /* ----- Colors ----- */
+  --color-surface: #fbf9f4;
+  --color-surface-bright: #fbf9f4;
+  --color-surface-dim: #dadad2;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f4ee;
+  --color-surface-container: #efeee8;
+  --color-surface-container-high: #e9e8e1;
+  --color-surface-container-highest: #e3e3db;
+
+  --color-primary: #005bc3;
+  --color-primary-dim: #004fac;
+  --color-primary-container: #a5c1ff;
+  --color-on-primary: #f9f8ff;
+  --color-on-primary-container: #003a81;
+
+  --color-secondary: #006f1c;
+  --color-secondary-dim: #006118;
+  --color-secondary-container: #9bfc96;
+  --color-on-secondary: #eaffe2;
+  --color-on-secondary-container: #006218;
+
+  --color-tertiary: #7e572e;
+  --color-tertiary-dim: #704b23;
+  --color-tertiary-container: #e1af7e;
+  --color-on-tertiary: #fff7f4;
+  --color-on-tertiary-container: #502f09;
+
+  --color-on-surface: #31332e;
+  --color-on-surface-variant: #5e605a;
+  --color-outline: #7a7b75;
+  --color-outline-variant: #b2b2ab;
+
+  --color-error: #ac3434;
+  --color-error-container: #f56965;
+  --color-on-error: #fff7f6;
+
+  /* ----- Typography ----- */
+  --font-headline: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-pixel: "Press Start 2P", "DotGothic16", monospace;
+  --font-dot: "DotGothic16", "Press Start 2P", monospace;
+
+  /* ----- Radius (zero everywhere except full) ----- */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+}
+
+/* ==============================================================
+   Base layer
+   ============================================================== */
+
+html,
+body {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+}
+
+*::selection {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* ==============================================================
+   Background Effects (retro-bg + scanlines + particles)
+   ============================================================== */
+
+.retro-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(45deg, #f5f4ee 25%, transparent 25%),
+    linear-gradient(-45deg, #f5f4ee 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f5f4ee 75%),
+    linear-gradient(-45deg, transparent 75%, #f5f4ee 75%);
+  background-size: 4px 4px;
+  background-position: 0 0, 0 2px, 2px -2px, -2px 0;
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 16, 16, 0) 50%,
+    rgba(49, 51, 46, 0.025) 50%
+  );
+  background-size: 100% 4px;
+  animation: scanlineScroll 10s linear infinite;
+}
+
+@keyframes scanlineScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+.pixel-particles {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.pixel-particles .particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--color-tertiary);
+  opacity: 0.15;
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(110vh) translateX(0); }
+  100% { transform: translateY(-10vh) translateX(20px); }
+}
+
+/* ==============================================================
+   Pixel Border Utilities (16-Bit Atélier)
+   Rule: 2/3/4 px strokes only. Never use 1px or pure black.
+   ============================================================== */
+
+.pixel-border {
+  border: 4px solid var(--color-tertiary);
+  box-shadow: 4px 4px 0 0 rgba(126, 87, 46, 0.2);
+  background-color: var(--color-surface);
+}
+
+.pixel-border-primary {
+  border: 4px solid var(--color-primary);
+  box-shadow: 4px 4px 0 0 rgba(0, 91, 195, 0.2);
+}
+
+.pixel-border-secondary {
+  border: 4px solid var(--color-secondary);
+  box-shadow: 4px 4px 0 0 rgba(0, 111, 28, 0.2);
+}
+
+.pixel-border-thin {
+  border: 3px solid var(--color-outline-variant);
+}
+
+/* Bottom-heavy button: creates a "pressed" feel */
+.pixel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-family: var(--font-body);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  border-bottom: 4px solid var(--color-primary-dim);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.pixel-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 0 rgba(0, 91, 195, 0.25);
+}
+
+.pixel-button:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.pixel-button--tertiary {
+  background-color: var(--color-tertiary);
+  color: var(--color-on-tertiary);
+  border-bottom-color: var(--color-tertiary-dim);
+}
+
+.pixel-button--ghost {
+  background-color: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+  border-bottom-color: var(--color-outline-variant);
+}
+
+/* ==============================================================
+   Pixel art image rendering
+   ============================================================== */
+
+.pixelated,
+img.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ==============================================================
+   Material Symbols
+   ============================================================== */
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ==============================================================
+   Custom scrollbar (chunky 16-bit feel)
+   ============================================================== */
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface-container-low);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-tertiary);
+  border: 2px solid var(--color-surface-container-low);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-tertiary-dim);
+}

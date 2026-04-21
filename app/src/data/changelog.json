@@ -1,0 +1,12 @@
+[
+  {
+    "date": "2026-04-21",
+    "version": "0.1.0",
+    "title": "Atelier scaffolded",
+    "entries": [
+      "16-Bit Atélier デザイントークン確立",
+      "ピクセル共通コンポーネント (Character/Button/Dialogue/Window/Room) 実装",
+      "Cloudflare Pages 構成ドラフト"
+    ]
+  }
+]

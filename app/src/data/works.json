@@ -1,0 +1,75 @@
+[
+  {
+    "id": "aether-drift",
+    "title": "Aether Drift",
+    "category": "game",
+    "tagline": "手描き 16-bit タイルで組むプロシージャル雲上アクション。",
+    "description": "カスタムシェーダと独自タイルセットで実装したプロシージャル・プラットフォーマー。HSL ベースの時間帯サイクルで空の色が変化します。",
+    "cover": "/rooms/placeholder-1.png",
+    "tags": ["Platformer", "Pixel Art", "Custom Shader"],
+    "version": "1.0.4",
+    "status": "new",
+    "links": {
+      "play": "#",
+      "github": "#"
+    }
+  },
+  {
+    "id": "neon-circuit",
+    "title": "Neon Circuit",
+    "category": "uiux",
+    "tagline": "サイバーパンク UI キット＋アイソメ環境。",
+    "description": "ネオン基板から着想した UI コンポーネント集。ダークモード固定、発光はすべて 2px 以内のストロークで表現。",
+    "cover": "/rooms/placeholder-2.png",
+    "tags": ["UI Toolkit", "Isometric", "Design System"],
+    "version": "2.1.0",
+    "status": "stable",
+    "links": {
+      "demo": "#",
+      "github": "#"
+    }
+  },
+  {
+    "id": "loot-logic",
+    "title": "Loot Logic",
+    "category": "prototype",
+    "tagline": "RPG のインベントリ管理システム試作。",
+    "description": "グリッド配置・スタック数・重量制約を 1 ファイルで検証できる最小プロトタイプ。テトリス風の自動パッキング機能を検証中。",
+    "cover": "/rooms/placeholder-3.png",
+    "tags": ["Prototype", "State Machine"],
+    "version": "alpha",
+    "status": "wip",
+    "links": {
+      "demo": "#"
+    }
+  },
+  {
+    "id": "asset-pack-01",
+    "title": "Asset Pack 01",
+    "category": "art",
+    "tagline": "32x32 の CC0 ファンタジーアイコン集。",
+    "description": "武器・ポーション・食料など 120 種の 32x32 アイコン。インディー開発者向けに CC0 で公開。",
+    "cover": "/rooms/placeholder-4.png",
+    "tags": ["2D Art", "CC0", "Icons"],
+    "version": "1.2",
+    "status": "stable",
+    "links": {
+      "demo": "#"
+    }
+  },
+  {
+    "id": "cozy-workshop",
+    "title": "Cozy Workshop",
+    "category": "web",
+    "tagline": "ピクセル職人のための Web 制作実験場。",
+    "description": "本ポートフォリオそのもの。Cloudflare Pages + Pages Functions + Gemini で将来のクローンエージェントを動かす基盤。",
+    "cover": "/rooms/placeholder-5.png",
+    "tags": ["Web", "React", "Cloudflare"],
+    "version": "0.1.0",
+    "status": "wip",
+    "links": {
+      "demo": "https://shiyow.dev",
+      "github": "#"
+    }
+  }
+]
