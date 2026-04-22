@@ -45,6 +45,10 @@ jobs:
         working-directory: app
         run: npx playwright install --with-deps chromium
 
+      - name: Build production bundle for preview server
+        working-directory: app
+        run: npm run build
+
       - name: Run Playwright smoke tests
         working-directory: app
         run: npm run e2e
