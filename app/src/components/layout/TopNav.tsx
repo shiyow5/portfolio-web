@@ -15,7 +15,7 @@ export function TopNav() {
           Shiyow
         </NavLink>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="flex items-center gap-8">
           {LINKS.map((link) => (
             <NavLink
               key={link.to}
@@ -35,30 +35,6 @@ export function TopNav() {
             </NavLink>
           ))}
         </nav>
-
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            className="pixel-button hidden sm:inline-flex"
-            aria-label="Download resume"
-          >
-            Resume
-          </button>
-          <div className="flex gap-2 text-tertiary">
-            <span
-              className="material-symbols-outlined cursor-pointer hover:text-primary"
-              aria-hidden
-            >
-              settings
-            </span>
-            <span
-              className="material-symbols-outlined cursor-pointer hover:text-primary"
-              aria-hidden
-            >
-              account_circle
-            </span>
-          </div>
-        </div>
       </div>
     </header>
   );
