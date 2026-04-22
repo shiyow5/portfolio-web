@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -11,8 +11,10 @@ const LINKS = [
 
 export function TopNav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -37,9 +39,41 @@ export function TopNav() {
     };
   }, [open]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useLayoutEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const syncHeight = () => {
+      document.documentElement.style.setProperty('--topnav-h', `${el.offsetHeight}px`);
+    };
+    syncHeight();
+    const ro = new ResizeObserver(syncHeight);
+    ro.observe(el);
+    window.addEventListener('resize', syncHeight);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', syncHeight);
+    };
+  }, []);
+
   return (
     <>
-      <header className="sticky top-0 z-50 bg-surface/90 backdrop-blur-sm border-b-4 border-tertiary shadow-[0_4px_0_0_rgba(126,87,46,0.2)]">
+      <header
+        ref={headerRef}
+        className={[
+          'fixed top-0 left-0 right-0 z-50 border-b-4 border-tertiary',
+          'backdrop-blur-sm transition-[background-color,box-shadow] duration-200',
+          scrolled
+            ? 'bg-surface shadow-[0_6px_0_0_rgba(126,87,46,0.28)]'
+            : 'bg-surface/90 shadow-[0_4px_0_0_rgba(126,87,46,0.18)]',
+        ].join(' ')}
+      >
         <div className="flex justify-between items-center w-full px-6 py-4 max-w-[1440px] mx-auto">
           <NavLink to="/" className="text-2xl font-black text-tertiary tracking-tighter uppercase">
             Shiyow

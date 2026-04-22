@@ -9,7 +9,7 @@ export function Layout() {
     <div className="min-h-screen flex flex-col">
       <BackgroundFX />
       <TopNav />
-      <main className="flex-1 relative">
+      <main className="flex-1 relative" style={{ paddingTop: 'var(--topnav-h, 72px)' }}>
         <Outlet />
       </main>
       <Footer />
