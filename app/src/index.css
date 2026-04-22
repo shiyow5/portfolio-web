@@ -227,6 +227,39 @@ img.pixelated {
 }
 
 /* ==============================================================
+   Link underline wipe (left → right on hover)
+   ============================================================== */
+
+.link-wipe {
+  position: relative;
+  display: inline-block;
+}
+
+.link-wipe::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 3px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-wipe:hover::after,
+.link-wipe:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link-wipe::after {
+    transition: none;
+  }
+}
+
+/* ==============================================================
    Material Symbols
    ============================================================== */
 

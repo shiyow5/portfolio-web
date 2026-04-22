@@ -1,4 +1,5 @@
 import { RELEASES, type ChangeKind, type ReleaseStatus } from '../lib/changelog';
+import { Reveal } from '../components/motion/Reveal';
 
 const KIND_COLOR: Record<ChangeKind, string> = {
   feature: 'text-secondary',
@@ -65,8 +66,13 @@ export function Changelog() {
                 className="absolute left-[11px] top-2 bottom-2 w-1 bg-outline-variant opacity-30"
                 aria-hidden
               />
-              {RELEASES.map((release) => (
-                <li key={release.version} className="relative pl-10 pb-10 last:pb-0">
+              {RELEASES.map((release, idx) => (
+                <Reveal
+                  key={release.version}
+                  as="li"
+                  delay={Math.min(idx * 0.08, 0.24)}
+                  className="relative pl-10 pb-10 last:pb-0"
+                >
                   <span
                     aria-hidden
                     className={[
@@ -116,7 +122,7 @@ export function Changelog() {
                       </ul>
                     )}
                   </div>
-                </li>
+                </Reveal>
               ))}
             </ol>
           </div>
