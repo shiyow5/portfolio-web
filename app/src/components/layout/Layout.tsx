@@ -1,8 +1,8 @@
-import { Outlet } from 'react-router-dom';
 import { BackgroundFX } from './BackgroundFX';
 import { TopNav } from './TopNav';
 import { Footer } from './Footer';
 import { ChatWidget } from '../chat/ChatWidget';
+import { AnimatedOutlet } from '../motion/AnimatedOutlet';
 
 export function Layout() {
   return (
@@ -10,7 +10,7 @@ export function Layout() {
       <BackgroundFX />
       <TopNav />
       <main className="flex-1 relative" style={{ paddingTop: 'var(--topnav-h, 72px)' }}>
-        <Outlet />
+        <AnimatedOutlet />
       </main>
       <Footer />
       <ChatWidget />

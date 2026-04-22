@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PROFILE } from '../lib/profile';
+import { Reveal } from '../components/motion/Reveal';
 
 const CHARACTER_SRC = '/characters/shiyow.png';
 
@@ -27,7 +28,7 @@ export function About() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         <div className="lg:col-span-5 space-y-8">
-          <section className="relative bg-surface-container-high pixel-border p-1">
+          <Reveal as="section" className="relative bg-surface-container-high pixel-border p-1">
             <div className="bg-surface-container-lowest border-2 border-outline-variant p-6">
               <div className="relative flex flex-col items-center mb-8">
                 <div className="w-48 h-48 bg-surface-container-high border-4 border-tertiary flex items-center justify-center overflow-hidden">
@@ -87,9 +88,13 @@ export function About() {
                 })}
               </div>
             </div>
-          </section>
+          </Reveal>
 
-          <section className="relative bg-tertiary-container pixel-border p-6">
+          <Reveal
+            as="section"
+            className="relative bg-tertiary-container pixel-border p-6"
+            delay={0.08}
+          >
             <div className="absolute -top-3 left-6 bg-tertiary text-on-tertiary px-3 py-1 text-[10px] font-black uppercase tracking-widest">
               Biography
             </div>
@@ -98,11 +103,15 @@ export function About() {
                 &ldquo;{PROFILE.bioQuote}&rdquo;
               </p>
             </div>
-          </section>
+          </Reveal>
         </div>
 
         <div className="lg:col-span-7">
-          <section className="bg-surface-container pixel-border p-6 md:p-8">
+          <Reveal
+            as="section"
+            className="bg-surface-container pixel-border p-6 md:p-8"
+            delay={0.04}
+          >
             <header className="mb-8 flex items-start justify-between">
               <div>
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-on-surface">
@@ -183,15 +192,19 @@ export function About() {
                 ))}
               </ul>
             </footer>
-          </section>
+          </Reveal>
 
-          <section className="mt-8 bg-surface-container-lowest pixel-border p-6 md:p-8">
+          <Reveal
+            as="section"
+            className="mt-8 bg-surface-container-lowest pixel-border p-6 md:p-8"
+            delay={0.12}
+          >
             <h3 className="text-xl font-black uppercase tracking-tighter text-on-surface mb-6">
               Recent Milestones
             </h3>
             <ol className="space-y-4">
-              {PROFILE.history.map((event) => (
-                <li key={event.year} className="flex gap-5">
+              {PROFILE.history.map((event, idx) => (
+                <Reveal as="li" key={event.year} className="flex gap-5" delay={0.04 * idx}>
                   <span className="bg-tertiary text-on-tertiary px-3 py-1 h-fit font-black text-xs tracking-widest uppercase">
                     {event.year}
                   </span>
@@ -199,13 +212,13 @@ export function About() {
                     <h4 className="font-black uppercase tracking-tight">{event.title}</h4>
                     <p className="text-sm text-on-surface-variant">{event.detail}</p>
                   </div>
-                </li>
+                </Reveal>
               ))}
             </ol>
             <Link to="/gallery" className="pixel-button pixel-button--tertiary mt-6 inline-flex">
               See full quest log
             </Link>
-          </section>
+          </Reveal>
         </div>
       </div>
     </section>

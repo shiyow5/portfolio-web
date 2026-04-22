@@ -8,6 +8,7 @@ import {
   type Work,
   type WorkCategory,
 } from '../lib/works';
+import { Reveal } from '../components/motion/Reveal';
 
 const STATUS_LABEL: Record<Work['status'], string> = {
   new: 'New',
@@ -98,9 +99,11 @@ export function Gallery() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {works.map((work) => (
-                <article
+              {works.map((work, idx) => (
+                <Reveal
                   key={work.id}
+                  as="article"
+                  delay={Math.min(idx * 0.05, 0.3)}
                   className="bg-surface-container-highest pixel-border flex flex-col hover:-translate-y-1 transition-transform"
                 >
                   <Link to={`/works/${work.id}`} className="contents">
@@ -145,7 +148,7 @@ export function Gallery() {
                       </ul>
                     </div>
                   </Link>
-                </article>
+                </Reveal>
               ))}
             </div>
           )}

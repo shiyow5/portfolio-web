@@ -11,6 +11,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { WanderingCharacter } from '../components/pixel/WanderingCharacter';
+import { Reveal } from '../components/motion/Reveal';
 const CHARACTER_SRC = '/characters/shiyow.png';
 const ROOM_SRC = '/rooms/simple_room.png';
 
@@ -61,8 +62,8 @@ export function Home() {
     <section className="max-w-[1440px] mx-auto px-6 py-12 md:py-20 relative">
       {/* Hero */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        {/* Companion Sidebar */}
-        <aside className="lg:col-span-3 order-2 lg:order-1">
+        {/* Profile Sidebar */}
+        <Reveal as="aside" className="lg:col-span-3 order-2 lg:order-1">
           <div className="pixel-border bg-tertiary-container p-6 space-y-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-14 h-14 bg-surface pixel-border-thin flex items-center justify-center overflow-hidden">
@@ -99,7 +100,7 @@ export function Home() {
               &ldquo;The pixels are warm today. Perfect for crafting new worlds.&rdquo;
             </div>
           </div>
-        </aside>
+        </Reveal>
 
         {/* Center Stage */}
         <div className="lg:col-span-6 order-1 lg:order-2 flex flex-col items-center">
@@ -122,7 +123,7 @@ export function Home() {
         </div>
 
         {/* Right: Quest + Inventory */}
-        <aside className="lg:col-span-3 order-3">
+        <Reveal as="aside" className="lg:col-span-3 order-3" delay={0.1}>
           <div className="pixel-border bg-surface-container-highest p-6 space-y-6">
             <div>
               <h3 className="text-xs font-black uppercase tracking-widest text-tertiary border-b-2 border-tertiary pb-1 mb-3">
@@ -166,77 +167,82 @@ export function Home() {
               View Stats
             </Link>
           </div>
-        </aside>
+        </Reveal>
       </div>
 
       {/* Featured — Recent Loot bento */}
       <section className="mt-24 md:mt-32">
-        <header className="flex items-end justify-between mb-8 md:mb-12">
+        <Reveal as="header" className="flex items-end justify-between mb-8 md:mb-12">
           <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-on-surface">
             Recent Loot
           </h2>
           <div className="hidden md:block h-1 flex-grow mx-8 bg-surface-container-highest" />
           <Link
             to="/gallery"
-            className="text-primary font-black uppercase text-xs tracking-widest hover:underline"
+            className="link-wipe text-primary font-black uppercase text-xs tracking-widest"
           >
             View All Quests
           </Link>
-        </header>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Large */}
-          <Link
-            to={`/works/${FEATURED[0].id}`}
-            className="md:col-span-2 md:row-span-2 bg-surface-container-lowest pixel-border flex flex-col hover:-translate-y-1 transition-transform"
-          >
-            <div className="h-60 md:h-64 bg-gradient-to-br from-primary-container to-secondary-container border-b-4 border-tertiary" />
-            <div className="p-6 flex-grow flex flex-col">
-              <span className="inline-block px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase tracking-widest mb-4 w-fit">
-                {FEATURED[0].tag}
-              </span>
-              <h3 className="text-2xl font-black uppercase mb-2 text-on-surface">
-                {FEATURED[0].title}
-              </h3>
-              <p className="text-sm text-on-surface-variant mb-6">{FEATURED[0].desc}</p>
-              <div className="mt-auto flex justify-between items-center">
-                <span className="text-xs font-black uppercase text-tertiary tracking-widest">
-                  {FEATURED[0].xp}
+          <Reveal className="md:col-span-2 md:row-span-2" delay={0}>
+            <Link
+              to={`/works/${FEATURED[0].id}`}
+              className="h-full bg-surface-container-lowest pixel-border flex flex-col hover:-translate-y-1 transition-transform"
+            >
+              <div className="h-60 md:h-64 bg-gradient-to-br from-primary-container to-secondary-container border-b-4 border-tertiary" />
+              <div className="p-6 flex-grow flex flex-col">
+                <span className="inline-block px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase tracking-widest mb-4 w-fit">
+                  {FEATURED[0].tag}
                 </span>
-                <ArrowRight size={20} className="text-primary" />
+                <h3 className="text-2xl font-black uppercase mb-2 text-on-surface">
+                  {FEATURED[0].title}
+                </h3>
+                <p className="text-sm text-on-surface-variant mb-6">{FEATURED[0].desc}</p>
+                <div className="mt-auto flex justify-between items-center">
+                  <span className="text-xs font-black uppercase text-tertiary tracking-widest">
+                    {FEATURED[0].xp}
+                  </span>
+                  <ArrowRight size={20} className="text-primary" />
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </Reveal>
 
           {/* Small 1 & 2 */}
-          {FEATURED.slice(1).map((f) => (
-            <Link
-              key={f.id}
-              to={`/works/${f.id}`}
-              className="bg-surface-container-lowest pixel-border p-4 hover:-translate-y-1 transition-transform"
-            >
-              <div className="h-32 bg-gradient-to-br from-tertiary-container to-primary-container mb-4 border-2 border-outline-variant" />
-              <h4 className="font-black uppercase text-sm mb-1 text-on-surface">{f.title}</h4>
-              <p className="text-xs text-on-surface-variant uppercase font-black tracking-widest">
-                {f.tag}
-              </p>
-            </Link>
+          {FEATURED.slice(1).map((f, i) => (
+            <Reveal key={f.id} delay={0.08 * (i + 1)}>
+              <Link
+                to={`/works/${f.id}`}
+                className="block h-full bg-surface-container-lowest pixel-border p-4 hover:-translate-y-1 transition-transform"
+              >
+                <div className="h-32 bg-gradient-to-br from-tertiary-container to-primary-container mb-4 border-2 border-outline-variant" />
+                <h4 className="font-black uppercase text-sm mb-1 text-on-surface">{f.title}</h4>
+                <p className="text-xs text-on-surface-variant uppercase font-black tracking-widest">
+                  {f.tag}
+                </p>
+              </Link>
+            </Reveal>
           ))}
 
           {/* CTA */}
-          <div className="md:col-span-2 bg-primary-container pixel-border-primary p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-black uppercase text-on-primary-container">
-                Ready for a new quest?
-              </h3>
-              <p className="text-sm text-on-primary-container opacity-80 mt-1">
-                作品のご相談、コラボ、コミッションを受付中です。
-              </p>
+          <Reveal className="md:col-span-2" delay={0.24}>
+            <div className="h-full bg-primary-container pixel-border-primary p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-black uppercase text-on-primary-container">
+                  Ready for a new quest?
+                </h3>
+                <p className="text-sm text-on-primary-container opacity-80 mt-1">
+                  作品のご相談、コラボ、コミッションを受付中です。
+                </p>
+              </div>
+              <Link to="/gallery" className="pixel-button whitespace-nowrap">
+                Start Quest
+              </Link>
             </div>
-            <Link to="/gallery" className="pixel-button whitespace-nowrap">
-              Start Quest
-            </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
     </section>
