@@ -174,7 +174,8 @@ export function WorkDetail() {
               Loot Drop
             </div>
             <p className="text-xs font-bold text-on-tertiary-container leading-snug mt-2">
-              コラボ・コミッションのご相談はチャット右下の UxtuU、または Contact リンクからどうぞ。
+              コラボ・コミッションのご相談はチャット右下の shiyow クローン、または Contact
+              リンクからどうぞ。
             </p>
           </section>
         </aside>
