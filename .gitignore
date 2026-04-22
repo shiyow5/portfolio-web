@@ -31,3 +31,6 @@ coverage/
 # Playwright
 playwright-report/
 test-results/
+
+# Claude Code (local agent state; not shared with repo)
+.claude/
