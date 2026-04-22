@@ -20,6 +20,11 @@ permissions:
 jobs:
   deploy:
     name: Deploy to Cloudflare Pages
+    # Gate: only run once Cloudflare Pages is configured. Set the repo
+    # variable CF_DEPLOY_ENABLED=true alongside the CLOUDFLARE_* secrets
+    # (see docs/SETUP_CLOUDFLARE.md) to enable this job. Until then the
+    # job is skipped (neutral), not failed.
+    if: vars.CF_DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment:
       name: production

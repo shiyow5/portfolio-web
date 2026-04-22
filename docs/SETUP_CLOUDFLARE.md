@@ -72,8 +72,11 @@ GitHub リポジトリの **Settings → Secrets and variables → Actions → S
 | Name                   | 値                              | 用途                                   |
 | ---------------------- | ------------------------------- | -------------------------------------- |
 | `CF_PAGES_PROJECT`     | `shiyow-portfolio`              | `deploy.yml` が参照                    |
+| `CF_DEPLOY_ENABLED`    | `true`                          | Deploy ワークフローの実行ゲート（未設定 or 他の値なら skip 扱い）|
 | `PRODUCTION_URL`       | `https://shiyow.dev`            | GitHub の Environment URL 表示         |
 | `VITE_TURNSTILE_SITEKEY` | §6 で取得                     | フロントで Turnstile ウィジェット表示   |
+
+> **メモ:** `CF_DEPLOY_ENABLED=true` を登録するまで Deploy ワークフローは **Skipped（グレー）** になります。secrets/variables が揃った段階で最後にこの変数を `true` に設定してください。
 
 設定後、**Actions → Deploy → Run workflow** を押して初回デプロイを試せます。
 
