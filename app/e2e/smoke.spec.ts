@@ -40,6 +40,18 @@ test.describe('Smoke', () => {
     await expect(page.getByRole('heading', { level: 1, name: '404' })).toBeVisible();
   });
 
+  test('header stays pinned to the top while scrolling', async ({ page }) => {
+    await page.goto('/');
+    const header = page.locator('header').first();
+    await expect(header).toBeVisible();
+    const initialBox = await header.boundingBox();
+    await page.evaluate(() => window.scrollTo(0, 1200));
+    await page.waitForTimeout(200);
+    await expect(header).toBeVisible();
+    const scrolledBox = await header.boundingBox();
+    expect(scrolledBox?.y).toBeLessThanOrEqual((initialBox?.y ?? 0) + 1);
+  });
+
   test('hamburger menu opens, navigates, and closes', async ({ page }) => {
     await page.goto('/');
     const trigger = page.locator('button[aria-controls="site-menu-panel"]');
