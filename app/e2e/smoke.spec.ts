@@ -39,4 +39,22 @@ test.describe('Smoke', () => {
     await page.goto('/no-such-page');
     await expect(page.getByRole('heading', { level: 1, name: '404' })).toBeVisible();
   });
+
+  test('hamburger menu opens, navigates, and closes', async ({ page }) => {
+    await page.goto('/');
+    const trigger = page.locator('button[aria-controls="site-menu-panel"]');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await trigger.click();
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    const panel = page.getByRole('dialog', { name: /site navigation/i });
+    await expect(panel).toBeVisible();
+
+    const aboutLink = panel.getByRole('link', { name: /about/i });
+    await expect(aboutLink).toBeVisible();
+    await aboutLink.click();
+
+    await expect(page).toHaveURL(/\/about$/);
+    await expect(page.getByRole('dialog', { name: /site navigation/i })).toBeHidden();
+  });
 });
