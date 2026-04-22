@@ -255,7 +255,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 export const onRequestGet: PagesFunction<Env> = async () => {
   return json({
     model: MODEL,
-    persona: 'UxtuU · shiyow clone agent v0',
+    persona: 'shiyow clone agent v0',
     limits: {
       maxInputChars: MAX_INPUT_CHARS,
       maxOutputTokens: MAX_OUTPUT_TOKENS,

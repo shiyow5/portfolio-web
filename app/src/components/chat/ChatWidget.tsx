@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Send, X } from 'lucide-react';
 import { streamChat, type ChatMessage } from '../../lib/chat';
 
-const CHARACTER_SRC = '/characters/uxtuu.png';
+const CHARACTER_SRC = '/characters/shiyow.png';
 const TURNSTILE_SITEKEY = import.meta.env.VITE_TURNSTILE_SITEKEY as string | undefined;
 
 interface DisplayMessage extends ChatMessage {
@@ -15,7 +15,7 @@ interface DisplayMessage extends ChatMessage {
 const GREETING: DisplayMessage = {
   id: 'greeting',
   role: 'assistant',
-  content: 'やぁ旅人！ UxtuU です。shiyow のサイト案内、よろしく。何でも聞いて。',
+  content: 'やぁ旅人！ shiyow のクローンです。サイト案内、よろしく。何でも聞いて。',
 };
 
 export function ChatWidget() {
@@ -120,7 +120,7 @@ export function ChatWidget() {
           ) : (
             <img
               src={CHARACTER_SRC}
-              alt="Open chat with UxtuU"
+              alt="Open chat with shiyow"
               className="h-12 w-auto object-contain pointer-events-none"
               draggable={false}
             />
@@ -140,7 +140,7 @@ export function ChatWidget() {
           >
             <div className="flex items-center justify-between border-b-4 border-tertiary bg-tertiary-container px-4 py-2">
               <span className="font-black uppercase text-xs tracking-widest text-on-tertiary-container">
-                Companion · UxtuU v0
+                shiyow clone · v0
               </span>
               <button
                 type="button"

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { PROFILE } from '../lib/profile';
 
-const CHARACTER_SRC = '/characters/uxtuu.png';
+const CHARACTER_SRC = '/characters/shiyow.png';
 
 const STAT_BAR_COLOR: Record<string, string> = {
   primary: 'bg-primary',

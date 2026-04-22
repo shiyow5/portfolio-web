@@ -13,13 +13,19 @@
   },
   {
     "version": "0.2.0",
-    "codename": "UxtuU Takes Flight",
+    "codename": "Shiyow Avatar Lands",
     "date": "2026-04-21",
     "status": "stable",
-    "summary": "ユーザー提供のアイソメ部屋とペリカンキャラ UxtuU を背景除去して全面差し替え。",
+    "summary": "ユーザー提供のアイソメ部屋と shiyow 本人のアイコンを背景除去して全面差し替え。",
     "entries": [
-      { "kind": "feature", "text": "simple_room.png と uxtuu.png を Pages 静的アセットとして配信" },
-      { "kind": "feature", "text": "Companion サイドバー・ChatWidget・Hero 中央に UxtuU を配置" },
+      {
+        "kind": "feature",
+        "text": "simple_room.png と shiyow.png を Pages 静的アセットとして配信"
+      },
+      {
+        "kind": "feature",
+        "text": "Profile サイドバー・ChatWidget・Hero 中央に shiyow アイコンを配置"
+      },
       {
         "kind": "chore",
         "text": "未使用のプロシージャルピクセルコンポーネント群を削除 (-8.8 KB JS)"

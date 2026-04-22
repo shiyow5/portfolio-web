@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
 import {
   ArrowRight,
   Swords,
@@ -11,7 +10,8 @@ import {
   Gem,
   Lock,
 } from 'lucide-react';
-const CHARACTER_SRC = '/characters/uxtuu.png';
+import { WanderingCharacter } from '../components/pixel/WanderingCharacter';
+const CHARACTER_SRC = '/characters/shiyow.png';
 const ROOM_SRC = '/rooms/simple_room.png';
 
 const SIDE_NAV = [
@@ -68,16 +68,16 @@ export function Home() {
               <div className="w-14 h-14 bg-surface pixel-border-thin flex items-center justify-center overflow-hidden">
                 <img
                   src={CHARACTER_SRC}
-                  alt="UxtuU companion"
+                  alt="shiyow avatar"
                   className="h-full w-auto object-contain"
                 />
               </div>
               <div>
                 <p className="text-[10px] uppercase font-black tracking-widest text-tertiary">
-                  Companion
+                  Profile
                 </p>
                 <p className="text-sm font-black uppercase text-on-tertiary-container">
-                  UxtuU · Lvl 99
+                  shiyow · Lvl 99
                 </p>
               </div>
             </div>
@@ -117,20 +117,7 @@ export function Home() {
               className="absolute inset-0 w-full h-full object-contain"
               draggable={false}
             />
-            <motion.img
-              src={CHARACTER_SRC}
-              alt="UxtuU waving"
-              draggable={false}
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute pixelated pointer-events-none"
-              style={{
-                width: '22%',
-                left: '49%',
-                top: '72%',
-                transform: 'translate(-50%, -100%)',
-              }}
-            />
+            <WanderingCharacter src={CHARACTER_SRC} width={22} />
           </div>
         </div>
 
