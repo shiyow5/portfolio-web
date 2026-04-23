@@ -9,13 +9,11 @@ export interface Stat {
   color: StatColor;
 }
 
-export interface Skill {
+export interface TechStackGroup {
   id: string;
-  name: string;
+  label: string;
   icon: string;
-  rank: string;
-  progress: number;
-  tools: string[];
+  items: string[];
 }
 
 export interface HistoryEntry {
@@ -33,7 +31,7 @@ export interface Profile {
   location: string;
   bioQuote: string;
   stats: Stat[];
-  skills: Skill[];
+  techStack: TechStackGroup[];
   perks: string[];
   history: HistoryEntry[];
 }

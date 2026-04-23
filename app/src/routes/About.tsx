@@ -115,10 +115,10 @@ export function About() {
             <header className="mb-8 flex items-start justify-between">
               <div>
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-on-surface">
-                  Ability Board
+                  Skills &amp; Tech Stack
                 </h2>
                 <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mt-1">
-                  Mastery progression & unlocked traits
+                  Loadout & arsenal
                 </p>
               </div>
               <div className="flex gap-2">
@@ -135,47 +135,40 @@ export function About() {
               </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {PROFILE.skills.map((skill) => (
-                <article
-                  key={skill.id}
-                  className="bg-surface-container-lowest border-4 border-outline p-5 hover:border-primary transition-colors"
+            <ul className="space-y-4">
+              {PROFILE.techStack.map((group, idx) => (
+                <Reveal
+                  key={group.id}
+                  as="li"
+                  delay={0.04 * idx}
+                  className="bg-surface-container-lowest border-4 border-outline p-4 md:p-5 hover:border-primary transition-colors"
                 >
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="p-2.5 bg-surface-container-high border-2 border-outline-variant">
-                      <span className="material-symbols-outlined text-2xl text-on-surface-variant">
-                        {skill.icon}
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="p-2 bg-surface-container-high border-2 border-outline-variant">
+                      <span className="material-symbols-outlined text-xl text-on-surface-variant">
+                        {group.icon}
                       </span>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-black uppercase tracking-tight text-base leading-tight">
-                        {skill.name}
-                      </h3>
-                      <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-1">
-                        Rank · {skill.rank}
-                      </p>
-                    </div>
+                    </span>
+                    <h3 className="font-black uppercase tracking-widest text-sm md:text-base text-tertiary">
+                      {group.label}
+                    </h3>
+                    <span className="ml-auto text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                      {group.items.length} slots
+                    </span>
                   </div>
-                  <div className="h-3 bg-surface-container-high border-2 border-outline overflow-hidden mb-2">
-                    <div className="h-full bg-secondary" style={{ width: `${skill.progress}%` }} />
-                  </div>
-                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-secondary">
-                    <span>Progress</span>
-                    <span>{skill.progress}%</span>
-                  </div>
-                  <ul className="mt-3 flex flex-wrap gap-1.5">
-                    {skill.tools.map((tool) => (
+                  <ul className="flex flex-wrap gap-2">
+                    {group.items.map((item) => (
                       <li
-                        key={tool}
-                        className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-tertiary-container text-on-tertiary-container"
+                        key={item}
+                        className="text-xs font-black uppercase tracking-widest px-2 py-1 bg-tertiary-container text-on-tertiary-container border-2 border-tertiary/40"
                       >
-                        {tool}
+                        {item}
                       </li>
                     ))}
                   </ul>
-                </article>
+                </Reveal>
               ))}
-            </div>
+            </ul>
 
             <footer className="mt-8 border-t-4 border-outline-variant pt-6">
               <h3 className="font-black uppercase tracking-widest text-sm text-tertiary mb-3">
