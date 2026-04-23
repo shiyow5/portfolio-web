@@ -51,11 +51,7 @@ export function Changelog() {
 
             {years.map((group, yi) => (
               <section key={group.year} className="mb-10 last:mb-0">
-                <Reveal
-                  as="header"
-                  className="flex items-center gap-3 mb-4"
-                  delay={yi * 0.04}
-                >
+                <Reveal as="header" className="flex items-center gap-3 mb-4" delay={yi * 0.04}>
                   <span className="font-pixel text-[10px] text-primary">////</span>
                   <h3 className="font-black text-2xl md:text-3xl tracking-tighter text-on-surface">
                     {group.year}
@@ -83,9 +79,7 @@ export function Changelog() {
                         className="absolute left-0 top-1 w-6 h-6 border-4 border-surface-container-low bg-primary ring-4 ring-primary-container z-10"
                       />
                       <div className="flex flex-col md:flex-row md:items-baseline md:justify-between mb-2 gap-1">
-                        <h4 className="font-black text-lg text-on-surface">
-                          {activity.title}
-                        </h4>
+                        <h4 className="font-black text-lg text-on-surface">{activity.title}</h4>
                         <span className="font-black text-[10px] uppercase tracking-widest bg-surface-container-highest px-3 py-1 text-on-surface-variant">
                           {formatDate(activity.date)}
                         </span>
