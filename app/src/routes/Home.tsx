@@ -1,17 +1,15 @@
 import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  Swords,
-  User,
-  LayoutGrid,
-  Brush,
-  Code2,
-  Palette,
-  Gem,
-  Lock,
-} from 'lucide-react';
+import { ArrowRight, Swords, User, LayoutGrid } from 'lucide-react';
 import { WanderingCharacter } from '../components/pixel/WanderingCharacter';
 import { Reveal } from '../components/motion/Reveal';
+import { PROFILE } from '../lib/profile';
+import {
+  ACTIVITIES,
+  CATEGORY_COLOR,
+  CATEGORY_ICON,
+  CATEGORY_LABEL,
+  formatDate,
+} from '../lib/activity';
 const CHARACTER_SRC = '/characters/shiyow.png';
 const ROOM_SRC = '/rooms/simple_room.png';
 
@@ -21,14 +19,8 @@ const SIDE_NAV = [
   { icon: LayoutGrid, label: 'Collection', to: '/gallery' },
 ];
 
-const INVENTORY = [
-  { icon: Brush, label: 'Pixel Art', unlocked: true },
-  { icon: Code2, label: 'Frontend', unlocked: true },
-  { icon: Palette, label: 'UI Design', unlocked: true },
-  { icon: Gem, label: 'Gamedev', unlocked: true },
-  { icon: Lock, label: 'Locked', unlocked: false },
-  { icon: Lock, label: 'Locked', unlocked: false },
-];
+const INVENTORY_GROUPS = PROFILE.techStack.slice(0, 6);
+const LATEST_ACTIVITY = ACTIVITIES[0];
 
 const FEATURED = [
   {
@@ -127,15 +119,37 @@ export function Home() {
           <div className="pixel-border bg-surface-container-highest p-6 space-y-6">
             <div>
               <h3 className="text-xs font-black uppercase tracking-widest text-tertiary border-b-2 border-tertiary pb-1 mb-3">
-                Current Quest
+                Latest Activity
               </h3>
-              <p className="text-sm font-bold text-on-surface">Redesigning the Multiverse</p>
-              <div className="w-full bg-surface-container-low h-4 mt-2 pixel-border-thin">
-                <div className="bg-secondary h-full" style={{ width: '35%' }} />
-              </div>
-              <p className="text-[10px] uppercase font-black mt-1 text-right tracking-widest">
-                35% Complete
-              </p>
+              {LATEST_ACTIVITY ? (
+                <Link
+                  to="/changelog"
+                  className="block group"
+                  aria-label={`最新の活動: ${LATEST_ACTIVITY.title}`}
+                >
+                  <p className="text-sm font-black text-on-surface leading-snug group-hover:text-primary transition-colors">
+                    {LATEST_ACTIVITY.title}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span
+                      className={[
+                        'inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2 py-0.5',
+                        CATEGORY_COLOR[LATEST_ACTIVITY.category],
+                      ].join(' ')}
+                    >
+                      <span className="material-symbols-outlined text-sm">
+                        {CATEGORY_ICON[LATEST_ACTIVITY.category]}
+                      </span>
+                      {CATEGORY_LABEL[LATEST_ACTIVITY.category]}
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-auto">
+                      {formatDate(LATEST_ACTIVITY.date)}
+                    </span>
+                  </div>
+                </Link>
+              ) : (
+                <p className="text-sm text-on-surface-variant">記録はまだありません</p>
+              )}
             </div>
 
             <div>
@@ -143,19 +157,19 @@ export function Home() {
                 Inventory
               </h3>
               <div className="grid grid-cols-3 gap-2">
-                {INVENTORY.map(({ icon: Icon, label, unlocked }, i) => (
-                  <div
-                    key={i}
-                    title={label}
-                    className={[
-                      'aspect-square bg-surface pixel-border-thin flex items-center justify-center transition-transform',
-                      unlocked
-                        ? 'hover:-translate-y-0.5 cursor-help text-primary'
-                        : 'opacity-40 text-outline',
-                    ].join(' ')}
+                {INVENTORY_GROUPS.map((group) => (
+                  <Link
+                    key={group.id}
+                    to="/about"
+                    title={`${group.label} · ${group.items.length} items`}
+                    aria-label={`${group.label} (${group.items.length} items)`}
+                    className="aspect-square bg-surface pixel-border-thin flex flex-col items-center justify-center gap-1 hover:-translate-y-0.5 transition-transform text-primary"
                   >
-                    <Icon size={20} />
-                  </div>
+                    <span className="material-symbols-outlined text-xl">{group.icon}</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant leading-none">
+                      {group.items.length}
+                    </span>
+                  </Link>
                 ))}
               </div>
             </div>

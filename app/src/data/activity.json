@@ -1,0 +1,74 @@
+[
+  {
+    "id": "portfolio-v0-2",
+    "date": "2026-04-22",
+    "title": "shiyow.dev v0.2.0 を公開",
+    "category": "release",
+    "summary": "16-Bit Atélier デザイン / 部屋を歩き回るキャラ / ハンバーガーナビ / 全ページのスクロールリビールを実装。",
+    "tags": ["portfolio", "web"],
+    "links": [{ "label": "Source", "url": "https://github.com/shiyow5/portfolio-web" }]
+  },
+  {
+    "id": "post-pixel-tokens",
+    "date": "2026-03-18",
+    "title": "Tailwind v4 @theme でドット絵トークンを組む",
+    "category": "post",
+    "summary": "4px 刻みボーダー・ドット絵アイコンのレンダリング指針・BackgroundFX のレイヤ構成まで解説。",
+    "tags": ["tailwind", "pixel-art"],
+    "links": []
+  },
+  {
+    "id": "lt-pixel-webdev",
+    "date": "2025-11-02",
+    "title": "LT: 個人開発でも続くピクセルアート UI 運用",
+    "category": "talk",
+    "summary": "ローカル勉強会 15 分枠。デザインガイドライン / Aseprite パイプライン / Figma との往復フロー。",
+    "tags": ["talk", "ui"],
+    "links": []
+  },
+  {
+    "id": "neon-circuit-v2",
+    "date": "2025-09-12",
+    "title": "Neon Circuit v2.1.0 を OSS リリース",
+    "category": "release",
+    "summary": "サイバーパンク UI キット。140 コンポーネント・3 テーマ・Figma ソースを含む。",
+    "tags": ["ui-kit", "oss"],
+    "links": [{ "label": "GitHub", "url": "https://github.com/shiyow5/neon-circuit" }]
+  },
+  {
+    "id": "feature-x-weekly",
+    "date": "2025-06-04",
+    "title": "週刊ピクセル系ニュースレターに掲載",
+    "category": "award",
+    "summary": "Asset Pack 01 が海外のインディー向けニュースレターで紹介された。",
+    "tags": ["recognition"],
+    "links": []
+  },
+  {
+    "id": "asset-pack-01",
+    "date": "2024-11-20",
+    "title": "Asset Pack 01 リリース",
+    "category": "release",
+    "summary": "32x32 CC0 ファンタジーアイコン 120 種。武器・ポーション・食料・UI パーツを網羅。",
+    "tags": ["cc0", "pixel-art"],
+    "links": []
+  },
+  {
+    "id": "switch-to-cloudflare",
+    "date": "2024-06-02",
+    "title": "インフラを Cloudflare に統一",
+    "category": "project",
+    "summary": "個人プロジェクト全体を Pages / Workers / D1 に寄せ、egress ゼロ構成へ移行。",
+    "tags": ["infra"],
+    "links": []
+  },
+  {
+    "id": "career-start",
+    "date": "2024-01-15",
+    "title": "フリーランス / 個人事業主として稼働開始",
+    "category": "job",
+    "summary": "UI 設計・ピクセルアート制作・小規模 Web 実装のご相談を受付開始。",
+    "tags": ["career"],
+    "links": []
+  }
+]

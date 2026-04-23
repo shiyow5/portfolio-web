@@ -26,7 +26,7 @@ test.describe('Smoke', () => {
   test('about shows character sheet', async ({ page }) => {
     await page.goto('/about');
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/status/i);
-    await expect(page.getByRole('heading', { name: /ability board/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /skills.*tech stack/i })).toBeVisible();
   });
 
   test('changelog shows patch notes timeline', async ({ page }) => {
