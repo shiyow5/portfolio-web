@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { PROFILE } from '../lib/profile';
 import { Reveal } from '../components/motion/Reveal';
+import { TechIcon } from '../components/pixel/TechIcon';
 
 const CHARACTER_SRC = '/characters/shiyow.png';
 
@@ -160,9 +161,10 @@ export function About() {
                     {group.items.map((item) => (
                       <li
                         key={item}
-                        className="text-xs font-black uppercase tracking-widest px-2 py-1 bg-tertiary-container text-on-tertiary-container border-2 border-tertiary/40"
+                        className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest px-2 py-1 bg-tertiary-container text-on-tertiary-container border-2 border-tertiary/40"
                       >
-                        {item}
+                        <TechIcon name={item} size={14} />
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
