@@ -21,12 +21,12 @@
     "clean": "rm -rf dist coverage playwright-report test-results"
   },
   "dependencies": {
-    "lucide-react": "^1.8.0",
+    "lucide-react": "^1.11.0",
     "motion": "^12.23.24",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.14.2",
-    "simple-icons": "^16.17.0"
+    "simple-icons": "^16.18.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260421.1",
