@@ -1,11 +1,17 @@
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { Home } from './routes/Home';
-import { About } from './routes/About';
-import { Gallery } from './routes/Gallery';
-import { WorkDetail } from './routes/WorkDetail';
-import { Changelog } from './routes/Changelog';
-import { NotFound } from './routes/NotFound';
+
+// Home stays eager (it is the landing route); the rest are code-split so the
+// first paint only ships the home + shared chunks instead of every route.
+const About = lazy(() => import('./routes/About').then((m) => ({ default: m.About })));
+const Gallery = lazy(() => import('./routes/Gallery').then((m) => ({ default: m.Gallery })));
+const WorkDetail = lazy(() =>
+  import('./routes/WorkDetail').then((m) => ({ default: m.WorkDetail })),
+);
+const Changelog = lazy(() => import('./routes/Changelog').then((m) => ({ default: m.Changelog })));
+const NotFound = lazy(() => import('./routes/NotFound').then((m) => ({ default: m.NotFound })));
 
 export default function App() {
   return (
