@@ -18,6 +18,11 @@ export function Layout() {
     document.title = 'Shiyow — AI Engineer';
   }, []);
 
+  // expose the mode on <html> so global CSS (scrollbar / selection) can re-skin
+  useEffect(() => {
+    document.documentElement.dataset.mode = mode;
+  }, [mode]);
+
   // A mode switch swaps the entire tree; move focus to the new <main> and
   // announce it so keyboard / screen-reader users aren't stranded (WCAG 2.4.3).
   useEffect(() => {

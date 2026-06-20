@@ -45,6 +45,7 @@ export function EditorialNav() {
 
   useEffect(() => {
     if (!open) return;
+    const trigger = triggerRef.current;
     const focusables = () =>
       Array.from(
         overlayRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [],
@@ -75,7 +76,7 @@ export function EditorialNav() {
     return () => {
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
-      triggerRef.current?.focus();
+      trigger?.focus();
     };
   }, [open]);
 

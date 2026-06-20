@@ -1,9 +1,9 @@
 @import 'tailwindcss';
 
 /* ==============================================================
-   16-Bit Atélier — Design Tokens (Tailwind v4 @theme)
-   Color palette: warm cream + sky blue + forest green + wood brown
-   See Templates/design/DESIGN_home.md for the source of truth.
+   Design Tokens (Tailwind v4 @theme)
+   Warm "Atelier" palette: cream surface · sky-blue · forest-green · wood-brown.
+   Used by the editorial mode; the terminal mode uses its own dark literals.
    ============================================================== */
 
 @theme {
@@ -47,11 +47,9 @@
   /* ----- Typography ----- */
   --font-headline: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   --font-body: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-pixel: 'Press Start 2P', 'DotGothic16', monospace;
-  --font-dot: 'DotGothic16', 'Press Start 2P', monospace;
   --font-mono: 'JetBrains Mono', 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* ----- Radius (zero everywhere except full) ----- */
+  /* ----- Radius (sharp, editorial) ----- */
   --radius-xs: 0px;
   --radius-sm: 0px;
   --radius-md: 0px;
@@ -89,225 +87,15 @@ body {
   color: var(--color-on-primary);
 }
 
-/* Keyboard focus indicator (WCAG 2.4.7).
-   outline-offset places the ring outside the element, on the page background,
-   so a primary-blue ring keeps contrast even over coloured/pixel-bordered controls. */
+/* Keyboard focus indicator (WCAG 2.4.7). outline-offset places the ring on the
+   page background so it stays visible over coloured controls. */
 :focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 3px;
 }
 
 /* ==============================================================
-   Background Effects (retro-bg + scanlines + particles)
-   ============================================================== */
-
-.retro-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background-image:
-    linear-gradient(45deg, #f5f4ee 25%, transparent 25%),
-    linear-gradient(-45deg, #f5f4ee 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #f5f4ee 75%),
-    linear-gradient(-45deg, transparent 75%, #f5f4ee 75%);
-  background-size: 4px 4px;
-  background-position:
-    0 0,
-    0 2px,
-    2px -2px,
-    -2px 0;
-}
-
-.scanlines {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(49, 51, 46, 0.025) 50%);
-  background-size: 100% 4px;
-  animation: scanlineScroll 10s linear infinite;
-}
-
-@keyframes scanlineScroll {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 100%;
-  }
-}
-
-.pixel-particles {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.pixel-particles .particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--color-tertiary);
-  opacity: 0.15;
-  animation: float linear infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(110vh) translateX(0);
-  }
-  100% {
-    transform: translateY(-10vh) translateX(20px);
-  }
-}
-
-/* ==============================================================
-   Pixel Border Utilities (16-Bit Atélier)
-   Rule: 2/3/4 px strokes only. Never use 1px or pure black.
-   ============================================================== */
-
-.pixel-border {
-  border: 4px solid var(--color-tertiary);
-  box-shadow: 4px 4px 0 0 rgba(126, 87, 46, 0.2);
-  background-color: var(--color-surface);
-}
-
-.pixel-border-primary {
-  border: 4px solid var(--color-primary);
-  box-shadow: 4px 4px 0 0 rgba(0, 91, 195, 0.2);
-}
-
-.pixel-border-secondary {
-  border: 4px solid var(--color-secondary);
-  box-shadow: 4px 4px 0 0 rgba(0, 111, 28, 0.2);
-}
-
-.pixel-border-thin {
-  border: 3px solid var(--color-outline-variant);
-}
-
-/* Bottom-heavy button: creates a "pressed" feel */
-.pixel-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  font-family: var(--font-body);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.75rem;
-  border-bottom: 4px solid var(--color-primary-dim);
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  cursor: pointer;
-  transition:
-    transform 120ms ease,
-    box-shadow 120ms ease;
-}
-
-.pixel-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 0 0 rgba(0, 91, 195, 0.25);
-}
-
-.pixel-button:active {
-  transform: translateY(2px);
-  box-shadow: none;
-}
-
-.pixel-button--tertiary {
-  background-color: var(--color-tertiary);
-  color: var(--color-on-tertiary);
-  border-bottom-color: var(--color-tertiary-dim);
-}
-
-.pixel-button--ghost {
-  background-color: var(--color-surface-container-low);
-  color: var(--color-on-surface);
-  border-bottom-color: var(--color-outline-variant);
-}
-
-/* ==============================================================
-   Pixel art image rendering
-   ============================================================== */
-
-.pixelated,
-img.pixelated {
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-/* ==============================================================
-   Link underline wipe (left → right on hover)
-   ============================================================== */
-
-.link-wipe {
-  position: relative;
-  display: inline-block;
-}
-
-.link-wipe::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -3px;
-  height: 3px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.link-wipe:hover::after,
-.link-wipe:focus-visible::after {
-  transform: scaleX(1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .link-wipe::after {
-    transition: none;
-  }
-}
-
-/* ==============================================================
-   Material Symbols
-   ============================================================== */
-
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  font-feature-settings: 'liga';
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-.material-symbols-outlined.filled {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-/* ==============================================================
-   Custom scrollbar (chunky 16-bit feel)
+   Custom scrollbar (chunky feel)
    ============================================================== */
 
 ::-webkit-scrollbar {
@@ -325,16 +113,32 @@ img.pixelated {
   background: var(--color-tertiary-dim);
 }
 
+/* terminal mode re-skins the global scrollbar / selection to match the IDE look */
+[data-mode='terminal'] {
+  color-scheme: dark;
+}
+[data-mode='terminal'] *::selection {
+  background-color: #2dd4bf;
+  color: #0d1117;
+}
+[data-mode='terminal'] ::-webkit-scrollbar-track {
+  background: #161b22;
+}
+[data-mode='terminal'] ::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-color: #161b22;
+}
+[data-mode='terminal'] ::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf;
+}
+
 /* ==============================================================
-   Reduced motion — silence decorative CSS animations too
-   (JS/motion already honours useReducedMotion; this covers pure CSS)
+   Reduced motion (JS/motion already honours useReducedMotion; this covers CSS)
    ============================================================== */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .scanlines,
-  .pixel-particles .particle,
   .animate-pulse {
     animation: none !important;
   }
