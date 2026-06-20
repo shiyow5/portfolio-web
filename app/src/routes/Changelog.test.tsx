@@ -29,4 +29,12 @@ describe('Changelog route', () => {
       'https://github.com/shiyow5',
     );
   });
+
+  it('links the Broadcast entry to the real X profile', () => {
+    render(<Changelog />);
+    expect(screen.getByRole('link', { name: /broadcast/i })).toHaveAttribute(
+      'href',
+      'https://x.com/twinS_KNSN1415',
+    );
+  });
 });
