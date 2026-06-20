@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Swords, User, LayoutGrid } from 'lucide-react';
+import { ArrowRight, Swords, User, LayoutGrid, Bot } from 'lucide-react';
 import { WanderingCharacter } from '../components/pixel/WanderingCharacter';
 import { Reveal } from '../components/motion/Reveal';
 import { PROFILE } from '../lib/profile';
@@ -27,6 +27,8 @@ const LATEST_ACTIVITY = ACTIVITIES[0];
 const FEATURED = WORKS.slice(0, 3);
 
 export function Home() {
+  const openChat = () => window.dispatchEvent(new CustomEvent('shiyow:open-chat'));
+
   return (
     <section className="max-w-[1440px] mx-auto px-6 py-12 md:py-20 relative">
       {/* Hero */}
@@ -74,10 +76,27 @@ export function Home() {
         {/* Center Stage */}
         <div className="lg:col-span-6 order-1 lg:order-2 flex flex-col items-center">
           <div className="mb-8 text-center">
-            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-tertiary mb-2">
+            <span className="inline-block bg-tertiary-container px-3 py-1 border-2 border-tertiary text-[10px] font-black uppercase tracking-widest text-on-tertiary-container mb-4">
               Level 1: Home
+            </span>
+            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-tertiary leading-none">
+              Shiyow
             </h1>
-            <div className="h-2 w-32 bg-primary mx-auto" />
+            <p className="text-xl md:text-2xl font-black uppercase tracking-tight text-primary mt-1">
+              AI Engineer
+            </p>
+            <p className="text-sm md:text-base text-on-surface-variant max-w-md mx-auto mt-4 normal-case">
+              LLM アプリ・AI エージェント・ML をプロダクトとして実装します。
+            </p>
+            <div className="flex flex-wrap gap-3 justify-center mt-6">
+              <button type="button" onClick={openChat} className="pixel-button">
+                <Bot size={16} /> AI クローンと話す
+              </button>
+              <Link to="/gallery" className="pixel-button pixel-button--tertiary">
+                実績を見る
+              </Link>
+            </div>
+            <div className="h-2 w-32 bg-primary mx-auto mt-8" />
           </div>
 
           <div className="relative w-full max-w-[600px] aspect-square bg-surface-container-high pixel-border overflow-hidden">
@@ -131,7 +150,7 @@ export function Home() {
 
             <div>
               <h3 className="text-xs font-black uppercase tracking-widest text-tertiary border-b-2 border-tertiary pb-1 mb-3">
-                Inventory
+                Inventory · Tech Stack
               </h3>
               <div className="grid grid-cols-3 gap-2">
                 {INVENTORY_GROUPS.map((group) => (
@@ -164,9 +183,14 @@ export function Home() {
       {/* Featured — Recent Loot bento */}
       <section className="mt-24 md:mt-32">
         <Reveal as="header" className="flex items-end justify-between mb-8 md:mb-12">
-          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-on-surface">
-            Recent Loot
-          </h2>
+          <div>
+            <span className="block text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1">
+              Selected Works
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-on-surface">
+              Recent Loot
+            </h2>
+          </div>
           <div className="hidden md:block h-1 flex-grow mx-8 bg-surface-container-highest" />
           <Link
             to="/gallery"

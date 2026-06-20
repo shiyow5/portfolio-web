@@ -125,7 +125,7 @@ export function WorkDetail() {
 
           <article className="bg-surface-container-lowest pixel-border p-6 md:p-8">
             <h2 className="text-xl font-black uppercase tracking-tight text-tertiary mb-4">
-              Quest Log
+              Quest Log · About
             </h2>
             <p className="text-on-surface leading-relaxed whitespace-pre-line">
               {work.description}
@@ -171,7 +171,7 @@ export function WorkDetail() {
 
           <section className="pixel-border bg-tertiary-container p-5 relative">
             <div className="absolute -top-3 left-4 bg-tertiary text-on-tertiary px-3 py-1 text-[10px] font-black uppercase tracking-widest">
-              Loot Drop
+              Loot Drop · Contact
             </div>
             <p className="text-xs font-bold text-on-tertiary-container leading-snug mt-2">
               コラボ・コミッションのご相談は、右下の shiyow クローン（AI

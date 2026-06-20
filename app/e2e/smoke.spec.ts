@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test.describe('Smoke', () => {
   test('home renders hero + Recent Loot + chat widget FAB', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1, name: /level 1: home/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /shiyow/i })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: /recent loot/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /open chat/i })).toBeVisible();
   });

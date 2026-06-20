@@ -174,7 +174,7 @@ export function About() {
 
             <footer className="mt-8 border-t-4 border-outline-variant pt-6">
               <h3 className="font-black uppercase tracking-widest text-sm text-tertiary mb-3">
-                Passive Perks
+                Passive Perks · Strengths
               </h3>
               <ul className="space-y-2">
                 {PROFILE.perks.map((perk) => (
