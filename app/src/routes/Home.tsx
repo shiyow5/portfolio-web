@@ -47,7 +47,7 @@ export function Home() {
                   Profile
                 </p>
                 <p className="text-sm font-black uppercase text-on-tertiary-container">
-                  shiyow · Lvl 99
+                  shiyow · Lvl {PROFILE.level}
                 </p>
               </div>
             </div>

@@ -82,6 +82,14 @@ body {
   color: var(--color-on-primary);
 }
 
+/* Keyboard focus indicator (WCAG 2.4.7).
+   outline-offset places the ring outside the element, on the page background,
+   so a primary-blue ring keeps contrast even over coloured/pixel-bordered controls. */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
 /* ==============================================================
    Background Effects (retro-bg + scanlines + particles)
    ============================================================== */
@@ -308,4 +316,16 @@ img.pixelated {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-tertiary-dim);
+}
+
+/* ==============================================================
+   Reduced motion — silence decorative CSS animations too
+   (JS/motion already honours useReducedMotion; this covers pure CSS)
+   ============================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .scanlines,
+  .pixel-particles .particle,
+  .animate-pulse {
+    animation: none !important;
+  }
 }
