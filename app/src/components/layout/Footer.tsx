@@ -15,16 +15,12 @@ export function Footer() {
             GitHub
           </a>
           <a
-            href="#"
+            href="https://x.com/twinS_KNSN1415"
+            target="_blank"
+            rel="noreferrer"
             className="text-xs uppercase font-medium text-tertiary opacity-70 hover:opacity-100 hover:text-primary transition-all tracking-widest"
           >
-            Itch.io
-          </a>
-          <a
-            href="#"
-            className="text-xs uppercase font-medium text-tertiary opacity-70 hover:opacity-100 hover:text-primary transition-all tracking-widest"
-          >
-            Contact
+            X
           </a>
         </div>
         <div className="text-[10px] font-black uppercase text-secondary flex items-center gap-2 tracking-widest">

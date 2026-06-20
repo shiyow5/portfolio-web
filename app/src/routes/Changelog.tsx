@@ -209,15 +209,9 @@ export function Changelog() {
                   icon: 'code',
                 },
                 {
-                  label: 'Guild Hall',
-                  detail: 'Discord · 調整中',
-                  href: '#',
-                  icon: 'forum',
-                },
-                {
                   label: 'Broadcast',
-                  detail: 'X / Twitter',
-                  href: '#',
+                  detail: 'X · @twinS_KNSN1415',
+                  href: 'https://x.com/twinS_KNSN1415',
                   icon: 'campaign',
                 },
               ].map((link) => (
