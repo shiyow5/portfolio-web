@@ -135,7 +135,10 @@ export function Changelog() {
         </div>
 
         <aside className="lg:col-span-4 space-y-6">
-          <section className="bg-tertiary text-on-tertiary pixel-border border-[#502f09] p-6">
+          <section
+            className="bg-tertiary text-on-tertiary pixel-border border-[#502f09] p-6"
+            style={{ backgroundColor: 'var(--color-tertiary)' }}
+          >
             <div className="flex items-start justify-between mb-6">
               <div>
                 <div className="text-[10px] uppercase font-black tracking-widest opacity-80 mb-1">

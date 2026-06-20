@@ -7,7 +7,7 @@ export function Footer() {
         </div>
         <div className="flex gap-8">
           <a
-            href="https://github.com"
+            href="https://github.com/shiyow5"
             target="_blank"
             rel="noreferrer"
             className="text-xs uppercase font-medium text-tertiary opacity-70 hover:opacity-100 hover:text-primary transition-all tracking-widest"
