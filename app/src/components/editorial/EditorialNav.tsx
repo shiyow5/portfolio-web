@@ -88,13 +88,24 @@ export function EditorialNav() {
             Shiyow
           </a>
           <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => setMode('terminal')}
-              className="font-mono text-xs uppercase tracking-widest text-primary hover:underline"
-            >
-              {'>_'} Terminal
-            </button>
+            <div className="flex items-center gap-2">
+              <span className="hidden font-mono text-[10px] uppercase tracking-widest text-on-surface-variant sm:inline">
+                View
+              </span>
+              <div className="flex items-center border-2 border-on-surface font-mono text-[11px] uppercase tracking-widest">
+                <span aria-current="true" className="bg-on-surface px-2.5 py-1.5 text-surface">
+                  Editorial
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setMode('terminal')}
+                  aria-label="Switch to terminal mode"
+                  className="px-2.5 py-1.5 hover:bg-on-surface/10"
+                >
+                  {'>_'} Terminal
+                </button>
+              </div>
+            </div>
             <button
               ref={triggerRef}
               type="button"

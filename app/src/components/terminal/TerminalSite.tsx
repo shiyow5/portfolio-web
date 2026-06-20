@@ -60,13 +60,19 @@ export function TerminalSite() {
           <Dot className="bg-[#7EE787]" />
           <Dot className="bg-[#2DD4BF]" />
           <span className={`ml-3 text-[12px] ${MUTED}`}>shiyow@devstation: ~/shiyow.dev — zsh</span>
-          <button
-            type="button"
-            onClick={() => setMode('editorial')}
-            className="ml-auto rounded-md border border-[#30363D] px-2.5 py-1 text-[12px] text-[#E6EDF3] hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
-          >
-            ◧ editorial
-          </button>
+          <div className="ml-auto flex items-center overflow-hidden rounded-md border border-[#30363D] text-[12px]">
+            <button
+              type="button"
+              onClick={() => setMode('editorial')}
+              aria-label="Switch to editorial mode"
+              className="px-2.5 py-1 text-[#8B949E] hover:text-[#E6EDF3]"
+            >
+              ◧ editorial
+            </button>
+            <span aria-current="true" className="bg-[#2DD4BF] px-2.5 py-1 text-[#0D1117]">
+              terminal
+            </span>
+          </div>
         </div>
         <nav className="mt-2 flex items-end gap-1 overflow-x-auto px-2 text-[13px]">
           {NAV.map((t) => (
@@ -184,9 +190,16 @@ export function TerminalSite() {
             {PROFILE.techStack.map((g) => (
               <div key={g.id} className="rounded-md border border-[#30363D] bg-[#161B22] p-4">
                 <p className={`text-[13px] ${PURPLE}`}>"{g.label}":</p>
-                <p className="mt-1 text-[13px] leading-relaxed text-[#E6EDF3]/85">
-                  [{g.items.map((it) => `"${it}"`).join(', ')}]
-                </p>
+                <ul className="mt-2 flex flex-wrap gap-1.5">
+                  {g.items.map((it) => (
+                    <li
+                      key={it}
+                      className="rounded border border-[#30363D] bg-[#0D1117] px-2 py-0.5 text-[11px] text-[#E6EDF3]/90"
+                    >
+                      {it}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

@@ -18,7 +18,7 @@ const GREETING: DisplayMessage = {
   id: 'greeting',
   role: 'assistant',
   content:
-    'shiyow の AI クローンです（Gemini 製）。経歴・スキル・作ったもの、何でも聞いてください。',
+    'shiyow の AI クローンです（Gemini 製）。経歴・スキル・このサイトの実装まで、何でも聞いてください。',
 };
 
 interface ChatTheme {
@@ -85,6 +85,7 @@ export function ChatWidget() {
   const reduce = useReducedMotion();
   const { containerRef, token, enabled } = useTurnstile();
   const [open, setOpen] = useState(false);
+  const [teaserHidden, setTeaserHidden] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
   const [sending, setSending] = useState(false);
@@ -118,6 +119,12 @@ export function ChatWidget() {
     const openChat = () => setOpen(true);
     window.addEventListener('shiyow:open-chat', openChat);
     return () => window.removeEventListener('shiyow:open-chat', openChat);
+  }, []);
+
+  // The teaser bubble greets once, then tucks away so it stops overlapping content.
+  useEffect(() => {
+    const timer = setTimeout(() => setTeaserHidden(true), 6000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSend = () => {
@@ -177,7 +184,7 @@ export function ChatWidget() {
     <div className={t.font}>
       <div className="fixed bottom-8 right-8 flex flex-col items-end gap-3 z-[90]">
         <AnimatePresence>
-          {!open && (
+          {!open && !teaserHidden && (
             <motion.div
               key="bubble"
               initial={{ opacity: 0, y: 8, scale: 0.95 }}

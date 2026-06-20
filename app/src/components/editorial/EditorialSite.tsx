@@ -69,7 +69,7 @@ export function EditorialSite() {
 
           <motion.p
             variants={fadeUp}
-            className="mt-1 text-2xl md:text-4xl font-black uppercase tracking-tight text-on-surface-variant"
+            className="mt-2 text-2xl md:text-4xl font-bold uppercase tracking-tight text-on-surface-variant"
           >
             AI Engineer
           </motion.p>
@@ -119,6 +119,13 @@ export function EditorialSite() {
               Get in touch ↓
             </a>
           </motion.div>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-4 font-mono text-[11px] uppercase tracking-widest text-on-surface-variant"
+          >
+            {'// ▶ Ask my AI clone — 本人が Gemini で実装したライブデモ (SSE / Turnstile / KV)'}
+          </motion.p>
         </motion.section>
 
         {/* ===== selected work ===== */}
@@ -126,6 +133,11 @@ export function EditorialSite() {
           <motion.div {...reveal}>
             <SectionHead index="01" title="Selected Work" note="制作物・実績" />
           </motion.div>
+          {WORKS.length === 0 && (
+            <p className="border-t-2 border-on-surface/15 py-7 font-mono text-sm text-on-surface-variant">
+              {'// 準備中 — 近日公開'}
+            </p>
+          )}
           <motion.ol
             variants={staggerContainer(0.07)}
             initial="hidden"
@@ -200,6 +212,11 @@ export function EditorialSite() {
         {/* ===== activity ===== */}
         <motion.section id="activity" className="py-12 md:py-16" {...reveal}>
           <SectionHead index="03" title="Activity" note="直近の活動" />
+          {ACTIVITIES.length === 0 && (
+            <p className="border-t-2 border-on-surface/15 py-3 font-mono text-sm text-on-surface-variant">
+              {'// 準備中'}
+            </p>
+          )}
           <ul>
             {ACTIVITIES.slice(0, 7).map((a) => (
               <li
