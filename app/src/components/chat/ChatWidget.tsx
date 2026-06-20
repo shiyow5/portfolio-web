@@ -15,7 +15,8 @@ interface DisplayMessage extends ChatMessage {
 const GREETING: DisplayMessage = {
   id: 'greeting',
   role: 'assistant',
-  content: 'やぁ旅人！ shiyow のクローンです。サイト案内、よろしく。何でも聞いて。',
+  content:
+    'shiyow の AI クローンです（Gemini 製）。経歴・スキル・作ったもの、何でも聞いてください。',
 };
 
 export function ChatWidget() {
@@ -32,6 +33,13 @@ export function ChatWidget() {
 
   useEffect(() => {
     return () => abortRef.current?.abort();
+  }, []);
+
+  // Allow other components (e.g. the Home hero CTA) to open the chat.
+  useEffect(() => {
+    const openChat = () => setOpen(true);
+    window.addEventListener('shiyow:open-chat', openChat);
+    return () => window.removeEventListener('shiyow:open-chat', openChat);
   }, []);
 
   const handleSend = () => {
@@ -102,7 +110,7 @@ export function ChatWidget() {
               className="pixel-border bg-surface-container-lowest p-3 max-w-[220px]"
             >
               <p className="text-[11px] font-black uppercase text-on-surface leading-snug">
-                Hey Traveler! 何か聞いてみる?
+                shiyow の AI クローンに聞いてみる?
               </p>
               <div className="absolute -bottom-2 right-6 w-4 h-4 bg-surface-container-lowest border-r-4 border-b-4 border-tertiary rotate-45" />
             </motion.div>

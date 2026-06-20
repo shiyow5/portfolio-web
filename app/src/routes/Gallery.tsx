@@ -33,7 +33,7 @@ export function Gallery() {
       <header className="mb-10">
         <div className="inline-block bg-tertiary-container px-5 py-1.5 border-4 border-tertiary mb-4">
           <span className="font-black text-on-tertiary-container uppercase tracking-tighter text-sm">
-            Quest Log
+            Quest Log · Works
           </span>
         </div>
         <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-tertiary leading-none">

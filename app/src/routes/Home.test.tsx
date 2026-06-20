@@ -13,9 +13,15 @@ function renderHome() {
 }
 
 describe('Home route', () => {
-  it('shows the hero heading', () => {
+  it('shows the hero with the name and AI Engineer role', () => {
     renderHome();
-    expect(screen.getByRole('heading', { level: 1, name: /level 1: home/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /shiyow/i })).toBeInTheDocument();
+    expect(screen.getByText(/ai engineer/i)).toBeInTheDocument();
+  });
+
+  it('offers a CTA to talk to the AI clone', () => {
+    renderHome();
+    expect(screen.getByRole('button', { name: /クローンと話す/ })).toBeInTheDocument();
   });
 
   it('renders the Recent Loot section', () => {

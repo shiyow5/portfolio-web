@@ -1,11 +1,11 @@
 {
   "name": "Shiyow",
-  "classTitle": "Pixel Craftsperson / UI Engineer",
+  "classTitle": "AI Engineer / LLM・Agent Developer",
   "level": 28,
   "xp": 12450,
   "xpNext": 15000,
   "location": "Digital Highlands, JP",
-  "bioQuote": "デジタル高原の職人。ピクセルの形と UX の流れを磨き続けてはや何月。今は広い Web 平原を旅しながら、帰宅した時みたいに落ち着く体験を作っています。",
+  "bioQuote": "LLM とエージェントで動くプロダクトを作る AI エンジニア。モデル選定・RAG・エージェント設計の実装から、手触りの良い UI まで一気通貫で仕上げるのが好きです。",
   "stats": [
     { "label": "HP", "value": 92, "max": 100, "color": "secondary" },
     { "label": "Focus", "value": 74, "max": 100, "color": "primary" },
@@ -13,22 +13,22 @@
   ],
   "techStack": [
     {
+      "id": "ai",
+      "label": "AI & Agents",
+      "icon": "smart_toy",
+      "items": ["Gemini 2.0 Flash", "Claude", "LangChain", "RAG", "Vectorize (Workers AI)"]
+    },
+    {
       "id": "languages",
       "label": "Languages",
       "icon": "code",
-      "items": ["TypeScript", "JavaScript", "Python", "Go", "SQL"]
+      "items": ["Python", "TypeScript", "JavaScript", "Go", "SQL"]
     },
     {
       "id": "frameworks",
       "label": "Frameworks & Runtime",
       "icon": "deployed_code",
-      "items": ["React 19", "Vite 6", "Tailwind CSS v4", "Motion", "React Router", "Node.js"]
-    },
-    {
-      "id": "design",
-      "label": "Design & Pixel Art",
-      "icon": "brush",
-      "items": ["Figma", "FigJam", "Aseprite", "Photoshop"]
+      "items": ["React 19", "Vite 8", "Tailwind CSS v4", "Motion", "React Router", "Node.js"]
     },
     {
       "id": "cloud",
@@ -37,28 +37,28 @@
       "items": ["Cloudflare Pages", "Workers", "D1", "R2", "KV", "GCP", "Vercel"]
     },
     {
-      "id": "ai",
-      "label": "AI & Agents",
-      "icon": "smart_toy",
-      "items": ["Gemini 2.0 Flash", "Claude", "LangChain", "Vectorize (Workers AI)"]
+      "id": "tools",
+      "label": "Tools",
+      "icon": "build",
+      "items": ["VS Code", "Git", "gh CLI", "tmux", "Wrangler"]
+    },
+    {
+      "id": "design",
+      "label": "Design & Pixel Art",
+      "icon": "brush",
+      "items": ["Figma", "FigJam", "Aseprite", "Photoshop"]
     },
     {
       "id": "gamedev",
       "label": "Game Dev",
       "icon": "sports_esports",
       "items": ["Unity", "Godot"]
-    },
-    {
-      "id": "tools",
-      "label": "Tools",
-      "icon": "build",
-      "items": ["VS Code", "Git", "gh CLI", "tmux", "Wrangler"]
     }
   ],
   "perks": [
-    "Passive: 新しいピクセルフォントを見ると HP +5",
-    "Passive: 太ボーダー+角丸0pxに耐性",
-    "Active: ダークモード → ライトモード往復で CSS 変数を自動整理"
+    "Passive: 自分のクローン AI をサイトに住まわせている",
+    "Passive: モデル選定とコスト最適化が習慣",
+    "Active: プロトタイプから本番デプロイまで一人で通す"
   ],
   "history": [
     {
