@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Send, X } from 'lucide-react';
 import { streamChat, type ChatMessage } from '../../lib/chat';
+import { useMode, type Mode } from '../../lib/mode';
 
 const CHARACTER_SRC = '/characters/shiyow.png';
 const TURNSTILE_SITEKEY = import.meta.env.VITE_TURNSTILE_SITEKEY as string | undefined;
@@ -19,7 +20,67 @@ const GREETING: DisplayMessage = {
     'shiyow の AI クローンです（Gemini 製）。経歴・スキル・作ったもの、何でも聞いてください。',
 };
 
+interface ChatTheme {
+  font: string;
+  fab: string;
+  fabIcon: string;
+  teaser: string;
+  teaserText: string;
+  panel: string;
+  header: string;
+  headerTitle: string;
+  title: string;
+  closeBtn: string;
+  msgUser: string;
+  msgAssistant: string;
+  msgError: string;
+  form: string;
+  input: string;
+  sendBtn: string;
+}
+
+const THEMES: Record<Mode, ChatTheme> = {
+  editorial: {
+    font: '',
+    fab: 'bg-surface border-2 border-on-surface shadow-[4px_4px_0_0_rgba(49,51,46,0.22)]',
+    fabIcon: 'text-on-surface',
+    teaser: 'border-2 border-on-surface bg-surface-container-lowest',
+    teaserText: 'text-on-surface',
+    panel: 'bg-surface border-2 border-on-surface shadow-[6px_6px_0_0_rgba(49,51,46,0.18)]',
+    header: 'bg-on-surface',
+    headerTitle: 'text-surface',
+    title: 'shiyow clone',
+    closeBtn: 'text-surface/70 hover:text-surface',
+    msgUser: 'bg-primary border-2 border-primary text-on-primary',
+    msgAssistant: 'bg-surface-container-low border-2 border-on-surface/20 text-on-surface',
+    msgError: 'bg-error-container border-2 border-error text-on-error',
+    form: 'border-t-2 border-on-surface bg-surface-container-low',
+    input: 'bg-surface-container-lowest border-2 border-on-surface/30 focus:border-primary',
+    sendBtn: 'bg-primary text-on-primary border-2 border-primary',
+  },
+  terminal: {
+    font: 'font-mono',
+    fab: 'bg-[#161B22] border border-[#30363D]',
+    fabIcon: 'text-[#2DD4BF]',
+    teaser: 'border border-[#30363D] bg-[#161B22]',
+    teaserText: 'text-[#2DD4BF]',
+    panel: 'bg-[#0D1117] border border-[#30363D] shadow-[0_8px_30px_rgba(0,0,0,0.5)]',
+    header: 'bg-[#161B22] border-b border-[#30363D]',
+    headerTitle: 'text-[#2DD4BF]',
+    title: 'shiyow-clone — agent.py',
+    closeBtn: 'text-[#8B949E] hover:text-[#FF6B6B]',
+    msgUser: 'bg-[#2DD4BF]/15 border border-[#2DD4BF]/40 text-[#E6EDF3]',
+    msgAssistant: 'bg-[#161B22] border border-[#30363D] text-[#E6EDF3]/90',
+    msgError: 'bg-[#FF6B6B]/15 border border-[#FF6B6B] text-[#FF6B6B]',
+    form: 'border-t border-[#30363D] bg-[#0D1117]',
+    input: 'bg-[#0D1117] border border-[#30363D] text-[#E6EDF3] focus:border-[#2DD4BF]',
+    sendBtn: 'bg-[#2DD4BF] text-[#0D1117] border border-[#2DD4BF]',
+  },
+};
+
 export function ChatWidget() {
+  const { mode } = useMode();
+  const t = THEMES[mode];
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
@@ -35,7 +96,6 @@ export function ChatWidget() {
     return () => abortRef.current?.abort();
   }, []);
 
-  // Allow other components (e.g. the Home hero CTA) to open the chat.
   useEffect(() => {
     const openChat = () => setOpen(true);
     window.addEventListener('shiyow:open-chat', openChat);
@@ -50,11 +110,7 @@ export function ChatWidget() {
       .filter((m) => !m.error)
       .map(({ role, content }) => ({ role, content }));
 
-    const userMsg: DisplayMessage = {
-      id: `u-${Date.now()}`,
-      role: 'user',
-      content: trimmed,
-    };
+    const userMsg: DisplayMessage = { id: `u-${Date.now()}`, role: 'user', content: trimmed };
     const assistantId = `a-${Date.now()}`;
     const assistantMsg: DisplayMessage = {
       id: assistantId,
@@ -97,34 +153,39 @@ export function ChatWidget() {
     });
   };
 
+  const isTerminal = mode === 'terminal';
+
   return (
-    <>
+    <div className={t.font}>
       <div className="fixed bottom-8 right-8 flex flex-col items-end gap-3 z-[90]">
         <AnimatePresence>
           {!open && (
             <motion.div
               key="bubble"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              className="pixel-border bg-surface-container-lowest p-3 max-w-[220px]"
+              initial={{ opacity: 0, y: 8, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.95 }}
+              className={`relative p-3 max-w-[230px] ${t.teaser}`}
             >
-              <p className="text-[11px] font-black uppercase text-on-surface leading-snug">
-                shiyow の AI クローンに聞いてみる?
+              <p className={`text-[11px] font-black uppercase leading-snug ${t.teaserText}`}>
+                {isTerminal ? '❯ ask my clone' : 'shiyow の AI クローンに聞いてみる?'}
               </p>
-              <div className="absolute -bottom-2 right-6 w-4 h-4 bg-surface-container-lowest border-r-4 border-b-4 border-tertiary rotate-45" />
             </motion.div>
           )}
         </AnimatePresence>
 
-        <button
+        <motion.button
           type="button"
           aria-label={open ? 'Close chat' : 'Open chat'}
           onClick={() => setOpen((v) => !v)}
-          className="relative w-16 h-16 bg-tertiary-container border-4 border-tertiary shadow-[4px_4px_0_0_rgba(126,87,46,0.25)] flex items-center justify-center hover:-translate-y-1 transition-transform"
+          whileHover={{ y: -3 }}
+          whileTap={{ scale: 0.95 }}
+          className={`relative w-16 h-16 flex items-center justify-center ${t.fab}`}
         >
           {open ? (
-            <X size={28} className="text-tertiary" />
+            <X size={26} className={t.fabIcon} />
+          ) : isTerminal ? (
+            <span className={`text-2xl font-black ${t.fabIcon}`}>❯_</span>
           ) : (
             <img
               src={CHARACTER_SRC}
@@ -133,28 +194,28 @@ export function ChatWidget() {
               draggable={false}
             />
           )}
-        </button>
+        </motion.button>
       </div>
 
       <AnimatePresence>
         {open && (
           <motion.div
             key="panel"
-            initial={{ opacity: 0, y: 20, scale: 0.96 }}
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.96 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-28 right-8 z-[91] w-[360px] max-w-[calc(100vw-2rem)] h-[460px] bg-surface-container-lowest border-4 border-tertiary shadow-[4px_4px_0_0_rgba(126,87,46,0.25)] flex flex-col"
+            exit={{ opacity: 0, y: 24, scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+            className={`fixed bottom-28 right-8 z-[91] w-[360px] max-w-[calc(100vw-2rem)] h-[460px] flex flex-col ${t.panel}`}
           >
-            <div className="flex items-center justify-between border-b-4 border-tertiary bg-tertiary-container px-4 py-2">
-              <span className="font-black uppercase text-xs tracking-widest text-on-tertiary-container">
-                shiyow clone · v0
+            <div className={`flex items-center justify-between px-4 py-2 ${t.header}`}>
+              <span className={`font-black uppercase text-xs tracking-widest ${t.headerTitle}`}>
+                {t.title}
               </span>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close"
-                className="text-tertiary hover:text-error"
+                className={t.closeBtn}
               >
                 <X size={18} />
               </button>
@@ -167,14 +228,9 @@ export function ChatWidget() {
                   className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}
                 >
                   <div
-                    className={[
-                      'max-w-[85%] p-3 text-sm leading-relaxed border-4 whitespace-pre-wrap',
-                      m.role === 'user'
-                        ? 'bg-primary-container border-primary text-on-primary-container'
-                        : m.error
-                          ? 'bg-error-container border-error text-on-error'
-                          : 'bg-surface-container-low border-outline-variant text-on-surface',
-                    ].join(' ')}
+                    className={`max-w-[85%] p-3 text-sm leading-relaxed whitespace-pre-wrap ${
+                      m.role === 'user' ? t.msgUser : m.error ? t.msgError : t.msgAssistant
+                    }`}
                   >
                     {m.content || (m.pending ? '…' : '')}
                     {m.pending && m.content && (
@@ -186,7 +242,7 @@ export function ChatWidget() {
             </div>
 
             {import.meta.env.DEV && !TURNSTILE_SITEKEY && (
-              <div className="px-4 py-1 text-[10px] font-black uppercase tracking-widest bg-error-container text-on-error border-t-2 border-error">
+              <div className="px-4 py-1 text-[10px] font-black uppercase tracking-widest bg-error-container text-on-error">
                 Turnstile 未設定 — 保護なしで動作中（開発時のみ表示）
               </div>
             )}
@@ -196,20 +252,20 @@ export function ChatWidget() {
                 e.preventDefault();
                 handleSend();
               }}
-              className="flex gap-2 border-t-4 border-tertiary p-3 bg-surface-container-low"
+              className={`flex gap-2 p-3 ${t.form}`}
             >
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="メッセージを入力..."
-                className="flex-1 bg-surface-container-lowest border-2 border-outline px-3 py-2 text-base focus:border-primary focus:border-4 outline-none transition-all"
+                placeholder={isTerminal ? '❯ type a message…' : 'メッセージを入力...'}
+                className={`flex-1 px-3 py-2 text-base outline-none transition-colors ${t.input}`}
                 maxLength={500}
                 disabled={sending}
               />
               <button
                 type="submit"
                 aria-label="Send"
-                className="pixel-button disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`px-3 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed ${t.sendBtn}`}
                 disabled={!input.trim() || sending}
               >
                 <Send size={14} />
@@ -218,6 +274,6 @@ export function ChatWidget() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

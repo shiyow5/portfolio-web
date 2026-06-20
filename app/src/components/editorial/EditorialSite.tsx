@@ -1,87 +1,85 @@
 import { useState, type FormEvent } from 'react';
+import { motion } from 'motion/react';
 import { useMode } from '../../lib/mode';
+import { fadeUp, staggerContainer } from '../../lib/motion';
 import { PROFILE } from '../../lib/profile';
 import { WORKS } from '../../lib/works';
 import { ACTIVITIES, CATEGORY_LABEL, formatDate } from '../../lib/activity';
 import { submitContact } from '../../lib/contact';
 import { useTurnstile } from '../../lib/turnstile';
 import { ChatWidget } from '../chat/ChatWidget';
+import { EditorialNav } from './EditorialNav';
 
 // ---------------------------------------------------------------------------
 // Editorial / TYPESET presentation in the warm Atelier palette (cream + blue).
-// Typography-led, numbered sections, mono metadata. Default site mode.
+// Typography-led, numbered sections, mono metadata, motion reveals.
 // ---------------------------------------------------------------------------
-
-const NAV = [
-  { href: '#work', label: 'Work' },
-  { href: '#stack', label: 'Stack' },
-  { href: '#activity', label: 'Activity' },
-  { href: '#contact', label: 'Contact' },
-];
 
 type Status = 'idle' | 'sending' | 'success' | 'error';
 
 const FORM_INPUT =
   'w-full bg-surface-container-lowest border-b-2 border-on-surface/30 px-1 py-2 text-base focus:border-primary outline-none transition-colors';
 
+const reveal = {
+  variants: fadeUp,
+  initial: 'hidden',
+  whileInView: 'show',
+  viewport: { once: true, amount: 0.15 },
+} as const;
+
 export function EditorialSite() {
   const { setMode } = useMode();
   const askClone = () => window.dispatchEvent(new CustomEvent('shiyow:open-chat'));
-  const title = PROFILE.classTitle.split(' / ')[0];
 
   return (
     <div className="min-h-screen bg-surface text-on-surface">
-      {/* ===== header ===== */}
-      <header className="sticky top-0 z-30 bg-surface/90 backdrop-blur border-b-2 border-on-surface">
-        <div className="mx-auto flex max-w-[1180px] items-center justify-between px-6 py-3">
-          <a href="#top" className="text-lg font-black uppercase tracking-tighter">
-            Shiyow
-          </a>
-          <nav className="hidden items-center gap-6 font-mono text-xs uppercase tracking-widest text-on-surface-variant md:flex">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="hover:text-primary">
-                {n.label}
-              </a>
-            ))}
-          </nav>
-          <button
-            type="button"
-            onClick={() => setMode('terminal')}
-            className="font-mono text-xs uppercase tracking-widest text-primary hover:underline"
-          >
-            {'>_'} Terminal ↗
-          </button>
-        </div>
-      </header>
+      <EditorialNav />
 
       <main id="top" className="mx-auto max-w-[1180px] px-6">
         {/* ===== hero ===== */}
-        <section className="border-b-2 border-on-surface py-12 md:py-20">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs uppercase tracking-widest text-on-surface-variant">
+        <motion.section
+          variants={staggerContainer(0.09)}
+          initial="hidden"
+          animate="show"
+          className="border-b-2 border-on-surface py-12 md:py-20"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs uppercase tracking-widest text-on-surface-variant"
+          >
             <span>shiyow</span>
             <span className="text-outline">/</span>
             <span>{PROFILE.location}</span>
             <span className="text-outline">/</span>
             <span className="text-secondary">◉ Open to work — 就活中</span>
-          </div>
+          </motion.div>
 
-          <h1 className="mt-6 font-black uppercase leading-[0.84] tracking-tighter text-[clamp(3.25rem,13vw,11rem)]">
-            AI
-            <br />
-            Engineer
-            <span className="text-primary">.</span>
-          </h1>
+          <motion.h1
+            variants={fadeUp}
+            className="mt-6 font-black lowercase leading-[0.82] tracking-tighter text-[clamp(4rem,18vw,15rem)]"
+          >
+            shiyow<span className="text-primary">.</span>
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-1 text-2xl md:text-4xl font-black uppercase tracking-tight text-on-surface-variant"
+          >
+            AI Engineer
+          </motion.p>
 
           <div className="mt-8 grid gap-6 md:grid-cols-12">
-            <p className="md:col-span-7 text-lg md:text-xl text-on-surface-variant max-w-2xl">
-              {PROFILE.name} — LLM アプリ・AI エージェント・ML をプロダクトとして実装する AI
-              エンジニア。 モデル選定から本番デプロイまで一人で通します。
-            </p>
-            <dl className="md:col-span-5 font-mono text-xs uppercase tracking-widest text-tertiary md:justify-self-end space-y-1">
-              <div>
-                <dt className="inline text-on-surface-variant">role / </dt>
-                <dd className="inline">{title}</dd>
-              </div>
+            <motion.p
+              variants={fadeUp}
+              className="md:col-span-7 text-lg md:text-xl text-on-surface-variant max-w-2xl"
+            >
+              LLM アプリ・AI エージェント・ML をプロダクトとして実装します。
+              モデル選定から本番デプロイまで一人で通すのが得意です。
+            </motion.p>
+            <motion.dl
+              variants={fadeUp}
+              className="md:col-span-5 font-mono text-xs uppercase tracking-widest text-tertiary md:justify-self-end space-y-1"
+            >
               <div>
                 <dt className="inline text-on-surface-variant">core / </dt>
                 <dd className="inline">LLM · Agent · RAG · ML</dd>
@@ -90,10 +88,17 @@ export function EditorialSite() {
                 <dt className="inline text-on-surface-variant">lang / </dt>
                 <dd className="inline">Python · TypeScript · Go</dd>
               </div>
-            </dl>
+              <div>
+                <dt className="inline text-on-surface-variant">infra / </dt>
+                <dd className="inline">Cloudflare · GCP · Gemini</dd>
+              </div>
+            </motion.dl>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-widest">
+          <motion.div
+            variants={fadeUp}
+            className="mt-8 flex flex-wrap gap-3 font-mono text-xs uppercase tracking-widest"
+          >
             <button
               type="button"
               onClick={askClone}
@@ -107,20 +112,24 @@ export function EditorialSite() {
             >
               Get in touch ↓
             </a>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* ===== selected work ===== */}
         <section id="work" className="py-12 md:py-16">
-          <SectionHead
-            index="01"
-            title="Selected Work"
-            note="制作物・実績（内容は順次 AI 実績へ）"
-          />
-          <ol>
+          <motion.div {...reveal}>
+            <SectionHead index="01" title="Selected Work" note="制作物・実績（順次 AI 実績へ）" />
+          </motion.div>
+          <motion.ol
+            variants={staggerContainer(0.07)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             {WORKS.map((w, i) => (
-              <li
+              <motion.li
                 key={w.id}
+                variants={fadeUp}
                 className="grid grid-cols-12 gap-3 border-t-2 border-on-surface/15 py-7 group"
               >
                 <span className="col-span-12 md:col-span-1 font-mono text-sm text-primary">
@@ -160,13 +169,13 @@ export function EditorialSite() {
                     )}
                   </p>
                 </div>
-              </li>
+              </motion.li>
             ))}
-          </ol>
+          </motion.ol>
         </section>
 
         {/* ===== stack ===== */}
-        <section id="stack" className="py-12 md:py-16">
+        <motion.section id="stack" className="py-12 md:py-16" {...reveal}>
           <SectionHead index="02" title="Stack" note="AI を主軸に" />
           <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
             {PROFILE.techStack.map((g) => (
@@ -178,10 +187,10 @@ export function EditorialSite() {
               </div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* ===== activity ===== */}
-        <section id="activity" className="py-12 md:py-16">
+        <motion.section id="activity" className="py-12 md:py-16" {...reveal}>
           <SectionHead index="03" title="Activity" note="直近の活動" />
           <ul>
             {ACTIVITIES.slice(0, 7).map((a) => (
@@ -199,13 +208,12 @@ export function EditorialSite() {
               </li>
             ))}
           </ul>
-        </section>
+        </motion.section>
 
         {/* ===== contact ===== */}
         <ContactSection askClone={askClone} />
       </main>
 
-      {/* ===== footer ===== */}
       <footer className="border-t-2 border-on-surface">
         <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 px-6 py-6 font-mono text-xs uppercase tracking-widest text-on-surface-variant">
           <span>© 2026 shiyow — AI Engineer</span>
@@ -257,11 +265,14 @@ function ContactSection({ askClone }: { askClone: () => void }) {
   };
 
   return (
-    <section id="contact" className="border-t-2 border-on-surface py-12 md:py-20">
+    <motion.section
+      id="contact"
+      className="border-t-2 border-on-surface py-12 md:py-20"
+      {...reveal}
+    >
       <p className="font-mono text-xs uppercase tracking-widest text-secondary">◉ Open to work</p>
       <h2 className="mt-3 font-black uppercase leading-[0.85] tracking-tighter text-[clamp(2.75rem,10vw,7rem)]">
-        Let&rsquo;s talk
-        <span className="text-primary">.</span>
+        Let&rsquo;s talk<span className="text-primary">.</span>
       </h2>
       <p className="mt-4 max-w-xl text-on-surface-variant">
         採用・カジュアル面談のご連絡を歓迎します。経歴やスキルは右下の AI クローンにも聞けます。
@@ -346,7 +357,7 @@ function ContactSection({ askClone }: { askClone: () => void }) {
           </a>
         </aside>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
