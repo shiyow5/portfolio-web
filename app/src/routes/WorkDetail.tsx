@@ -174,8 +174,11 @@ export function WorkDetail() {
               Loot Drop · Contact
             </div>
             <p className="text-xs font-bold text-on-tertiary-container leading-snug mt-2">
-              コラボ・コミッションのご相談は、右下の shiyow クローン（AI
-              チャット）にお声がけください。
+              コラボ・コミッションのご相談は{' '}
+              <Link to="/contact" className="underline font-black hover:text-primary">
+                Contact ページ
+              </Link>{' '}
+              か、右下の shiyow クローン（AI チャット）からどうぞ。
             </p>
           </section>
         </aside>
