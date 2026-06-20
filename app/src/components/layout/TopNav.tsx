@@ -7,6 +7,7 @@ const LINKS = [
   { to: '/about', label: 'About' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/changelog', label: 'Changelog' },
+  { to: '/contact', label: 'Contact' },
 ];
 
 export function TopNav() {

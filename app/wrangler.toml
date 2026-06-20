@@ -15,3 +15,7 @@ pages_build_output_dir = "dist"
 # Runtime secrets are stored via the Pages dashboard, NOT this file:
 #   GEMINI_API_KEY
 #   TURNSTILE_SECRET
+#   CONTACT_WEBHOOK_URL  — incoming webhook (Discord / Slack / Zapier) that
+#                          functions/api/contact.ts forwards contact-form
+#                          submissions to. Until set, the form returns a
+#                          "未設定" notice and points visitors to X instead.

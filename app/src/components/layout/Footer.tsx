@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export function Footer() {
   return (
     <footer className="bg-surface-container-low/90 border-t-4 border-tertiary relative z-10 mt-20">
@@ -6,6 +8,12 @@ export function Footer() {
           © 2026 The 16-Bit Atelier · Handcrafted with Pixels
         </div>
         <div className="flex gap-8">
+          <Link
+            to="/contact"
+            className="text-xs uppercase font-medium text-tertiary opacity-70 hover:opacity-100 hover:text-primary transition-all tracking-widest"
+          >
+            Contact
+          </Link>
           <a
             href="https://github.com/shiyow5"
             target="_blank"

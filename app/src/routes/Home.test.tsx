@@ -29,10 +29,10 @@ describe('Home route', () => {
     expect(screen.getByRole('heading', { level: 2, name: /recent loot/i })).toBeInTheDocument();
   });
 
-  it('links to the gallery for the Start Quest CTA', () => {
+  it('links the consultation CTA to the contact page', () => {
     renderHome();
-    const cta = screen.getByRole('link', { name: /start quest/i });
-    expect(cta).toHaveAttribute('href', '/gallery');
+    const cta = screen.getByRole('link', { name: /相談する/ });
+    expect(cta).toHaveAttribute('href', '/contact');
   });
 
   it('features real works in Recent Loot, linking to their detail pages', () => {

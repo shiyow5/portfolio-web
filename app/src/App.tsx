@@ -11,6 +11,7 @@ const WorkDetail = lazy(() =>
   import('./routes/WorkDetail').then((m) => ({ default: m.WorkDetail })),
 );
 const Changelog = lazy(() => import('./routes/Changelog').then((m) => ({ default: m.Changelog })));
+const Contact = lazy(() => import('./routes/Contact').then((m) => ({ default: m.Contact })));
 const NotFound = lazy(() => import('./routes/NotFound').then((m) => ({ default: m.NotFound })));
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="gallery" element={<Gallery />} />
         <Route path="works/:id" element={<WorkDetail />} />
         <Route path="changelog" element={<Changelog />} />
+        <Route path="contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

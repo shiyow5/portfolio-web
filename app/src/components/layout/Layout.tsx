@@ -11,6 +11,7 @@ const ROUTE_TITLES: Record<string, string> = {
   '/about': 'About · Shiyow — AI Engineer',
   '/gallery': 'Works · Shiyow — AI Engineer',
   '/changelog': 'Activity · Shiyow — AI Engineer',
+  '/contact': 'Contact · Shiyow — AI Engineer',
 };
 
 function titleFor(pathname: string): string {

@@ -267,8 +267,8 @@ export function Home() {
                   作品のご相談、コラボ、コミッションを受付中です。
                 </p>
               </div>
-              <Link to="/gallery" className="pixel-button whitespace-nowrap">
-                Start Quest
+              <Link to="/contact" className="pixel-button whitespace-nowrap">
+                相談する
               </Link>
             </div>
           </Reveal>
