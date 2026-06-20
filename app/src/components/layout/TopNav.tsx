@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
+import { useMode } from '../../lib/mode';
 
 const LINKS = [
   { to: '/', label: 'Home', end: true },
@@ -13,6 +14,7 @@ const LINKS = [
 export function TopNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { setMode } = useMode();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -80,18 +82,33 @@ export function TopNav() {
             Shiyow
           </NavLink>
 
-          <button
-            ref={triggerRef}
-            type="button"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            aria-controls="site-menu-panel"
-            onClick={() => setOpen((v) => !v)}
-            className="flex items-center gap-3 pixel-border bg-tertiary-container px-4 py-2 font-black uppercase tracking-widest text-sm text-on-tertiary-container hover:-translate-y-0.5 transition-transform"
-          >
-            <HamburgerIcon open={open} />
-            <span className="hidden sm:inline">{open ? 'Close' : 'Menu'}</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setMode('terminal')}
+              aria-label="Switch to terminal mode"
+              title="Terminal モードに切替"
+              className="flex items-center gap-2 pixel-border-thin bg-surface px-3 py-2 font-black uppercase tracking-widest text-xs text-tertiary hover:-translate-y-0.5 hover:text-primary transition-all"
+            >
+              <span aria-hidden className="font-pixel text-[10px]">
+                {'>_'}
+              </span>
+              <span className="hidden sm:inline">Terminal</span>
+            </button>
+
+            <button
+              ref={triggerRef}
+              type="button"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              aria-controls="site-menu-panel"
+              onClick={() => setOpen((v) => !v)}
+              className="flex items-center gap-3 pixel-border bg-tertiary-container px-4 py-2 font-black uppercase tracking-widest text-sm text-on-tertiary-container hover:-translate-y-0.5 transition-transform"
+            >
+              <HamburgerIcon open={open} />
+              <span className="hidden sm:inline">{open ? 'Close' : 'Menu'}</span>
+            </button>
+          </div>
         </div>
       </header>
 

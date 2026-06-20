@@ -1,5 +1,7 @@
 import { Suspense, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useMode } from '../../lib/mode';
+import { TerminalSite } from '../terminal/TerminalSite';
 import { BackgroundFX } from './BackgroundFX';
 import { TopNav } from './TopNav';
 import { Footer } from './Footer';
@@ -31,6 +33,7 @@ function PageFallback() {
 }
 
 export function Layout() {
+  const { mode } = useMode();
   const { pathname } = useLocation();
   const mainRef = useRef<HTMLElement>(null);
   const isFirstRender = useRef(true);
@@ -49,6 +52,8 @@ export function Layout() {
     }
     mainRef.current?.focus();
   }, [pathname]);
+
+  if (mode === 'terminal') return <TerminalSite />;
 
   return (
     <div className="min-h-screen flex flex-col">
