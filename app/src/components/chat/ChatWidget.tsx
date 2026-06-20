@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Send, X } from 'lucide-react';
 import { streamChat, type ChatMessage } from '../../lib/chat';
 import { useMode, type Mode } from '../../lib/mode';
+import { useTurnstile } from '../../lib/turnstile';
 
 const CHARACTER_SRC = '/characters/shiyow.png';
 const TURNSTILE_SITEKEY = import.meta.env.VITE_TURNSTILE_SITEKEY as string | undefined;
@@ -81,16 +82,33 @@ const THEMES: Record<Mode, ChatTheme> = {
 export function ChatWidget() {
   const { mode } = useMode();
   const t = THEMES[mode];
+  const reduce = useReducedMotion();
+  const { containerRef, token, enabled } = useTurnstile();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
   const [sending, setSending] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
-  }, [messages]);
+    listRef.current?.scrollTo({
+      top: listRef.current.scrollHeight,
+      behavior: reduce ? 'auto' : 'smooth',
+    });
+  }, [messages, reduce]);
+
+  // Focus the input on open; Escape closes the panel.
+  useEffect(() => {
+    if (!open) return;
+    inputRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
 
   useEffect(() => {
     return () => abortRef.current?.abort();
@@ -107,7 +125,7 @@ export function ChatWidget() {
     if (!trimmed || sending) return;
 
     const history: ChatMessage[] = messages
-      .filter((m) => !m.error)
+      .filter((m) => !m.error && m.id !== 'greeting')
       .map(({ role, content }) => ({ role, content }));
 
     const userMsg: DisplayMessage = { id: `u-${Date.now()}`, role: 'user', content: trimmed };
@@ -123,7 +141,7 @@ export function ChatWidget() {
     setSending(true);
 
     abortRef.current?.abort();
-    abortRef.current = streamChat([...history, userMsg], undefined, {
+    abortRef.current = streamChat([...history, userMsg], token, {
       onDelta: (delta) => {
         setMessages((prev) =>
           prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + delta } : m)),
@@ -205,6 +223,8 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+            role="dialog"
+            aria-label="shiyow AI クローン チャット"
             className={`fixed bottom-28 right-8 z-[91] w-[360px] max-w-[calc(100vw-2rem)] h-[460px] flex flex-col ${t.panel}`}
           >
             <div className={`flex items-center justify-between px-4 py-2 ${t.header}`}>
@@ -221,7 +241,14 @@ export function ChatWidget() {
               </button>
             </div>
 
-            <div ref={listRef} className="flex-1 overflow-auto p-4 space-y-3">
+            <div
+              ref={listRef}
+              role="log"
+              aria-live="polite"
+              aria-relevant="additions text"
+              aria-label="会話ログ"
+              className="flex-1 overflow-auto p-4 space-y-3"
+            >
               {messages.map((m) => (
                 <div
                   key={m.id}
@@ -241,6 +268,8 @@ export function ChatWidget() {
               ))}
             </div>
 
+            {enabled && <div ref={containerRef} className="px-3 pt-2" />}
+
             {import.meta.env.DEV && !TURNSTILE_SITEKEY && (
               <div className="px-4 py-1 text-[10px] font-black uppercase tracking-widest bg-error-container text-on-error">
                 Turnstile 未設定 — 保護なしで動作中（開発時のみ表示）
@@ -255,18 +284,21 @@ export function ChatWidget() {
               className={`flex gap-2 p-3 ${t.form}`}
             >
               <input
+                ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={isTerminal ? '❯ type a message…' : 'メッセージを入力...'}
+                aria-label="メッセージを入力"
                 className={`flex-1 px-3 py-2 text-base outline-none transition-colors ${t.input}`}
                 maxLength={500}
                 disabled={sending}
               />
               <button
                 type="submit"
-                aria-label="Send"
+                aria-label="送信"
+                aria-busy={sending}
                 className={`px-3 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed ${t.sendBtn}`}
-                disabled={!input.trim() || sending}
+                disabled={!input.trim() || sending || (enabled && !token)}
               >
                 <Send size={14} />
               </button>

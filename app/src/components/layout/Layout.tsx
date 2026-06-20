@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMode } from '../../lib/mode';
 import { EditorialSite } from '../editorial/EditorialSite';
 import { TerminalSite } from '../terminal/TerminalSite';
@@ -12,10 +12,30 @@ import { TerminalSite } from '../terminal/TerminalSite';
  */
 export function Layout() {
   const { mode } = useMode();
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     document.title = 'Shiyow — AI Engineer';
   }, []);
 
-  return mode === 'terminal' ? <TerminalSite /> : <EditorialSite />;
+  // A mode switch swaps the entire tree; move focus to the new <main> and
+  // announce it so keyboard / screen-reader users aren't stranded (WCAG 2.4.3).
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    requestAnimationFrame(() => document.querySelector<HTMLElement>('main')?.focus());
+  }, [mode]);
+
+  return (
+    <>
+      <div aria-live="polite" className="sr-only">
+        {mode === 'terminal'
+          ? 'ターミナル表示に切り替えました'
+          : 'エディトリアル表示に切り替えました'}
+      </div>
+      {mode === 'terminal' ? <TerminalSite /> : <EditorialSite />}
+    </>
+  );
 }

@@ -37,7 +37,7 @@ function Prompt({ cmd, children }: { cmd: string; children?: React.ReactNode }) 
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className={`mb-4 text-[12px] ${MUTED}`}>{`// ${children}`}</p>;
+  return <h2 className={`mb-4 text-[12px] ${MUTED}`}>{`// ${children}`}</h2>;
 }
 
 export function TerminalSite() {
@@ -47,6 +47,12 @@ export function TerminalSite() {
 
   return (
     <div className="min-h-screen bg-[#0D1117] pb-12 font-mono text-[14px] text-[#E6EDF3] selection:bg-[#2DD4BF]/30">
+      <a
+        href="#home"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[110] focus:bg-[#2DD4BF] focus:px-4 focus:py-2 focus:text-[12px] focus:text-[#0D1117]"
+      >
+        Skip to content
+      </a>
       {/* top bar */}
       <header className="sticky top-0 z-20 border-b border-[#30363D] bg-[#161B22]">
         <div className="flex items-center gap-2 px-4 pt-2.5">
@@ -75,7 +81,10 @@ export function TerminalSite() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-[960px] px-4">
+      <main tabIndex={-1} className="mx-auto max-w-[960px] px-4 outline-none">
+        <h1 className="sr-only">
+          {PROFILE.name} — {title}
+        </h1>
         {/* hero */}
         <section id="home" className="border-x border-b border-[#30363D] bg-[#0D1117] p-6 md:p-8">
           <div className="space-y-2">
@@ -121,7 +130,7 @@ export function TerminalSite() {
 
         {/* projects */}
         <section id="projects" className="mt-10">
-          <SectionLabel>projects — selected work（内容は順次 AI 実績へ差し替え予定）</SectionLabel>
+          <SectionLabel>projects — selected work</SectionLabel>
           <div className="grid gap-3 md:grid-cols-2">
             {WORKS.map((w, i) => (
               <article
@@ -145,6 +154,7 @@ export function TerminalSite() {
                       href={w.links.github}
                       target="_blank"
                       rel="noreferrer"
+                      aria-label={`${w.title} のコード`}
                       className={`${ACCENT} hover:underline`}
                     >
                       code ↗
@@ -155,6 +165,7 @@ export function TerminalSite() {
                       href={w.links.demo ?? w.links.play}
                       target="_blank"
                       rel="noreferrer"
+                      aria-label={`${w.title} のデモ`}
                       className={`${PURPLE} hover:underline`}
                     >
                       demo ↗
@@ -238,7 +249,6 @@ export function TerminalSite() {
         <div className="mx-auto flex max-w-[960px] flex-wrap items-center gap-x-4 gap-y-1">
           <span className={GREEN}>main ✓</span>
           <span className={MUTED}>model: gemini-2.0-flash</span>
-          <span className={MUTED}>latency ~0.4s</span>
           <span className={`ml-auto ${GREEN}`}>◉ open to work</span>
         </div>
       </footer>

@@ -29,9 +29,9 @@ export const PERSONA_SYSTEM_INSTRUCTION = `
 - 使用スタック: Python / TypeScript / Go、Gemini・Claude・LangChain、Cloudflare (Pages/Workers/D1/KV) / GCP、React + Tailwind
 - このチャット自体が shiyow の実装例（Gemini 2.0 Flash・SSE ストリーミング・Turnstile・KV レート制限を Cloudflare 上で構築）
 - UI 実装やドット絵も副次的に手がけるが、メインは AI
-- 現在就職活動中。採用・カジュアル面談のご連絡は Contact ページのフォーム、もしくは X から可能
+- 現在就職活動中。採用・カジュアル面談のご連絡は 画面下部の問い合わせフォーム、もしくは X から可能
 
-未確認の情報を聞かれたら「その話は本人じゃないと分からないので、Contact ページからどうぞ」と案内してください。
+未確認の情報を聞かれたら「その話は本人じゃないと分からないので、画面下部の問い合わせフォーム（または X / GitHub）からどうぞ」と案内してください。
 `;
 
 export const FAQ_PAIRS: Array<{ q: string; a: string }> = [
@@ -49,7 +49,7 @@ export const FAQ_PAIRS: Array<{ q: string; a: string }> = [
   },
   {
     q: '連絡方法は?',
-    a: '採用・面談のご連絡は Contact ページのフォーム、または X からどうぞ。このチャットで先に質問してもらってもOKです。',
+    a: '採用・面談のご連絡は 画面下部の問い合わせフォーム、または X からどうぞ。このチャットで先に質問してもらってもOKです。',
   },
   {
     q: '使っている技術は?',

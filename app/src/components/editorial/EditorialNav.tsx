@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMode } from '../../lib/mode';
 
@@ -40,17 +40,42 @@ function Burger({ open, tone }: { open: boolean; tone: string }) {
 export function EditorialNav() {
   const { setMode } = useMode();
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
+    const focusables = () =>
+      Array.from(
+        overlayRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [],
+      );
+    focusables()[0]?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+      if (e.key === 'Tab') {
+        const items = focusables();
+        if (items.length === 0) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
+      triggerRef.current?.focus();
     };
   }, [open]);
 
@@ -70,6 +95,7 @@ export function EditorialNav() {
               {'>_'} Terminal
             </button>
             <button
+              ref={triggerRef}
               type="button"
               onClick={() => setOpen(true)}
               aria-label="Open menu"
@@ -91,6 +117,7 @@ export function EditorialNav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
+            ref={overlayRef}
             role="dialog"
             aria-modal="true"
             aria-label="Site navigation"
@@ -123,11 +150,14 @@ export function EditorialNav() {
                   transition={{ delay: 0.08 + i * 0.07, duration: 0.5, ease: EASE }}
                   className="group flex items-baseline gap-5 border-t-2 border-surface/15 py-5 last:border-b-2"
                 >
-                  <span className="font-mono text-sm text-surface/50">{l.n}</span>
+                  <span className="font-mono text-sm text-surface/70">{l.n}</span>
                   <span className="text-5xl font-black uppercase leading-none tracking-tighter transition-colors group-hover:text-primary md:text-8xl">
                     {l.label}
                   </span>
-                  <span className="ml-auto self-center font-mono text-surface/40 transition-transform group-hover:translate-x-1">
+                  <span
+                    aria-hidden
+                    className="ml-auto self-center font-mono text-surface/50 transition-transform group-hover:translate-x-1"
+                  >
                     ↗
                   </span>
                 </motion.a>

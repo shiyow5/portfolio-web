@@ -33,9 +33,15 @@ export function EditorialSite() {
 
   return (
     <div className="min-h-screen bg-surface text-on-surface">
+      <a
+        href="#top"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[110] focus:bg-on-surface focus:text-surface focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
+      >
+        Skip to content
+      </a>
       <EditorialNav />
 
-      <main id="top" className="mx-auto max-w-[1180px] px-6">
+      <main id="top" tabIndex={-1} className="mx-auto max-w-[1180px] px-6 outline-none">
         {/* ===== hero ===== */}
         <motion.section
           variants={staggerContainer(0.09)}
@@ -118,7 +124,7 @@ export function EditorialSite() {
         {/* ===== selected work ===== */}
         <section id="work" className="py-12 md:py-16">
           <motion.div {...reveal}>
-            <SectionHead index="01" title="Selected Work" note="制作物・実績（順次 AI 実績へ）" />
+            <SectionHead index="01" title="Selected Work" note="制作物・実績" />
           </motion.div>
           <motion.ol
             variants={staggerContainer(0.07)}
@@ -152,6 +158,7 @@ export function EditorialSite() {
                         href={w.links.github}
                         target="_blank"
                         rel="noreferrer"
+                        aria-label={`${w.title} のコード`}
                         className="text-primary hover:underline"
                       >
                         code ↗
@@ -162,6 +169,7 @@ export function EditorialSite() {
                         href={w.links.demo ?? w.links.play}
                         target="_blank"
                         rel="noreferrer"
+                        aria-label={`${w.title} のデモ`}
                         className="text-primary hover:underline"
                       >
                         demo ↗

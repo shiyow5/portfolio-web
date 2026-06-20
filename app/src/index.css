@@ -49,6 +49,7 @@
   --font-body: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   --font-pixel: 'Press Start 2P', 'DotGothic16', monospace;
   --font-dot: 'DotGothic16', 'Press Start 2P', monospace;
+  --font-mono: 'JetBrains Mono', 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
 
   /* ----- Radius (zero everywhere except full) ----- */
   --radius-xs: 0px;
@@ -63,6 +64,12 @@
 /* ==============================================================
    Base layer
    ============================================================== */
+
+html {
+  scroll-behavior: smooth;
+  /* keep section headings clear of the sticky header when jumping to anchors */
+  scroll-padding-top: 72px;
+}
 
 html,
 body {
@@ -323,6 +330,9 @@ img.pixelated {
    (JS/motion already honours useReducedMotion; this covers pure CSS)
    ============================================================== */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .scanlines,
   .pixel-particles .particle,
   .animate-pulse {

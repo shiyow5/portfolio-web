@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test.describe('Smoke', () => {
   test('editorial home renders hero + work + chat FAB', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1, name: /engineer/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /shiyow/i })).toBeVisible();
     await expect(page.getByText(/open to work/i).first()).toBeVisible();
     await expect(page.getByRole('heading', { name: /selected work/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /open chat/i })).toBeVisible();
@@ -21,7 +21,7 @@ test.describe('Smoke', () => {
       .getByRole('button', { name: /editorial/i })
       .first()
       .click();
-    await expect(page.getByRole('heading', { level: 1, name: /engineer/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /shiyow/i })).toBeVisible();
   });
 
   test('chat widget opens from the FAB', async ({ page }) => {
