@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { Home } from './Home';
+import { WORKS } from '../lib/works';
 
 function renderHome() {
   return render(
@@ -26,5 +27,12 @@ describe('Home route', () => {
     renderHome();
     const cta = screen.getByRole('link', { name: /start quest/i });
     expect(cta).toHaveAttribute('href', '/gallery');
+  });
+
+  it('features real works in Recent Loot, linking to their detail pages', () => {
+    renderHome();
+    const first = WORKS[0];
+    const link = screen.getByRole('link', { name: new RegExp(first.title, 'i') });
+    expect(link).toHaveAttribute('href', `/works/${first.id}`);
   });
 });
