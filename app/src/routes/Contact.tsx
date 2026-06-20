@@ -43,10 +43,11 @@ export function Contact() {
           </span>
         </div>
         <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-on-surface leading-none">
-          相談する
+          連絡する
         </h1>
         <p className="mt-4 text-on-surface-variant">
-          AI / LLM・エージェント・ML の実装のご相談、コラボ、採用のお問い合わせはこちらから。{' '}
+          採用・カジュアル面談のご連絡はこちらから。AI / LLM・エージェント・ML
+          まわりの経歴やスキルについてもお気軽に。{' '}
           <a
             href={X_URL}
             target="_blank"

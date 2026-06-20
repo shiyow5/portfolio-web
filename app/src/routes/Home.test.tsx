@@ -29,9 +29,9 @@ describe('Home route', () => {
     expect(screen.getByRole('heading', { level: 2, name: /recent loot/i })).toBeInTheDocument();
   });
 
-  it('links the consultation CTA to the contact page', () => {
+  it('links the contact CTA to the contact page', () => {
     renderHome();
-    const cta = screen.getByRole('link', { name: /相談する/ });
+    const cta = screen.getByRole('link', { name: /連絡する/ });
     expect(cta).toHaveAttribute('href', '/contact');
   });
 

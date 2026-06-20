@@ -261,14 +261,14 @@ export function Home() {
             <div className="h-full bg-primary-container pixel-border-primary p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-black uppercase text-on-primary-container">
-                  Ready for a new quest?
+                  Open to Work
                 </h3>
                 <p className="text-sm text-on-primary-container opacity-80 mt-1">
-                  作品のご相談、コラボ、コミッションを受付中です。
+                  就職活動中です。カジュアル面談・選考のご連絡を歓迎します。
                 </p>
               </div>
               <Link to="/contact" className="pixel-button whitespace-nowrap">
-                相談する
+                連絡する
               </Link>
             </div>
           </Reveal>
