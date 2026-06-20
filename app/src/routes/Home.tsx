@@ -10,6 +10,7 @@ import {
   CATEGORY_LABEL,
   formatDate,
 } from '../lib/activity';
+import { WORKS, CATEGORY_LABEL as WORK_CATEGORY_LABEL } from '../lib/works';
 const CHARACTER_SRC = '/characters/shiyow.png';
 const ROOM_SRC = '/rooms/simple_room.png';
 
@@ -22,32 +23,8 @@ const SIDE_NAV = [
 const INVENTORY_GROUPS = PROFILE.techStack.slice(0, 6);
 const LATEST_ACTIVITY = ACTIVITIES[0];
 
-const FEATURED = [
-  {
-    id: 'aether-drift',
-    tag: 'Concept Art',
-    title: 'The Neon Dungeon',
-    desc: 'A cyberpunk-inspired dungeon crawler asset pack featuring 500+ handcrafted elements.',
-    xp: 'Gold Earned · 1,200',
-    size: 'lg',
-  },
-  {
-    id: 'neon-circuit',
-    tag: '[Animation]',
-    title: 'Sprite Sheets',
-    desc: '',
-    xp: '',
-    size: 'sm',
-  },
-  {
-    id: 'loot-logic',
-    tag: '[UI/UX]',
-    title: 'Menu Systems',
-    desc: '',
-    xp: '',
-    size: 'sm',
-  },
-];
+// Recent Loot bento: the three most recent works, wired to real catalogue data.
+const FEATURED = WORKS.slice(0, 3);
 
 export function Home() {
   return (
@@ -206,18 +183,25 @@ export function Home() {
               to={`/works/${FEATURED[0].id}`}
               className="h-full bg-surface-container-lowest pixel-border flex flex-col hover:-translate-y-1 transition-transform"
             >
-              <div className="h-60 md:h-64 bg-gradient-to-br from-primary-container to-secondary-container border-b-4 border-tertiary" />
+              <div className="h-60 md:h-64 border-b-4 border-tertiary overflow-hidden">
+                <img
+                  src={FEATURED[0].cover}
+                  alt={FEATURED[0].title}
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+              </div>
               <div className="p-6 flex-grow flex flex-col">
                 <span className="inline-block px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase tracking-widest mb-4 w-fit">
-                  {FEATURED[0].tag}
+                  {WORK_CATEGORY_LABEL[FEATURED[0].category]}
                 </span>
                 <h3 className="text-2xl font-black uppercase mb-2 text-on-surface">
                   {FEATURED[0].title}
                 </h3>
-                <p className="text-sm text-on-surface-variant mb-6">{FEATURED[0].desc}</p>
+                <p className="text-sm text-on-surface-variant mb-6">{FEATURED[0].tagline}</p>
                 <div className="mt-auto flex justify-between items-center">
                   <span className="text-xs font-black uppercase text-tertiary tracking-widest">
-                    {FEATURED[0].xp}
+                    v{FEATURED[0].version} · {FEATURED[0].year}
                   </span>
                   <ArrowRight size={20} className="text-primary" />
                 </div>
@@ -226,16 +210,23 @@ export function Home() {
           </Reveal>
 
           {/* Small 1 & 2 */}
-          {FEATURED.slice(1).map((f, i) => (
-            <Reveal key={f.id} delay={0.08 * (i + 1)}>
+          {FEATURED.slice(1).map((work, i) => (
+            <Reveal key={work.id} delay={0.08 * (i + 1)}>
               <Link
-                to={`/works/${f.id}`}
+                to={`/works/${work.id}`}
                 className="block h-full bg-surface-container-lowest pixel-border p-4 hover:-translate-y-1 transition-transform"
               >
-                <div className="h-32 bg-gradient-to-br from-tertiary-container to-primary-container mb-4 border-2 border-outline-variant" />
-                <h4 className="font-black uppercase text-sm mb-1 text-on-surface">{f.title}</h4>
+                <div className="h-32 mb-4 border-2 border-outline-variant overflow-hidden">
+                  <img
+                    src={work.cover}
+                    alt={work.title}
+                    className="w-full h-full object-cover"
+                    draggable={false}
+                  />
+                </div>
+                <h4 className="font-black uppercase text-sm mb-1 text-on-surface">{work.title}</h4>
                 <p className="text-xs text-on-surface-variant uppercase font-black tracking-widest">
-                  {f.tag}
+                  {WORK_CATEGORY_LABEL[work.category]}
                 </p>
               </Link>
             </Reveal>
