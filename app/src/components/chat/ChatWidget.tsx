@@ -177,9 +177,9 @@ export function ChatWidget() {
               ))}
             </div>
 
-            {!TURNSTILE_SITEKEY && (
+            {import.meta.env.DEV && !TURNSTILE_SITEKEY && (
               <div className="px-4 py-1 text-[10px] font-black uppercase tracking-widest bg-error-container text-on-error border-t-2 border-error">
-                Turnstile 未設定 — 保護なしで動作中
+                Turnstile 未設定 — 保護なしで動作中（開発時のみ表示）
               </div>
             )}
 
@@ -194,7 +194,7 @@ export function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="メッセージを入力..."
-                className="flex-1 bg-surface-container-lowest border-2 border-outline px-3 py-2 text-sm focus:border-primary focus:border-4 outline-none transition-all"
+                className="flex-1 bg-surface-container-lowest border-2 border-outline px-3 py-2 text-base focus:border-primary focus:border-4 outline-none transition-all"
                 maxLength={500}
                 disabled={sending}
               />
