@@ -27,7 +27,7 @@ async function fillForm(user: ReturnType<typeof userEvent.setup>) {
 describe('Contact route', () => {
   it('renders the form fields', () => {
     render(<Contact />);
-    expect(screen.getByRole('heading', { level: 1, name: /相談する/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /連絡する/ })).toBeInTheDocument();
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
