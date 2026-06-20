@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
-export type Mode = 'quest' | 'terminal';
+export type Mode = 'editorial' | 'terminal';
 
 const STORAGE_KEY = 'shiyow:mode';
 
@@ -19,12 +19,11 @@ const ModeContext = createContext<ModeContextValue | null>(null);
  */
 function readStoredMode(): Mode {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'terminal' || saved === 'quest') return saved;
+    if (localStorage.getItem(STORAGE_KEY) === 'terminal') return 'terminal';
   } catch {
     // localStorage unavailable (private mode / SSR)
   }
-  return 'quest';
+  return 'editorial';
 }
 
 export function ModeProvider({ children }: { children: ReactNode }) {
@@ -39,7 +38,7 @@ export function ModeProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const toggle = () => setMode(mode === 'quest' ? 'terminal' : 'quest');
+  const toggle = () => setMode(mode === 'terminal' ? 'editorial' : 'terminal');
 
   return <ModeContext.Provider value={{ mode, setMode, toggle }}>{children}</ModeContext.Provider>;
 }

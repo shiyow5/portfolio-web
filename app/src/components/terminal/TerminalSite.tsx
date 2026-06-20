@@ -56,10 +56,10 @@ export function TerminalSite() {
           <span className={`ml-3 text-[12px] ${MUTED}`}>shiyow@devstation: ~/shiyow.dev — zsh</span>
           <button
             type="button"
-            onClick={() => setMode('quest')}
+            onClick={() => setMode('editorial')}
             className="ml-auto rounded-md border border-[#30363D] px-2.5 py-1 text-[12px] text-[#E6EDF3] hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
           >
-            ◧ pixel mode
+            ◧ editorial
           </button>
         </div>
         <nav className="mt-2 flex items-end gap-1 overflow-x-auto px-2 text-[13px]">
@@ -224,10 +224,10 @@ export function TerminalSite() {
             </a>
             <button
               type="button"
-              onClick={() => setMode('quest')}
+              onClick={() => setMode('editorial')}
               className={`rounded-md border border-[#30363D] px-4 py-2 ${MUTED} hover:text-[#E6EDF3]`}
             >
-              ◧ pixel site の問い合わせフォームへ
+              ◧ editorial サイトの問い合わせフォームへ
             </button>
           </div>
         </section>
