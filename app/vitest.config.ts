@@ -16,7 +16,15 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     css: false,
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
-    exclude: ['node_modules', 'dist', 'e2e/**', 'playwright-report/**', 'test-results/**'],
+    // *.live.test.ts hit the real Gemini API and are opt-in via `npm run eval`.
+    exclude: [
+      'node_modules',
+      'dist',
+      'e2e/**',
+      'playwright-report/**',
+      'test-results/**',
+      '**/*.live.test.ts',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

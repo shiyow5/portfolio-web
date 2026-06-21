@@ -1,8 +1,11 @@
 /// <reference types="@cloudflare/workers-types" />
-import { PERSONA_SYSTEM_INSTRUCTION, FAQ_PAIRS } from './_persona';
+import { buildSystemInstruction } from '../../src/lib/persona/persona';
+import { factCardIds } from '../../src/lib/persona/factCards';
+import { makeCitationGuard, type CitationGuard } from '../../src/lib/persona/citations';
 
 interface Env {
   GEMINI_API_KEY?: string;
+  GEMINI_MODEL?: string;
   TURNSTILE_SECRET?: string;
   RATE_LIMIT_KV?: KVNamespace;
 }
@@ -17,7 +20,9 @@ interface ChatRequestBody {
   turnstileToken?: string;
 }
 
-const MODEL = 'gemini-2.0-flash';
+// gemini-2.5-flash-lite: low latency/cost + implicit context caching (up to 90%
+// off the static system prompt). Override per-env with GEMINI_MODEL if needed.
+const DEFAULT_MODEL = 'gemini-2.5-flash-lite';
 const MAX_INPUT_CHARS = 2000;
 const MAX_OUTPUT_TOKENS = 1024;
 const MINUTE_LIMIT = 12;
@@ -92,19 +97,22 @@ function buildGeminiContents(messages: ChatMessage[]) {
   }));
 }
 
-function buildSystemInstruction(): string {
-  const faq = FAQ_PAIRS.map((p) => `Q: ${p.q}\nA: ${p.a}`).join('\n\n');
-  return `${PERSONA_SYSTEM_INSTRUCTION}\n\n## FAQ\n\n${faq}`;
-}
-
 /**
- * Reads the Gemini SSE response body and forwards text deltas to the client
- * as line-delimited JSON chunks: {"delta": "..."}\n
+ * Reads the Gemini SSE response body and forwards text deltas to the client as
+ * line-delimited JSON chunks: {"delta": "..."}\n. Each delta passes through the
+ * citation guard, which strips any [id] the model invents (boundary-safe).
  */
-function relayStream(upstream: ReadableStream<Uint8Array>): ReadableStream<Uint8Array> {
+function relayStream(
+  upstream: ReadableStream<Uint8Array>,
+  guard: CitationGuard,
+): ReadableStream<Uint8Array> {
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   let buffer = '';
+
+  const emit = (controller: ReadableStreamDefaultController<Uint8Array>, text: string) => {
+    if (text) controller.enqueue(encoder.encode(JSON.stringify({ delta: text }) + '\n'));
+  };
 
   return new ReadableStream({
     async start(controller) {
@@ -130,14 +138,13 @@ function relayStream(upstream: ReadableStream<Uint8Array>): ReadableStream<Uint8
                 }>;
               };
               const delta = parsed.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-              if (delta) {
-                controller.enqueue(encoder.encode(JSON.stringify({ delta }) + '\n'));
-              }
+              if (delta) emit(controller, guard.push(delta));
             } catch {
               // ignore malformed chunk
             }
           }
         }
+        emit(controller, guard.flush());
         controller.enqueue(encoder.encode(JSON.stringify({ done: true }) + '\n'));
       } catch (err) {
         controller.enqueue(
@@ -210,8 +217,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }
   }
 
+  const model = env.GEMINI_MODEL || DEFAULT_MODEL;
   const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent` +
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent` +
     `?alt=sse&key=${encodeURIComponent(env.GEMINI_API_KEY)}`;
 
   const upstream = await fetch(url, {
@@ -242,20 +250,20 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  return new Response(relayStream(upstream.body), {
+  return new Response(relayStream(upstream.body, makeCitationGuard(factCardIds())), {
     status: 200,
     headers: {
       'content-type': 'application/x-ndjson; charset=utf-8',
       'cache-control': 'no-store',
-      'x-gemini-model': MODEL,
+      'x-gemini-model': model,
     },
   });
 };
 
-export const onRequestGet: PagesFunction<Env> = async () => {
+export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
   return json({
-    model: MODEL,
-    persona: 'shiyow clone agent v0',
+    model: env.GEMINI_MODEL || DEFAULT_MODEL,
+    persona: 'shiyow clone agent v1 (grounded + cited)',
     limits: {
       maxInputChars: MAX_INPUT_CHARS,
       maxOutputTokens: MAX_OUTPUT_TOKENS,
