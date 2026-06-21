@@ -8,6 +8,7 @@ interface TurnstileApi {
       callback: (token: string) => void;
       'error-callback'?: () => void;
       'expired-callback'?: () => void;
+      appearance?: 'always' | 'execute' | 'interaction-only';
     },
   ) => string;
   remove: (id: string) => void;
@@ -51,6 +52,8 @@ export function useTurnstile(active = true) {
         callback: (t) => setToken(t),
         'error-callback': () => setToken(undefined),
         'expired-callback': () => setToken(undefined),
+        // Stay invisible unless Cloudflare actually needs a human interaction.
+        appearance: 'interaction-only',
       });
       widgetIdRef.current = widgetId;
     };

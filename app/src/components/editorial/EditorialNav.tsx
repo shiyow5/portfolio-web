@@ -123,93 +123,100 @@ export function EditorialNav() {
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            key="overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            ref={overlayRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site navigation"
-            className="fixed inset-0 z-[100] flex flex-col bg-on-surface text-surface"
-          >
-            <div className="mx-auto flex w-full max-w-[1180px] items-center justify-between px-6 py-4">
-              <span className="font-mono text-xs uppercase tracking-widest text-surface/60">
-                shiyow.dev / menu
-              </span>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Close menu"
-                className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-surface/80 hover:text-surface"
-              >
-                <Burger open tone="bg-surface" />
-                Close
-              </button>
-            </div>
-
-            <nav className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-center px-6">
-              {LINKS.map((l, i) => (
-                <motion.a
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  initial={{ opacity: 0, y: 36 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ delay: 0.08 + i * 0.07, duration: 0.5, ease: EASE }}
-                  className="group flex items-baseline gap-5 border-t-2 border-surface/15 py-5 last:border-b-2"
-                >
-                  <span className="font-mono text-sm text-surface/70">{l.n}</span>
-                  <span className="text-5xl font-black uppercase leading-none tracking-tighter transition-colors group-hover:text-primary md:text-8xl">
-                    {l.label}
-                  </span>
-                  <span
-                    aria-hidden
-                    className="ml-auto self-center font-mono text-surface/50 transition-transform group-hover:translate-x-1"
-                  >
-                    ↗
-                  </span>
-                </motion.a>
-              ))}
-            </nav>
-
+          <>
             <motion.div
+              key="backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="mx-auto flex w-full max-w-[1180px] flex-wrap gap-6 px-6 py-8 font-mono text-xs uppercase tracking-widest text-surface/70"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setOpen(false)}
+              aria-hidden
+              className="fixed inset-0 z-[100] bg-on-surface/40 backdrop-blur-sm"
+            />
+            <motion.div
+              key="panel"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', stiffness: 320, damping: 34 }}
+              ref={overlayRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site navigation"
+              className="fixed right-0 top-0 z-[101] flex h-full w-[420px] max-w-[88vw] flex-col border-l-2 border-surface bg-on-surface text-surface shadow-[-8px_0_30px_rgba(0,0,0,0.25)]"
             >
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('terminal');
-                  setOpen(false);
-                }}
-                className="hover:text-primary"
-              >
-                {'>_'} Terminal mode
-              </button>
-              <a
-                href="https://x.com/twinS_KNSN1415"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-primary"
-              >
-                X ↗
-              </a>
-              <a
-                href="https://github.com/shiyow5"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-primary"
-              >
-                GitHub ↗
-              </a>
+              <div className="flex items-center justify-between px-6 py-4">
+                <span className="font-mono text-xs uppercase tracking-widest text-surface/60">
+                  shiyow.dev / menu
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close menu"
+                  className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-surface/80 hover:text-surface"
+                >
+                  <Burger open tone="bg-surface" />
+                  Close
+                </button>
+              </div>
+
+              <nav className="flex flex-1 flex-col justify-center px-6">
+                {LINKS.map((l, i) => (
+                  <motion.a
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    initial={{ opacity: 0, x: 28 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 16 }}
+                    transition={{ delay: 0.06 + i * 0.06, duration: 0.4, ease: EASE }}
+                    className="group flex items-baseline gap-4 border-t-2 border-surface/15 py-4 last:border-b-2"
+                  >
+                    <span className="font-mono text-xs text-surface/70">{l.n}</span>
+                    <span className="text-3xl font-black uppercase leading-none tracking-tighter transition-colors group-hover:text-primary md:text-4xl">
+                      {l.label}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="ml-auto self-center font-mono text-surface/50 transition-transform group-hover:translate-x-1"
+                    >
+                      ↗
+                    </span>
+                  </motion.a>
+                ))}
+              </nav>
+
+              <div className="flex flex-wrap gap-4 px-6 py-8 font-mono text-xs uppercase tracking-widest text-surface/70">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode('terminal');
+                    setOpen(false);
+                  }}
+                  className="hover:text-primary"
+                >
+                  {'>_'} Terminal mode
+                </button>
+                <a
+                  href="https://x.com/twinS_KNSN1415"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-primary"
+                >
+                  X ↗
+                </a>
+                <a
+                  href="https://github.com/shiyow5"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-primary"
+                >
+                  GitHub ↗
+                </a>
+              </div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
