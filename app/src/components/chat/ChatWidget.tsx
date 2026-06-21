@@ -18,7 +18,7 @@ const GREETING: DisplayMessage = {
   id: 'greeting',
   role: 'assistant',
   content:
-    'shiyow の AI クローンです（Gemini 製）。経歴・スキル・このサイトの実装まで、何でも聞いてください。',
+    'shiyow の AI クローンです（本人じゃなくてクローンです）。経歴・スキル・作品・このサイトの実装まで、実際のデータに基づいて答えます。',
 };
 
 interface ChatTheme {
@@ -92,13 +92,26 @@ export function ChatWidget() {
   const abortRef = useRef<AbortController | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Whether the user is pinned near the bottom; if they scrolled up to read, we
+  // must not yank them back down on every streamed token.
+  const atBottomRef = useRef(true);
+
+  const handleListScroll = () => {
+    const el = listRef.current;
+    if (!el) return;
+    atBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
 
   useEffect(() => {
-    listRef.current?.scrollTo({
-      top: listRef.current.scrollHeight,
-      behavior: reduce ? 'auto' : 'smooth',
+    const el = listRef.current;
+    if (!el || !atBottomRef.current) return;
+    el.scrollTo({
+      top: el.scrollHeight,
+      // Instant while streaming: a smooth scroll per token stacks animations and
+      // makes the bubble jitter. Smooth only for discrete, settled turns.
+      behavior: reduce || sending ? 'auto' : 'smooth',
     });
-  }, [messages, reduce]);
+  }, [messages, sending, reduce]);
 
   // Focus the input on open; Escape closes the panel.
   useEffect(() => {
@@ -168,7 +181,7 @@ export function ChatWidget() {
             m.id === assistantId
               ? {
                   ...m,
-                  content: `⚠ 応答取得に失敗しました: ${message}`,
+                  content: `⚠ ${message}`,
                   pending: false,
                   error: true,
                 }
@@ -252,6 +265,7 @@ export function ChatWidget() {
 
             <div
               ref={listRef}
+              onScroll={handleListScroll}
               role="log"
               aria-live="polite"
               aria-relevant="additions text"

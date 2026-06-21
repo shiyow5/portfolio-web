@@ -111,7 +111,22 @@ describe('streamChat', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
-  it('maps a 429 response to a rate-limit message', async () => {
+  it('passes through the server-provided friendly message', async () => {
+    const result = await run(
+      async () =>
+        ({
+          ok: false,
+          status: 429,
+          json: async () => ({
+            error: 'AI が今アクセス集中で応答できないみたいです。',
+            retryAfter: 30,
+          }),
+        }) as unknown as Response,
+    );
+    expect(result.error).toContain('アクセス集中');
+  });
+
+  it('shows a friendly fallback on a 429 with no error body', async () => {
     const result = await run(
       async () =>
         ({
@@ -120,8 +135,7 @@ describe('streamChat', () => {
           json: async () => ({ retryAfter: 30 }),
         }) as unknown as Response,
     );
-    expect(result.error).toMatch(/rate limited/i);
-    expect(result.error).toContain('30');
+    expect(result.error).toMatch(/集中|時間/);
   });
 
   it('falls back to the HTTP status when the error body is not JSON', async () => {

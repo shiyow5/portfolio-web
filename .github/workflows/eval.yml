@@ -1,0 +1,45 @@
+name: Clone Eval
+
+on:
+  pull_request:
+    paths:
+      - 'app/src/lib/persona/**'
+      - 'app/functions/api/chat.ts'
+      - 'app/src/data/**'
+      - '.github/workflows/eval.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: eval-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    name: Grounding & abstention eval
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
+
+      # Always-green dataset integrity check (no API key needed).
+      - name: Golden set integrity
+        working-directory: app
+        run: npx vitest run src/lib/persona/golden.test.ts
+
+      # Live RAGAS-style eval — runs only when the secret is configured.
+      - name: Live clone eval (faithfulness + abstention)
+        if: ${{ env.GEMINI_API_KEY != '' }}
+        working-directory: app
+        run: npm run eval
+
+      - name: Skip notice
+        if: ${{ env.GEMINI_API_KEY == '' }}
+        run: echo "GEMINI_API_KEY not configured — live clone eval skipped (golden integrity still enforced)."

@@ -261,7 +261,7 @@ export function TerminalSite() {
       <footer className="fixed bottom-0 left-0 right-0 z-20 border-t border-[#30363D] bg-[#161B22] px-4 py-1.5 text-[12px]">
         <div className="mx-auto flex max-w-[960px] flex-wrap items-center gap-x-4 gap-y-1">
           <span className={GREEN}>main ✓</span>
-          <span className={MUTED}>model: gemini-2.0-flash</span>
+          <span className={MUTED}>model: gemini-2.5-flash-lite</span>
           <span className={`ml-auto ${GREEN}`}>◉ open to work</span>
         </div>
       </footer>
