@@ -5,8 +5,10 @@ import { WORKS } from '../../lib/works';
 import { ACTIVITIES } from '../../lib/activity';
 import { streamChat } from '../../lib/chat';
 import { useTurnstile } from '../../lib/turnstile';
+import { tokenizeAssistantText } from '../../lib/persona/messageTokens';
 import {
   COMMANDS,
+  MANUAL,
   runCommand,
   type CmdCtx,
   type Line,
@@ -25,14 +27,34 @@ const TONE: Record<Tone, string> = {
 
 const ctx: CmdCtx = { works: WORKS, profile: PROFILE, activities: ACTIVITIES };
 
-/** Longest common prefix of a list of strings. */
 function lcp(items: string[]): string {
   if (!items.length) return '';
   let prefix = items[0]!;
-  for (const s of items) {
-    while (!s.startsWith(prefix)) prefix = prefix.slice(0, -1);
-  }
+  for (const s of items) while (!s.startsWith(prefix)) prefix = prefix.slice(0, -1);
   return prefix;
+}
+
+/** Renders assistant text with clickable citations / urls (for `ask` answers). */
+function RichLine({ text }: { text: string }) {
+  return (
+    <>
+      {tokenizeAssistantText(text, 'terminal').map((p, i) =>
+        p.kind === 'text' ? (
+          <span key={i}>{p.text}</span>
+        ) : (
+          <a
+            key={i}
+            href={p.href}
+            title={p.text}
+            className="text-[#2DD4BF] underline decoration-dotted underline-offset-2 hover:bg-[#2DD4BF]/10"
+            {...(p.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+          >
+            {p.text}
+          </a>
+        ),
+      )}
+    </>
+  );
 }
 
 export function TerminalRepl() {
@@ -43,7 +65,10 @@ export function TerminalRepl() {
     { text: `${PROFILE.name} — ${title}` },
     { text: `LLM / Agent / RAG / ML · ${PROFILE.location}`, tone: 'muted' },
     { text: '' },
-    { text: '`help` でコマンド一覧。`ask <質問>` でクローンに直接質問できます。', tone: 'muted' },
+    {
+      text: '`help` か上の ▾ でコマンド一覧。`ask <質問>` でクローンに直接質問できます。',
+      tone: 'muted',
+    },
   ];
 
   const [output, setOutput] = useState<Line[]>(boot);
@@ -51,6 +76,7 @@ export function TerminalRepl() {
   const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
   const [busy, setBusy] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -73,18 +99,22 @@ export function TerminalRepl() {
       return copy;
     });
 
+  const focus = () => inputRef.current?.focus();
+  // Don't steal focus mid-selection, otherwise the user can't copy console text.
+  const focusUnlessSelecting = () => {
+    if (window.getSelection()?.toString()) return;
+    inputRef.current?.focus();
+  };
+
   const ask = (question: string) => {
     if (enabled && !token) {
       append([
-        {
-          text: '認証（Turnstile）の確認中です。数秒おいてもう一度お試しください。',
-          tone: 'error',
-        },
+        { text: '認証（Turnstile）の確認中です。数秒おいてもう一度どうぞ。', tone: 'error' },
       ]);
       return;
     }
     setBusy(true);
-    append([{ text: '', tone: 'default' }]); // streaming target (always last)
+    append([{ text: '', tone: 'default', rich: true }]); // streaming target (always last)
     abortRef.current?.abort();
     abortRef.current = streamChat([{ role: 'user', content: question }], token, {
       onDelta: (d) => appendDelta(d),
@@ -99,14 +129,10 @@ export function TerminalRepl() {
     });
   };
 
-  const submit = () => {
-    if (busy) return;
-    const cmd = input;
-    setInput('');
-    setHistIdx(-1);
+  const exec = (cmd: string) => {
     if (cmd.trim()) setHistory((h) => [...h, cmd]);
+    setHistIdx(-1);
     append([{ text: `❯ ${cmd}`, tone: 'accent' }]);
-
     const res = runCommand(cmd, ctx);
     if (res.lines.length) append(res.lines);
     const a = res.action;
@@ -130,29 +156,46 @@ export function TerminalRepl() {
     }
   };
 
+  const submit = () => {
+    if (busy) return;
+    const cmd = input;
+    setInput('');
+    exec(cmd);
+  };
+
   const complete = () => {
     const parts = input.split(/\s+/);
+    const partial = parts[parts.length - 1]!;
+    let candidates: string[];
     if (parts.length <= 1) {
-      const matches = COMMANDS.filter((c) => c.startsWith(parts[0]!.toLowerCase()));
-      if (matches.length === 1) setInput(matches[0] + ' ');
-      else if (matches.length > 1) {
-        const p = lcp([...matches]);
-        if (p.length > parts[0]!.length) setInput(p);
-        else append([{ text: matches.join('  '), tone: 'muted' }]);
-      }
+      candidates = COMMANDS.filter((c) => c.startsWith(partial.toLowerCase()));
+    } else {
+      const head = parts[0]!.toLowerCase();
+      const files = ['mission.txt', 'contact.sh', 'status.txt', 'skills.json'];
+      candidates =
+        head === 'ls'
+          ? ['projects/']
+          : head === 'man'
+            ? MANUAL.map((m) => m.name)
+            : head === 'open'
+              ? WORKS.map((w) => w.id)
+              : head === 'cat'
+                ? [...files, ...WORKS.map((w) => `projects/${w.id}`)]
+                : [];
+      candidates = candidates.filter((c) => c.startsWith(partial));
+    }
+    if (!candidates.length) return;
+    if (candidates.length === 1) {
+      parts[parts.length - 1] = candidates[0]!;
+      setInput(parts.join(' ') + (parts.length <= 1 ? ' ' : ''));
       return;
     }
-    // second token: complete work ids for cat/open
-    const head = parts[0]!.toLowerCase();
-    if (head === 'open' || head === 'cat') {
-      const partial = parts[parts.length - 1]!.replace(/^projects\//, '');
-      const ids = WORKS.map((w) => w.id).filter((id) => id.startsWith(partial));
-      if (ids.length === 1) {
-        parts[parts.length - 1] = head === 'cat' ? `projects/${ids[0]}` : ids[0]!;
-        setInput(parts.join(' '));
-      } else if (ids.length > 1) {
-        append([{ text: ids.join('  '), tone: 'muted' }]);
-      }
+    const p = lcp(candidates);
+    if (p.length > partial.length) {
+      parts[parts.length - 1] = p;
+      setInput(parts.join(' '));
+    } else {
+      append([{ text: candidates.join('  '), tone: 'muted' }]);
     }
   };
 
@@ -186,11 +229,46 @@ export function TerminalRepl() {
   return (
     <section
       id="home"
-      onClick={() => inputRef.current?.focus()}
-      className="border-x border-b border-[#30363D] bg-[#0D1117] p-6 md:p-8"
+      className="relative border-x border-b border-[#30363D] bg-[#0D1117] p-4 md:p-6"
     >
-      <div ref={scrollRef} className="max-h-[52vh] overflow-y-auto">
-        <div className="space-y-1">
+      <div className="mb-2 flex items-center justify-between text-[12px]">
+        <span className={TONE.muted}>~/shiyow.dev — interactive</span>
+        <button
+          type="button"
+          onClick={() => setManualOpen((v) => !v)}
+          aria-expanded={manualOpen}
+          className="rounded-md border border-[#30363D] px-2.5 py-1 text-[#8B949E] hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
+        >
+          ▾ コマンド一覧
+        </button>
+      </div>
+
+      {manualOpen && (
+        <div className="absolute right-4 top-12 z-30 max-h-[300px] w-[min(420px,calc(100%-2rem))] overflow-y-auto rounded-md border border-[#30363D] bg-[#161B22] p-2 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+          {MANUAL.map((m) => (
+            <button
+              key={m.name}
+              type="button"
+              onClick={() => {
+                setManualOpen(false);
+                setInput(m.name + ' ');
+                focus();
+              }}
+              className="block w-full rounded px-2 py-1.5 text-left hover:bg-[#0D1117]"
+            >
+              <span className={`${TONE.accent} text-[13px]`}>{m.name}</span>{' '}
+              <span className="text-[11px] text-[#8B949E]">{m.usage}</span>
+              <span className="block text-[11px] text-[#8B949E]">{m.desc}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div
+        onClick={focusUnlessSelecting}
+        className="flex h-[clamp(300px,46vh,480px)] select-text flex-col rounded-md bg-[#0D1117]"
+      >
+        <div ref={scrollRef} className="flex-1 space-y-1 overflow-y-auto pr-1">
           {output.map((l, i) =>
             l.href ? (
               <a
@@ -207,14 +285,13 @@ export function TerminalRepl() {
                 key={i}
                 className={`whitespace-pre-wrap break-words ${TONE[l.tone ?? 'default']}`}
               >
-                {l.text || ' '}
+                {l.rich ? <RichLine text={l.text} /> : l.text || ' '}
               </div>
             ),
           )}
         </div>
 
-        {/* live input line */}
-        <div className="mt-1 flex items-center gap-2">
+        <div className="mt-1 flex items-center gap-2 border-t border-[#30363D] pt-2">
           <span className={TONE.accent}>❯</span>
           <input
             ref={inputRef}
@@ -226,14 +303,21 @@ export function TerminalRepl() {
             autoComplete="off"
             autoCapitalize="off"
             aria-label="terminal input"
-            placeholder={busy ? 'thinking…' : 'type a command — help'}
-            className="flex-1 bg-transparent text-[#E6EDF3] caret-[#2DD4BF] outline-none placeholder:text-[#8B949E]/60"
+            placeholder={busy ? 'thinking…' : 'type a command — help / man <cmd> / ask <質問>'}
+            className="min-w-0 flex-1 bg-transparent text-[#E6EDF3] caret-[#2DD4BF] outline-none placeholder:text-[#8B949E]/60"
           />
           {busy && <span className="inline-block h-4 w-2 animate-pulse bg-[#2DD4BF]" aria-hidden />}
         </div>
       </div>
 
-      {enabled && <div ref={containerRef} className="mt-2" />}
+      {/* Turnstile is kept off-screen — interaction-only, no visible widget here. */}
+      {enabled && (
+        <div
+          ref={containerRef}
+          aria-hidden
+          className="pointer-events-none fixed -left-[9999px] top-0"
+        />
+      )}
     </section>
   );
 }

@@ -15,6 +15,14 @@ export interface Line {
   text: string;
   tone?: Tone;
   href?: string;
+  /** Render through the assistant tokenizer (citations / urls become links). */
+  rich?: boolean;
+}
+
+export interface ManEntry {
+  name: string;
+  usage: string;
+  desc: string;
 }
 
 export type CmdAction =
@@ -35,26 +43,27 @@ export interface CmdCtx {
   activities: Activity[];
 }
 
-export const COMMANDS = [
-  'help',
-  'whoami',
-  'neofetch',
-  'ls',
-  'cat',
-  'projects',
-  'skills',
-  'activity',
-  'open',
-  'ask',
-  'chat',
-  'contact',
-  'social',
-  'editorial',
-  'clear',
-  'echo',
-  'sudo',
-  'cowsay',
-] as const;
+export const MANUAL: ManEntry[] = [
+  { name: 'help', usage: 'help', desc: 'コマンド一覧を表示' },
+  { name: 'man', usage: 'man [command]', desc: 'マニュアル（詳細）を表示' },
+  { name: 'whoami', usage: 'whoami', desc: 'プロフィールを1行で表示' },
+  { name: 'neofetch', usage: 'neofetch', desc: 'プロフィール＋アスキーアート' },
+  { name: 'ls', usage: 'ls [projects/]', desc: 'セクション/作品の一覧' },
+  { name: 'cat', usage: 'cat <file>', desc: 'mission.txt / contact.sh / projects/<id> を表示' },
+  { name: 'projects', usage: 'projects', desc: '作品一覧' },
+  { name: 'skills', usage: 'skills', desc: '技術スタックを表示' },
+  { name: 'activity', usage: 'activity', desc: 'タイムラインを表示' },
+  { name: 'open', usage: 'open <id>', desc: '作品のリンクを新規タブで開く' },
+  { name: 'ask', usage: 'ask <質問>', desc: 'AIクローンに質問し、回答をここにストリーミング' },
+  { name: 'chat', usage: 'chat', desc: 'クローンのチャットUIを開く' },
+  { name: 'contact', usage: 'contact', desc: '連絡先を表示' },
+  { name: 'social', usage: 'social', desc: 'X / GitHub / Kaggle' },
+  { name: 'editorial', usage: 'editorial', desc: 'エディトリアル表示へ切替' },
+  { name: 'clear', usage: 'clear', desc: '画面をクリア' },
+  { name: 'echo', usage: 'echo <text>', desc: 'テキストをそのまま表示' },
+];
+
+export const COMMANDS = [...MANUAL.map((m) => m.name), 'sudo', 'cowsay', 'matrix'] as const;
 
 const t = (text: string, tone?: Tone, href?: string): Line => ({ text, tone, href });
 
@@ -68,21 +77,11 @@ function workLine(w: Work): Line {
 
 function help(): Line[] {
   return [
-    t('Available commands:', 'muted'),
-    t('  help              このヘルプ'),
-    t('  whoami / neofetch プロフィール'),
-    t('  ls [projects/]    一覧'),
-    t('  cat <file>        mission.txt / contact.sh / projects/<id>'),
-    t('  projects          作品一覧'),
-    t('  skills            技術スタック'),
-    t('  activity          タイムライン'),
-    t('  open <id>         作品のリンクを開く'),
-    t('  ask <質問>        AIクローンに質問（回答をここに表示）', 'accent'),
-    t('  chat              クローンのチャットを開く'),
-    t('  contact / social  連絡先・SNS'),
-    t('  editorial         エディトリアル表示へ切替'),
-    t('  clear             画面クリア'),
-    t('  …ほかにも隠しコマンドが少々 😏', 'muted'),
+    t('Available commands ( man <command> で詳細・上の ▾ コマンド一覧でも確認可 ):', 'muted'),
+    ...MANUAL.map((m) =>
+      t(`  ${m.name.padEnd(10)} ${m.desc}`, m.name === 'ask' ? 'accent' : 'default'),
+    ),
+    t('  …ほかにも隠しコマンドが少々 😏 (sudo / cowsay / matrix)', 'muted'),
   ];
 }
 
@@ -119,6 +118,29 @@ export function runCommand(input: string, ctx: CmdCtx): CmdResult {
     case '?':
       return { lines: help() };
 
+    case 'man': {
+      if (!arg) {
+        return {
+          lines: [
+            t('MANUAL — man <command> で各コマンドの詳細を表示', 'muted'),
+            ...MANUAL.map((m) => t(`  ${m.name.padEnd(10)} ${m.usage.padEnd(16)} ${m.desc}`)),
+          ],
+        };
+      }
+      const e = MANUAL.find((m) => m.name === arg.toLowerCase());
+      if (!e) return { lines: [t(`man: ${arg}: マニュアルがありません`, 'error')] };
+      return {
+        lines: [
+          t('NAME', 'muted'),
+          t(`  ${e.name}`),
+          t('USAGE', 'muted'),
+          t(`  ${e.usage}`, 'accent'),
+          t('DESCRIPTION', 'muted'),
+          t(`  ${e.desc}`),
+        ],
+      };
+    }
+
     case 'whoami':
       return {
         lines: [
@@ -131,12 +153,15 @@ export function runCommand(input: string, ctx: CmdCtx): CmdResult {
       return { lines: neofetch(ctx) };
 
     case 'ls': {
+      if (!arg) {
+        return {
+          lines: [t('home.tsx  projects/  skills.json  activity.log  contact.sh', 'muted')],
+        };
+      }
       if (/^projects\/?$/.test(arg)) {
         return { lines: ctx.works.map((w) => t(`${w.id}/`, 'purple')) };
       }
-      return {
-        lines: [t('home.tsx  projects/  skills.json  activity.log  contact.sh', 'muted')],
-      };
+      return { lines: [t(`ls: ${arg}: No such directory`, 'error')] };
     }
 
     case 'projects':

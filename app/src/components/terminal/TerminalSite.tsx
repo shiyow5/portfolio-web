@@ -223,7 +223,7 @@ export function TerminalSite() {
 
         {/* skills */}
         <section id="skills" className="mt-10">
-          <SectionLabel>skills.json — AI を主軸に</SectionLabel>
+          <SectionLabel>skills.json — 技術スタック</SectionLabel>
           <div className="grid gap-3 md:grid-cols-2">
             {PROFILE.techStack.map((g) => (
               <div key={g.id} className="rounded-md border border-[#30363D] bg-[#161B22] p-4">

@@ -62,4 +62,16 @@ describe('runCommand', () => {
   it('sudo is a friendly easter egg', () => {
     expect(flat('sudo rm -rf /')).toMatch(/sudoers/);
   });
+
+  it('man lists the manual and details a command', () => {
+    expect(flat('man')).toMatch(/ask/);
+    expect(flat('man ask')).toMatch(/USAGE/);
+    expect(run('man nope').lines[0]!.tone).toBe('error');
+  });
+
+  it('ls errors on an invalid argument (typo)', () => {
+    expect(run('ls projets/').lines[0]!.tone).toBe('error');
+    expect(flat('ls')).toContain('projects/');
+    expect(flat('ls projects/')).toContain('astralyx/');
+  });
 });
