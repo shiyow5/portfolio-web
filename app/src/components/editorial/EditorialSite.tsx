@@ -385,6 +385,14 @@ function ContactSection({ askClone }: { askClone: () => void }) {
           >
             GitHub / shiyow5 ↗
           </a>
+          <a
+            href="https://www.kaggle.com/sshow14"
+            target="_blank"
+            rel="noreferrer"
+            className="block hover:text-primary"
+          >
+            Kaggle / sshow14 ↗
+          </a>
         </aside>
       </div>
     </motion.section>

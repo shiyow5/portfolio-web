@@ -1,72 +1,51 @@
 {
   "name": "Shiyow",
-  "classTitle": "AI Engineer / LLM・Agent Developer",
-  "level": 28,
-  "xp": 12450,
-  "xpNext": 15000,
-  "location": "Digital Highlands, JP",
-  "bioQuote": "LLM とエージェントで動くプロダクトを作る AI エンジニア。モデル選定・RAG・エージェント設計の実装から、手触りの良い UI まで一気通貫で仕上げるのが好きです。",
-  "stats": [
-    { "label": "HP", "value": 92, "max": 100, "color": "secondary" },
-    { "label": "Focus", "value": 74, "max": 100, "color": "primary" },
-    { "label": "Creativity", "value": 88, "max": 100, "color": "tertiary" }
-  ],
+  "classTitle": "AI Engineer / ML・LLM",
+  "location": "Aizu, Japan",
   "techStack": [
     {
       "id": "ai",
       "label": "AI & Agents",
-      "icon": "smart_toy",
-      "items": ["Gemini 2.0 Flash", "Claude", "LangChain", "RAG", "Vectorize (Workers AI)"]
+      "items": [
+        "Gemini / Vertex AI",
+        "LangGraph / LangChain",
+        "RAG (pgvector)",
+        "Function Calling",
+        "強化学習 (PPO)",
+        "LLM 効率化 (KV Cache)"
+      ]
+    },
+    {
+      "id": "ml",
+      "label": "Machine Learning",
+      "items": ["PyTorch", "TensorFlow", "scikit-learn", "Hugging Face", "XGBoost", "librosa"]
     },
     {
       "id": "languages",
       "label": "Languages",
-      "icon": "code",
-      "items": ["Python", "TypeScript", "JavaScript", "Go", "SQL"]
+      "items": ["Python", "TypeScript", "Go", "C / C++", "Java"]
     },
     {
-      "id": "frameworks",
-      "label": "Frameworks & Runtime",
-      "icon": "deployed_code",
-      "items": ["React 19", "Vite 8", "Tailwind CSS v4", "Motion", "Node.js"]
+      "id": "web",
+      "label": "Web",
+      "items": ["Next.js", "React", "Three.js (R3F)", "Hono", "Streamlit", "Tailwind CSS"]
     },
     {
       "id": "cloud",
       "label": "Cloud & Infra",
-      "icon": "cloud",
-      "items": ["Cloudflare Pages", "Workers", "D1", "R2", "KV", "GCP", "Vercel"]
+      "items": [
+        "Google Cloud (Run / Vertex AI)",
+        "Azure Functions",
+        "Cloudflare",
+        "Supabase",
+        "Docker",
+        "GitHub Actions"
+      ]
     },
     {
       "id": "tools",
-      "label": "Tools",
-      "icon": "build",
-      "items": ["VS Code", "Git", "gh CLI", "tmux", "Wrangler"]
-    },
-    {
-      "id": "design",
-      "label": "Design & Pixel Art",
-      "icon": "brush",
-      "items": ["Figma", "FigJam", "Aseprite", "Photoshop"]
-    },
-    {
-      "id": "gamedev",
-      "label": "Game Dev",
-      "icon": "sports_esports",
-      "items": ["Unity", "Godot"]
+      "label": "Tools & More",
+      "items": ["Git / GitHub", "Pygame", "discord.js", "LINE Bot", "Drizzle ORM"]
     }
-  ],
-  "perks": [
-    "Passive: 自分のクローン AI をサイトに住まわせている",
-    "Passive: モデル選定とコスト最適化が習慣",
-    "Active: プロトタイプから本番デプロイまで一人で通す"
-  ],
-  "history": [
-    {
-      "year": 2026,
-      "title": "shiyow.dev を公開",
-      "detail": "Cloudflare Pages + Gemini クローンエージェント"
-    },
-    { "year": 2025, "title": "Neon Circuit リリース", "detail": "ネオン UI キットを OSS 公開" },
-    { "year": 2024, "title": "Asset Pack 01 リリース", "detail": "CC0 ファンタジーアイコン 120 種" }
   ]
 }

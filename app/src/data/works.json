@@ -1,84 +1,83 @@
 [
   {
-    "id": "aether-drift",
-    "title": "Aether Drift",
-    "category": "game",
-    "tagline": "手描き 16-bit タイルで組むプロシージャル雲上アクション。",
-    "description": "カスタムシェーダと独自タイルセットで実装したプロシージャル・プラットフォーマー。HSL ベースの時間帯サイクルで空の色が変化します。",
-    "cover": "/rooms/simple_room.png",
-    "gallery": ["/rooms/simple_room.png"],
-    "tags": ["Platformer", "Pixel Art", "Custom Shader"],
-    "tech": ["TypeScript", "WebGL", "Aseprite"],
-    "version": "1.0.4",
-    "status": "new",
+    "id": "astralyx",
+    "title": "Astralyx",
+    "tagline": "YouTube 視聴履歴を 3D 宇宙に可視化し、AI が興味関心を分析・対話するアプリ。HDBSCAN を自作し embedding→クラスタリングの AI パイプラインと 3D 可視化を主担当。1 週間で 500+ コミット、デプロイ・ユーザーテストまで実施。",
+    "tech": ["Next.js", "Three.js (R3F)", "Go", "Gemini", "Vertex AI"],
+    "status": "ハッカソン優秀賞 · Team",
     "year": 2026,
-    "links": {
-      "github": "https://github.com/shiyow5/aether-drift"
-    }
+    "links": {}
   },
   {
-    "id": "neon-circuit",
-    "title": "Neon Circuit",
-    "category": "uiux",
-    "tagline": "サイバーパンク UI キット＋アイソメ環境。",
-    "description": "ネオン基板から着想した UI コンポーネント集。ダークモード固定、発光はすべて 2px 以内のストロークで表現。",
-    "cover": "/rooms/simple_room.png",
-    "gallery": ["/rooms/simple_room.png"],
-    "tags": ["UI Toolkit", "Isometric", "Design System"],
-    "tech": ["Figma", "Framer Motion", "Tailwind"],
-    "version": "2.1.0",
-    "status": "stable",
+    "id": "llm-kv-cache",
+    "title": "長文脈 LLM 推論の効率化（修士研究）",
+    "tagline": "自己検証付き階層的 KV キャッシュ近似で、長文脈 LLM 推論を品質を保ちつつ軽く・速く。直近は詳細・古い文脈は要約で記憶し、近似が信頼できるかを AI 自身が推論中に検証、危険時は丁寧な計算へ fallback。",
+    "tech": ["Python", "PyTorch", "Hugging Face", "LLM", "KV Cache"],
+    "status": "研究 · 進行中",
+    "year": 2026,
+    "links": {}
+  },
+  {
+    "id": "fastbear",
+    "title": "FASTBEAR",
+    "tagline": "クマ出没情報を AI が自動収集・構造化し、地図と SNS へ届ける社会課題解決サービス。ニュースの LLM 構造化抽出＋LangGraph によるファクトチェックを担当。27 都道府県を GitHub Actions で定期収集。",
+    "tech": ["Python", "Gemini", "LangGraph", "Supabase", "Next.js", "Leaflet"],
+    "status": "公開中 · Team（アオタケ採択）",
     "year": 2025,
-    "links": {
-      "github": "https://github.com/shiyow5/neon-circuit"
-    }
+    "links": { "demo": "https://fastbear.aisometry.com/" }
   },
   {
-    "id": "loot-logic",
-    "title": "Loot Logic",
-    "category": "prototype",
-    "tagline": "RPG のインベントリ管理システム試作。",
-    "description": "グリッド配置・スタック数・重量制約を 1 ファイルで検証できる最小プロトタイプ。テトリス風の自動パッキング機能を検証中。",
-    "cover": "/rooms/simple_room.png",
-    "gallery": ["/rooms/simple_room.png"],
-    "tags": ["Prototype", "State Machine"],
-    "tech": ["React", "Zustand"],
-    "version": "alpha",
-    "status": "wip",
+    "id": "dm-ai",
+    "title": "DM-AI",
+    "tagline": "デュエル・マスターズ Q&A ボット。RAG＋構造化 DB＋Function Calling のハイブリッドで、ルール検索（条文番号付き）・デッキ評価・環境分析を統合。",
+    "tech": ["Next.js", "Hono", "Gemini", "Supabase (pgvector)", "Drizzle"],
+    "status": "公開 · 個人",
     "year": 2026,
+    "links": { "github": "https://github.com/shiyow5/DuelMasters-AI" }
+  },
+  {
+    "id": "pokemon-cry",
+    "title": "Pokémon Cry Stats Predictor",
+    "tagline": "鳴き声から 6 種のステータスを予測する ML プロジェクト。59 次元の音響特徴量（MFCC / Chroma / Tonnetz 等）を抽出し、Random Forest / XGBoost / NN を 5-Fold CV で比較。Streamlit ダッシュボードも実装。",
+    "tech": ["Python", "TensorFlow", "scikit-learn", "XGBoost", "librosa"],
+    "status": "公開 · 個人",
+    "year": 2025,
+    "links": { "github": "https://github.com/shiyow5/pokemon-cry-stats-predictor" }
+  },
+  {
+    "id": "ptcg-ai",
+    "title": "PTCG-AI Battle Challenge",
+    "tagline": "ポケモンカード AI エージェント（Kaggle「Pokemon TCG AI Battle」）。戦略決定ロジックの実装・学習・評価を担当し、Docker で再現可能な提出パイプラインとエージェント同士の対戦テストを整備。",
+    "tech": ["Python", "Docker", "Kaggle"],
+    "status": "コンペ · Team",
+    "year": 2026,
+    "links": { "demo": "https://www.kaggle.com/sshow14" }
+  },
+  {
+    "id": "oekaki-battler",
+    "title": "お絵描きバトラー",
+    "tagline": "手描きキャラを Gemini が解析し、自動生成したステータスで対戦するゲーム。学園祭の新企画として企画立案〜アプリ開発を個人で担当。LINE Bot から画像登録、ポーリング最適化で API 呼び出しを大幅削減。",
+    "tech": ["Python", "Gemini", "Pygame", "LINE Bot"],
+    "status": "学園祭企画 · 個人",
+    "year": 2025,
     "links": {}
   },
   {
-    "id": "asset-pack-01",
-    "title": "Asset Pack 01",
-    "category": "art",
-    "tagline": "32x32 の CC0 ファンタジーアイコン集。",
-    "description": "武器・ポーション・食料など 120 種の 32x32 アイコン。インディー開発者向けに CC0 で公開。",
-    "cover": "/rooms/simple_room.png",
-    "gallery": ["/rooms/simple_room.png"],
-    "tags": ["2D Art", "CC0", "Icons"],
-    "tech": ["Aseprite", "Photoshop"],
-    "version": "1.2",
-    "status": "stable",
-    "year": 2024,
+    "id": "textworld-rl",
+    "title": "TextWorld 強化学習エージェント（卒業研究）",
+    "tagline": "「言語指示→実行コマンド」を学ぶ RL エージェントを LSTM / Transformer / GPT-2 で比較。特定ドメインでは汎用 LLM の微調整より小型 Transformer が安定・高成功率と示した。",
+    "tech": ["Python", "PyTorch", "PPO", "TextWorld"],
+    "status": "卒業研究 · 個人",
+    "year": 2025,
     "links": {}
   },
   {
-    "id": "cozy-workshop",
-    "title": "Cozy Workshop",
-    "category": "web",
-    "tagline": "ピクセル職人のための Web 制作実験場。",
-    "description": "本ポートフォリオそのもの。Cloudflare Pages + Pages Functions + Gemini で将来のクローンエージェントを動かす基盤。",
-    "cover": "/rooms/simple_room.png",
-    "gallery": ["/rooms/simple_room.png"],
-    "tags": ["Web", "React", "Cloudflare"],
-    "tech": ["Vite", "React 19", "Tailwind v4", "Cloudflare Pages", "Gemini"],
-    "version": "0.1.0",
-    "status": "wip",
+    "id": "shiyow-dev",
+    "title": "shiyow.dev",
+    "tagline": "このポートフォリオ。editorial / terminal の 2 モードと、Gemini 製の自作クローン AI チャット（SSE ストリーミング・Turnstile・KV レート制限）を Cloudflare 上で実装。",
+    "tech": ["React 19", "Vite", "Tailwind v4", "Cloudflare Pages", "Gemini"],
+    "status": "公開 · 個人",
     "year": 2026,
-    "links": {
-      "demo": "https://shiyow.dev",
-      "github": "https://github.com/shiyow5/portfolio-web"
-    }
+    "links": { "github": "https://github.com/shiyow5/portfolio-web" }
   }
 ]
