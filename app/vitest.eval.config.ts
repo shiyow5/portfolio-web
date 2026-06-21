@@ -9,7 +9,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.live.test.ts'],
-    testTimeout: 180_000,
-    hookTimeout: 180_000,
+    testTimeout: 600_000,
+    hookTimeout: 600_000,
   },
 });

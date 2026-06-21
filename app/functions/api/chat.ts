@@ -222,6 +222,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent` +
     `?alt=sse&key=${encodeURIComponent(env.GEMINI_API_KEY)}`;
 
+  // 2.5 / *-latest models can "think" by default, which adds latency and can
+  // consume the output budget. A grounded factual clone doesn't need it; disable
+  // it where supported (older models reject thinkingConfig).
+  const supportsThinking = /2\.5|latest/.test(model);
+
   const upstream = await fetch(url, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -232,6 +237,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         maxOutputTokens: MAX_OUTPUT_TOKENS,
         temperature: 0.7,
         topP: 0.9,
+        ...(supportsThinking ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
       },
       safetySettings: [
         { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },

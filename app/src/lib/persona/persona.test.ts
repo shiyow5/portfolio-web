@@ -16,6 +16,10 @@ describe('PERSONA_SYSTEM_INSTRUCTION (three layers)', () => {
   it('no longer claims pixel-art as a focus (stale persona removed)', () => {
     expect(PERSONA_SYSTEM_INSTRUCTION).not.toContain('ドット絵');
   });
+
+  it("encodes the user's real catchphrase as voice guidance", () => {
+    expect(PERSONA_SYSTEM_INSTRUCTION).toContain('そういう説もあるか');
+  });
 });
 
 describe('STYLE_FEWSHOT', () => {
