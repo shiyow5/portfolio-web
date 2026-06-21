@@ -28,8 +28,30 @@ const NAV = [
   { href: '#contact', label: 'contact.sh', color: ORANGE },
 ];
 
-function Dot({ className }: { className: string }) {
-  return <span className={`inline-block h-3 w-3 rounded-full ${className}`} />;
+function DotButton({
+  color,
+  symbol,
+  label,
+  onClick,
+}: {
+  color: string;
+  symbol: string;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className={`flex h-3.5 w-3.5 items-center justify-center rounded-full ${color} hover:brightness-110`}
+    >
+      <span className="text-[8px] font-black leading-none text-black/55 opacity-0 group-hover/lights:opacity-100">
+        {symbol}
+      </span>
+    </button>
+  );
 }
 
 function Prompt({ cmd, children }: { cmd: string; children?: React.ReactNode }) {
@@ -51,6 +73,13 @@ export function TerminalSite() {
   const title = PROFILE.classTitle.split(' / ')[0];
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const scrollTop = () =>
+    document.getElementById('terminal-top')?.scrollIntoView({ behavior: 'smooth' });
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else document.documentElement.requestFullscreen?.().catch(() => {});
+  };
+
   useEffect(() => {
     if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -71,11 +100,28 @@ export function TerminalSite() {
       {/* top bar */}
       <header className="sticky top-0 z-20 border-b border-[#30363D] bg-[#161B22]">
         <div className="flex items-center gap-2 px-4 py-2.5">
-          <Dot className="bg-[#FFA657]" />
-          <Dot className="bg-[#7EE787]" />
-          <Dot className="bg-[#2DD4BF]" />
+          <div className="group/lights flex items-center gap-2">
+            <DotButton
+              color="bg-[#FF5F57]"
+              symbol="✕"
+              label="閉じる — editorial へ"
+              onClick={() => setMode('editorial')}
+            />
+            <DotButton
+              color="bg-[#FEBC2E]"
+              symbol="–"
+              label="最小化 — トップへ"
+              onClick={scrollTop}
+            />
+            <DotButton
+              color="bg-[#28C840]"
+              symbol="+"
+              label="最大化 — 全画面表示"
+              onClick={toggleFullscreen}
+            />
+          </div>
           <span className={`ml-3 truncate text-[12px] ${MUTED}`}>
-            shiyow@devstation: ~/shiyow.dev — zsh
+            shiyow@devstation: ~/shiyow.dev — bash
           </span>
           <div className="ml-auto flex items-center gap-2">
             <div className="flex items-center overflow-hidden rounded-md border border-[#30363D] text-[12px]">
