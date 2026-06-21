@@ -7,6 +7,7 @@ import { submitContact } from '../../lib/contact';
 import { useTurnstile } from '../../lib/turnstile';
 import { ChatWidget } from '../chat/ChatWidget';
 import { WorkMedia } from '../media/WorkMedia';
+import { TerminalRepl } from './TerminalRepl';
 
 // ---------------------------------------------------------------------------
 // Terminal / IDE presentation of the portfolio (devstation skin), wired to the
@@ -134,48 +135,26 @@ export function TerminalSite() {
         <h1 className="sr-only">
           {PROFILE.name} — {title}
         </h1>
-        {/* hero */}
-        <section id="home" className="border-x border-b border-[#30363D] bg-[#0D1117] p-6 md:p-8">
-          <div className="space-y-2">
-            <Prompt cmd="whoami">
-              <span className="text-[#E6EDF3]">
-                {PROFILE.name} — {title}.
-              </span>{' '}
-              <span className={MUTED}>LLM / Agent / RAG / ML · {PROFILE.location}</span>
-            </Prompt>
-            <Prompt cmd="cat mission.txt">
-              <span className="text-[#E6EDF3]/90">
-                LLM アプリ・AI エージェント・ML をプロダクトとして実装します。
-              </span>
-            </Prompt>
-            <Prompt cmd="cat status.txt">
-              <span className={GREEN}>◉ open to work</span>{' '}
-              <span className={MUTED}>— 就活中。カジュアル面談歓迎。</span>
-            </Prompt>
-            <div className="pt-1">
-              <span className={ACCENT}>❯</span>{' '}
-              <span className="inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-[#2DD4BF]" />
-            </div>
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={askClone}
-              className="rounded-md bg-[#2DD4BF] px-4 py-2 text-[13px] font-bold text-[#0D1117] hover:bg-[#5EEAD4]"
-            >
-              ❯ ask my clone
-            </button>
-            <a
-              href="#contact"
-              className="rounded-md border border-[#30363D] px-4 py-2 text-[13px] hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
-            >
-              contact →
-            </a>
-          </div>
-          <p className={`mt-5 text-[12px] ${MUTED}`}>
-            {`// このチャット自体が実装デモ: Gemini · SSE streaming · Turnstile · KV rate-limit on Cloudflare`}
-          </p>
-        </section>
+        {/* hero — interactive terminal */}
+        <TerminalRepl />
+        <div className="mt-4 flex flex-wrap items-center gap-3 px-1">
+          <button
+            type="button"
+            onClick={askClone}
+            className="rounded-md bg-[#2DD4BF] px-4 py-2 text-[13px] font-bold text-[#0D1117] hover:bg-[#5EEAD4]"
+          >
+            ❯ ask my clone
+          </button>
+          <a
+            href="#contact"
+            className="rounded-md border border-[#30363D] px-4 py-2 text-[13px] hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
+          >
+            contact →
+          </a>
+          <span className={`text-[12px] ${MUTED}`}>
+            {`// 上のコンソールは本物です — help / ask <質問> / ls / cat …`}
+          </span>
+        </div>
 
         {/* projects */}
         <section id="projects" className="mt-10">

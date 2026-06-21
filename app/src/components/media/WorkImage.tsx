@@ -32,15 +32,15 @@ export function WorkImage({
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`${title} の画像を拡大`}
-        className={`group relative block overflow-hidden ${className}`}
+        className={`group/media relative block overflow-hidden ${className}`}
       >
         <img
           src={src}
           alt={`${title} のスクリーンショット`}
           loading="lazy"
-          className="block h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          className="block h-full w-full object-cover transition-transform duration-300 group-hover/media:scale-[1.03]"
         />
-        <span className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity group-hover:opacity-100">
+        <span className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity group-hover/media:opacity-100">
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-black shadow-lg">
             <Maximize2 size={16} />
           </span>
