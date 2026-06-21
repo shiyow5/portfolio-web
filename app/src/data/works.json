@@ -30,6 +30,7 @@
     "title": "FASTBEAR",
     "tagline": "クマ出没情報を AI が自動収集・構造化し、地図と SNS へ届ける社会課題解決サービス。ニュースの LLM 構造化抽出＋LangGraph によるファクトチェックを担当。27 都道府県を GitHub Actions で定期収集。",
     "tech": ["Python", "Gemini", "LangGraph", "Supabase", "Next.js", "Leaflet"],
+    "image": "/works/fastbear.png",
     "status": "公開中 · Team（アオタケ採択）",
     "year": 2025,
     "links": {
