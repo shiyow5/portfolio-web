@@ -22,8 +22,8 @@ describe('ACTIVITIES', () => {
 });
 
 describe('formatDate', () => {
-  it('renders an ISO date as dotted segments', () => {
-    expect(formatDate('2026-04-22')).toBe('2026.04.22');
+  it('renders an ISO date as year.month (no day)', () => {
+    expect(formatDate('2026-04-22')).toBe('2026.04');
   });
 });
 
@@ -48,7 +48,7 @@ describe('groupByYear', () => {
 });
 
 describe('category lookup tables', () => {
-  const categories = ['project', 'release', 'talk', 'award', 'job', 'post'] as const;
+  const categories = ['project', 'release', 'talk', 'award', 'job', 'post', 'education'] as const;
 
   it('provides a label, icon and colour for every category', () => {
     for (const category of categories) {

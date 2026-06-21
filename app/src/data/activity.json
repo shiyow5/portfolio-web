@@ -11,9 +11,9 @@
   {
     "id": "grad-school",
     "date": "2026-04-01",
-    "title": "大学院進学・LLM 効率化研究を開始",
-    "category": "project",
-    "summary": "会津大学大学院 Computer Science 専攻へ。長文脈 LLM 推論の KV キャッシュ効率化を研究。",
+    "title": "会津大学大学院 コンピュータ理工学研究科 入学",
+    "category": "education",
+    "summary": "コンピュータ理工学専攻へ。長文脈 LLM 推論の KV キャッシュ効率化を研究。",
     "tags": ["llm", "research"],
     "links": []
   },
@@ -78,6 +78,24 @@
     "category": "project",
     "summary": "RL エージェントを LSTM / Transformer / GPT-2 で比較し、知見を論文化。",
     "tags": ["rl", "research"],
+    "links": [{ "label": "卒業論文", "url": "/papers/textworld-rl-thesis.pdf" }]
+  },
+  {
+    "id": "bachelor-grad",
+    "date": "2026-03-01",
+    "title": "会津大学 コンピュータ理工学部 卒業",
+    "category": "education",
+    "summary": "コンピュータ理工学を専攻し卒業。",
+    "tags": ["education"],
+    "links": []
+  },
+  {
+    "id": "bachelor-enroll",
+    "date": "2022-04-01",
+    "title": "会津大学 コンピュータ理工学部 入学",
+    "category": "education",
+    "summary": "コンピュータ理工学を専攻。",
+    "tags": ["education"],
     "links": []
   }
 ]

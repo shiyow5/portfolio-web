@@ -223,14 +223,14 @@ export function EditorialSite() {
 
         {/* ===== activity ===== */}
         <motion.section id="activity" className="py-12 md:py-16" {...reveal}>
-          <SectionHead index="03" title="Activity" note="直近の活動" />
+          <SectionHead index="03" title="Activity" note="タイムライン" />
           {ACTIVITIES.length === 0 && (
             <p className="border-t-2 border-on-surface/15 py-3 font-mono text-sm text-on-surface-variant">
               {'// 準備中'}
             </p>
           )}
           <ul>
-            {ACTIVITIES.slice(0, 7).map((a) => (
+            {ACTIVITIES.map((a) => (
               <li
                 key={a.id}
                 className="grid grid-cols-12 gap-3 border-t-2 border-on-surface/15 py-3 items-baseline"
