@@ -181,7 +181,7 @@ export function ChatWidget() {
             m.id === assistantId
               ? {
                   ...m,
-                  content: `⚠ 応答取得に失敗しました: ${message}`,
+                  content: `⚠ ${message}`,
                   pending: false,
                   error: true,
                 }

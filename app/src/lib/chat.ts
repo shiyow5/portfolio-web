@@ -43,9 +43,14 @@ export function streamChat(
       let detail = `HTTP ${response.status}`;
       try {
         const parsed = (await response.json()) as { error?: string; retryAfter?: number };
-        if (parsed.error) detail = parsed.error;
-        if (response.status === 429 && parsed.retryAfter) {
-          detail = `Rate limited — ${parsed.retryAfter}s 後にもう一度お試しください`;
+        if (parsed.error) {
+          // The server is the source of truth for visitor-facing copy.
+          detail = parsed.error;
+        } else if (response.status === 429) {
+          detail = 'リクエストが集中しています。少し時間をおいてからお試しください。';
+        } else if (response.status === 503) {
+          detail =
+            'チャットは現在利用できません。お手数ですが問い合わせフォームからご連絡ください。';
         }
       } catch {
         // ignore non-JSON bodies

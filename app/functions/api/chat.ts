@@ -161,7 +161,14 @@ function relayStream(
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!env.GEMINI_API_KEY) {
-    return json({ error: 'GEMINI_API_KEY not configured' }, { status: 503 });
+    return json(
+      {
+        error:
+          'チャットは現在準備中です。お手数ですが画面下部の問い合わせフォームからご連絡ください。',
+        code: 'not_configured',
+      },
+      { status: 503 },
+    );
   }
 
   let body: ChatRequestBody;
@@ -198,7 +205,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
     if (!minute.ok) {
       return json(
-        { error: 'rate limited', retryAfter: minute.retryAfter },
+        {
+          error: 'すこしリクエストが早すぎるみたいです。1 分ほどおいてから、もう一度どうぞ。',
+          code: 'rate_limited',
+          retryAfter: minute.retryAfter,
+        },
         {
           status: 429,
           headers: { 'retry-after': String(minute.retryAfter) },
@@ -208,7 +219,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     const hour = await bumpRateLimit(env.RATE_LIMIT_KV, `ip:${ip}:h`, HOUR_LIMIT, HOUR_SECONDS);
     if (!hour.ok) {
       return json(
-        { error: 'hourly rate limited', retryAfter: hour.retryAfter },
+        {
+          error:
+            'たくさん試してくれてありがとうございます。1 時間ほどおいてからまたどうぞ（続きは問い合わせフォームからでもOKです）。',
+          code: 'rate_limited',
+          retryAfter: hour.retryAfter,
+        },
         {
           status: 429,
           headers: { 'retry-after': String(hour.retryAfter) },
@@ -250,8 +266,26 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   if (!upstream.ok || !upstream.body) {
     const detail = await upstream.text().catch(() => '');
+    // Gemini quota / rate limit — common on the free tier (≈20 req/day). Surface
+    // a friendly, actionable message instead of a raw upstream error.
+    if (upstream.status === 429) {
+      const retryAfter = Number(upstream.headers.get('retry-after')) || 30;
+      return json(
+        {
+          error:
+            'AI が今アクセス集中で応答できないみたいです。少し時間をおくか、画面下部の問い合わせフォームからご連絡ください。',
+          code: 'upstream_busy',
+          retryAfter,
+        },
+        { status: 429, headers: { 'retry-after': String(retryAfter) } },
+      );
+    }
     return json(
-      { error: 'gemini upstream error', status: upstream.status, detail: detail.slice(0, 400) },
+      {
+        error: 'AI への接続でエラーが発生しました。少し時間をおいて再度お試しください。',
+        code: 'upstream_error',
+        detail: detail.slice(0, 400),
+      },
       { status: 502 },
     );
   }
