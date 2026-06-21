@@ -2,6 +2,7 @@
 import { buildSystemInstruction } from '../../src/lib/persona/persona';
 import { factCardIds } from '../../src/lib/persona/factCards';
 import { makeCitationGuard, type CitationGuard } from '../../src/lib/persona/citations';
+import { splitSSEEvents, extractDelta } from '../../src/lib/gemini-sse';
 
 interface Env {
   GEMINI_API_KEY?: string;
@@ -123,25 +124,13 @@ function relayStream(
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
 
-          let sep: number;
-          while ((sep = buffer.indexOf('\n\n')) !== -1) {
-            const event = buffer.slice(0, sep);
-            buffer = buffer.slice(sep + 2);
-            const line = event.split('\n').find((l) => l.startsWith('data:'));
-            if (!line) continue;
-            const payload = line.slice(5).trim();
-            if (!payload || payload === '[DONE]') continue;
-            try {
-              const parsed = JSON.parse(payload) as {
-                candidates?: Array<{
-                  content?: { parts?: Array<{ text?: string }> };
-                }>;
-              };
-              const delta = parsed.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-              if (delta) emit(controller, guard.push(delta));
-            } catch {
-              // ignore malformed chunk
-            }
+          // Gemini separates SSE events with CRLF; splitSSEEvents handles both
+          // CRLF and LF (a plain '\n\n' split silently drops every chunk).
+          const { events, rest } = splitSSEEvents(buffer);
+          buffer = rest;
+          for (const event of events) {
+            const delta = extractDelta(event);
+            if (delta) emit(controller, guard.push(delta));
           }
         }
         emit(controller, guard.flush());

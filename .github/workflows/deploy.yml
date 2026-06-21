@@ -120,6 +120,10 @@ jobs:
 
       - name: Build
         working-directory: app
+        env:
+          # Public Turnstile site key — baked into the client bundle at build time
+          # so the widget renders. Leave the variable unset to ship without Turnstile.
+          VITE_TURNSTILE_SITEKEY: ${{ vars.VITE_TURNSTILE_SITEKEY }}
         run: npm run build
 
       - name: Deploy to Cloudflare Pages
