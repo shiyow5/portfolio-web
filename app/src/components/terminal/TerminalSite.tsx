@@ -3,6 +3,7 @@ import { PROFILE } from '../../lib/profile';
 import { WORKS } from '../../lib/works';
 import { ACTIVITIES, CATEGORY_LABEL, formatDate } from '../../lib/activity';
 import { ChatWidget } from '../chat/ChatWidget';
+import { WorkVideoFromSources } from '../media/WorkVideo';
 
 // ---------------------------------------------------------------------------
 // Terminal / IDE presentation of the portfolio (devstation skin), wired to the
@@ -154,6 +155,11 @@ export function TerminalSite() {
                 </header>
                 <p className={`mt-1 text-[12px] ${ORANGE}`}>{w.tech.join(' · ')}</p>
                 <p className="mt-2 text-[13px] leading-relaxed text-[#E6EDF3]/85">{w.tagline}</p>
+                <WorkVideoFromSources
+                  urls={(w.links.sources ?? []).map((s) => s.url)}
+                  title={w.title}
+                  className="mt-3 aspect-video w-full max-w-[320px] rounded-md border border-[#30363D]"
+                />
                 <div className="mt-3 flex flex-wrap gap-3 text-[12px]">
                   {w.links.github && (
                     <a
