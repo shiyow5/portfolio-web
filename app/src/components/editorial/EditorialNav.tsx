@@ -92,7 +92,7 @@ export function EditorialNav() {
               <span className="hidden font-mono text-[10px] uppercase tracking-widest text-on-surface-variant sm:inline">
                 View
               </span>
-              <div className="flex items-center border-2 border-on-surface font-mono text-[11px] uppercase tracking-widest">
+              <div className="flex shrink-0 items-center whitespace-nowrap border-2 border-on-surface font-mono text-[11px] uppercase tracking-widest">
                 <span aria-current="true" className="bg-on-surface px-2.5 py-1.5 text-surface">
                   Editorial
                 </span>
@@ -100,7 +100,7 @@ export function EditorialNav() {
                   type="button"
                   onClick={() => setMode('terminal')}
                   aria-label="Switch to terminal mode"
-                  className="px-2.5 py-1.5 hover:bg-on-surface/10"
+                  className="whitespace-nowrap px-2.5 py-1.5 hover:bg-on-surface/10"
                 >
                   {'>_'} Terminal
                 </button>

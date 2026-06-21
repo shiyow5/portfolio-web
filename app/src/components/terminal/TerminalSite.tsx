@@ -120,20 +120,23 @@ export function TerminalSite() {
               onClick={toggleFullscreen}
             />
           </div>
-          <span className={`ml-3 truncate text-[12px] ${MUTED}`}>
+          <span className={`ml-3 min-w-0 truncate text-[12px] ${MUTED}`}>
             shiyow@devstation: ~/shiyow.dev — bash
           </span>
-          <div className="ml-auto flex items-center gap-2">
-            <div className="flex items-center overflow-hidden rounded-md border border-[#30363D] text-[12px]">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
+            <div className="flex shrink-0 items-center overflow-hidden whitespace-nowrap rounded-md border border-[#30363D] text-[12px]">
               <button
                 type="button"
                 onClick={() => setMode('editorial')}
                 aria-label="Switch to editorial mode"
-                className="px-2.5 py-1 text-[#8B949E] hover:text-[#E6EDF3]"
+                className="whitespace-nowrap px-2.5 py-1 text-[#8B949E] hover:text-[#E6EDF3]"
               >
                 ◧ editorial
               </button>
-              <span aria-current="true" className="bg-[#2DD4BF] px-2.5 py-1 text-[#0D1117]">
+              <span
+                aria-current="true"
+                className="whitespace-nowrap bg-[#2DD4BF] px-2.5 py-1 text-[#0D1117]"
+              >
                 terminal
               </span>
             </div>
