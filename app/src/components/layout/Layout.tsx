@@ -1,78 +1,50 @@
-import { Suspense, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { BackgroundFX } from './BackgroundFX';
-import { TopNav } from './TopNav';
-import { Footer } from './Footer';
-import { ChatWidget } from '../chat/ChatWidget';
-import { AnimatedOutlet } from '../motion/AnimatedOutlet';
+import { useEffect, useRef } from 'react';
+import { useMode } from '../../lib/mode';
+import { EditorialSite } from '../editorial/EditorialSite';
+import { TerminalSite } from '../terminal/TerminalSite';
 
-const ROUTE_TITLES: Record<string, string> = {
-  '/': 'Shiyow — AI Engineer',
-  '/about': 'About · Shiyow — AI Engineer',
-  '/gallery': 'Works · Shiyow — AI Engineer',
-  '/changelog': 'Activity · Shiyow — AI Engineer',
-  '/contact': 'Contact · Shiyow — AI Engineer',
-};
-
-function titleFor(pathname: string): string {
-  if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
-  if (pathname.startsWith('/works/')) return 'Work · Shiyow — AI Engineer';
-  return 'Not Found · Shiyow — AI Engineer';
-}
-
-function PageFallback() {
-  return (
-    <div className="flex items-center justify-center py-32" role="status" aria-live="polite">
-      <span className="font-pixel text-xs uppercase tracking-widest text-tertiary animate-pulse">
-        Loading…
-      </span>
-    </div>
-  );
-}
-
+/**
+ * Top-level presentation switch. The portfolio renders as one of two
+ * self-contained single-page experiences sharing the same data:
+ *   - editorial (default) — TYPESET layout in the warm Atelier palette
+ *   - terminal — devstation IDE skin
+ * Toggled via useMode(); the choice persists in localStorage.
+ */
 export function Layout() {
-  const { pathname } = useLocation();
-  const mainRef = useRef<HTMLElement>(null);
+  const { mode } = useMode();
   const isFirstRender = useRef(true);
 
-  // Per-route document title (SEO + screen-reader page awareness).
   useEffect(() => {
-    document.title = titleFor(pathname);
-  }, [pathname]);
+    document.title = 'Shiyow — AI Engineer';
+  }, []);
 
-  // Move focus to <main> on client-side navigation so keyboard/SR users land
-  // on the new page content instead of being stranded at the top (WCAG 2.4.3).
+  // expose the mode on <html> so global CSS (scrollbar / selection / focus) can
+  // re-skin, and keep the browser theme-color in sync with the active palette.
+  useEffect(() => {
+    document.documentElement.dataset.mode = mode;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', mode === 'terminal' ? '#161b22' : '#fbf9f4');
+  }, [mode]);
+
+  // A mode switch swaps the entire tree; move focus to the new <main> and
+  // announce it so keyboard / screen-reader users aren't stranded (WCAG 2.4.3).
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    mainRef.current?.focus();
-  }, [pathname]);
+    requestAnimationFrame(() => document.querySelector<HTMLElement>('main')?.focus());
+  }, [mode]);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-primary focus:text-on-primary focus:px-4 focus:py-2 focus:font-black focus:uppercase focus:tracking-widest"
-      >
-        Skip to content
-      </a>
-      <BackgroundFX />
-      <TopNav />
-      <main
-        ref={mainRef}
-        id="main"
-        tabIndex={-1}
-        className="flex-1 relative outline-none"
-        style={{ paddingTop: 'var(--topnav-h, 72px)' }}
-      >
-        <Suspense fallback={<PageFallback />}>
-          <AnimatedOutlet />
-        </Suspense>
-      </main>
-      <Footer />
-      <ChatWidget />
-    </div>
+    <>
+      <div aria-live="polite" className="sr-only">
+        {mode === 'terminal'
+          ? 'ターミナル表示に切り替えました'
+          : 'エディトリアル表示に切り替えました'}
+      </div>
+      {mode === 'terminal' ? <TerminalSite /> : <EditorialSite />}
+    </>
   );
 }

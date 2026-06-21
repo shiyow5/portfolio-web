@@ -13,7 +13,6 @@
     "status": "new",
     "year": 2026,
     "links": {
-      "play": "https://example.com/aether-drift",
       "github": "https://github.com/shiyow5/aether-drift"
     }
   },
@@ -31,7 +30,6 @@
     "status": "stable",
     "year": 2025,
     "links": {
-      "demo": "https://example.com/neon-circuit",
       "github": "https://github.com/shiyow5/neon-circuit"
     }
   },
@@ -48,9 +46,7 @@
     "version": "alpha",
     "status": "wip",
     "year": 2026,
-    "links": {
-      "demo": "https://example.com/loot-logic"
-    }
+    "links": {}
   },
   {
     "id": "asset-pack-01",
@@ -65,9 +61,7 @@
     "version": "1.2",
     "status": "stable",
     "year": 2024,
-    "links": {
-      "demo": "https://example.com/asset-pack-01"
-    }
+    "links": {}
   },
   {
     "id": "cozy-workshop",

@@ -65,10 +65,10 @@
   {
     "id": "career-start",
     "date": "2024-01-15",
-    "title": "フリーランス / 個人事業主として稼働開始",
+    "title": "個人開発を本格化 — AI 実装に注力開始",
     "category": "job",
-    "summary": "UI 設計・ピクセルアート制作・小規模 Web 実装のご相談を受付開始。",
-    "tags": ["career"],
+    "summary": "LLM・エージェント・ML を中心に、プロダクトとして動かす個人開発に注力し始める。",
+    "tags": ["career", "ai"],
     "links": []
   }
 ]
