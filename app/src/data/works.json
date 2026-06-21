@@ -67,9 +67,9 @@
   {
     "id": "ptcg-ai",
     "title": "PTCG-AI Battle Challenge",
-    "tagline": "ポケモンカード AI エージェント（Kaggle「Pokemon TCG AI Battle」）。戦略決定ロジックの実装・学習・評価を担当し、Docker で再現可能な提出パイプラインとエージェント同士の対戦テストを整備。",
-    "tech": ["Python", "Docker", "Kaggle"],
-    "status": "コンペ · Team",
+    "tagline": "ポケモンカード AI エージェント（Kaggle「Pokemon TCG AI Battle」）。戦略決定ロジックの実装・学習・評価を担当。提出パイプラインや対戦テストの整備はチームメンバーが担当。現在進行中のプロジェクト。",
+    "tech": ["Python", "Kaggle"],
+    "status": "コンペ進行中 · Team",
     "year": 2026,
     "links": {
       "demo": "https://www.kaggle.com/sshow14",
