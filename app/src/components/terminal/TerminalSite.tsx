@@ -1,9 +1,12 @@
+import { useEffect, useState, type FormEvent } from 'react';
 import { useMode } from '../../lib/mode';
 import { PROFILE } from '../../lib/profile';
 import { WORKS } from '../../lib/works';
 import { ACTIVITIES, CATEGORY_LABEL, formatDate } from '../../lib/activity';
+import { submitContact } from '../../lib/contact';
+import { useTurnstile } from '../../lib/turnstile';
 import { ChatWidget } from '../chat/ChatWidget';
-import { WorkVideoFromSources } from '../media/WorkVideo';
+import { WorkMedia } from '../media/WorkMedia';
 
 // ---------------------------------------------------------------------------
 // Terminal / IDE presentation of the portfolio (devstation skin), wired to the
@@ -45,6 +48,16 @@ export function TerminalSite() {
   const { setMode } = useMode();
   const askClone = () => window.dispatchEvent(new CustomEvent('shiyow:open-chat'));
   const title = PROFILE.classTitle.split(' / ')[0];
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
 
   return (
     <div className="min-h-screen bg-[#0D1117] pb-12 font-mono text-[14px] text-[#E6EDF3] selection:bg-[#2DD4BF]/30">
@@ -56,36 +69,65 @@ export function TerminalSite() {
       </a>
       {/* top bar */}
       <header className="sticky top-0 z-20 border-b border-[#30363D] bg-[#161B22]">
-        <div className="flex items-center gap-2 px-4 pt-2.5">
+        <div className="flex items-center gap-2 px-4 py-2.5">
           <Dot className="bg-[#FFA657]" />
           <Dot className="bg-[#7EE787]" />
           <Dot className="bg-[#2DD4BF]" />
-          <span className={`ml-3 text-[12px] ${MUTED}`}>shiyow@devstation: ~/shiyow.dev — zsh</span>
-          <div className="ml-auto flex items-center overflow-hidden rounded-md border border-[#30363D] text-[12px]">
+          <span className={`ml-3 truncate text-[12px] ${MUTED}`}>
+            shiyow@devstation: ~/shiyow.dev — zsh
+          </span>
+          <div className="ml-auto flex items-center gap-2">
+            <div className="flex items-center overflow-hidden rounded-md border border-[#30363D] text-[12px]">
+              <button
+                type="button"
+                onClick={() => setMode('editorial')}
+                aria-label="Switch to editorial mode"
+                className="px-2.5 py-1 text-[#8B949E] hover:text-[#E6EDF3]"
+              >
+                ◧ editorial
+              </button>
+              <span aria-current="true" className="bg-[#2DD4BF] px-2.5 py-1 text-[#0D1117]">
+                terminal
+              </span>
+            </div>
             <button
               type="button"
-              onClick={() => setMode('editorial')}
-              aria-label="Switch to editorial mode"
-              className="px-2.5 py-1 text-[#8B949E] hover:text-[#E6EDF3]"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="メニュー"
+              aria-expanded={menuOpen}
+              className="rounded-md border border-[#30363D] px-2.5 py-1 leading-none text-[15px] text-[#8B949E] hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
             >
-              ◧ editorial
+              ☰
             </button>
-            <span aria-current="true" className="bg-[#2DD4BF] px-2.5 py-1 text-[#0D1117]">
-              terminal
-            </span>
           </div>
         </div>
-        <nav className="mt-2 flex items-end gap-1 overflow-x-auto px-2 text-[13px]">
-          {NAV.map((t) => (
-            <a
-              key={t.href}
-              href={t.href}
-              className={`rounded-t-md border-x border-t border-transparent px-3 py-1.5 ${MUTED} hover:text-[#E6EDF3]`}
+
+        {menuOpen && (
+          <>
+            <button
+              type="button"
+              aria-hidden
+              tabIndex={-1}
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 z-[95] cursor-default bg-black/30"
+            />
+            <nav
+              aria-label="セクション"
+              className="absolute right-3 top-full z-[96] mt-1 w-56 overflow-hidden rounded-md border border-[#30363D] bg-[#161B22] py-1 shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
             >
-              <span className={t.color}>{t.label}</span>
-            </a>
-          ))}
-        </nav>
+              {NAV.map((t) => (
+                <a
+                  key={t.href}
+                  href={t.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2 text-[13px] text-[#8B949E] hover:bg-[#0D1117] hover:text-[#E6EDF3]"
+                >
+                  <span className={t.color}>{t.label}</span>
+                </a>
+              ))}
+            </nav>
+          </>
+        )}
       </header>
 
       <main id="terminal-top" tabIndex={-1} className="mx-auto max-w-[960px] px-4 outline-none">
@@ -155,9 +197,8 @@ export function TerminalSite() {
                 </header>
                 <p className={`mt-1 text-[12px] ${ORANGE}`}>{w.tech.join(' · ')}</p>
                 <p className="mt-2 text-[13px] leading-relaxed text-[#E6EDF3]/85">{w.tagline}</p>
-                <WorkVideoFromSources
-                  urls={(w.links.sources ?? []).map((s) => s.url)}
-                  title={w.title}
+                <WorkMedia
+                  work={w}
                   className="mt-3 aspect-video w-full max-w-[320px] rounded-md border border-[#30363D]"
                 />
                 <div className="mt-3 flex flex-wrap gap-3 text-[12px]">
@@ -251,39 +292,7 @@ export function TerminalSite() {
         </section>
 
         {/* contact */}
-        <section
-          id="contact"
-          className="mt-10 rounded-md border border-[#30363D] bg-[#161B22] p-6 md:p-8"
-        >
-          <SectionLabel>contact.sh — 採用・カジュアル面談歓迎</SectionLabel>
-          <p className="text-[15px] text-[#E6EDF3]">
-            <span className={GREEN}>◉ open to work</span> — 一緒に働く話、歓迎します。
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3 text-[13px]">
-            <button
-              type="button"
-              onClick={askClone}
-              className="rounded-md bg-[#2DD4BF] px-4 py-2 font-bold text-[#0D1117] hover:bg-[#5EEAD4]"
-            >
-              ❯ ask my clone
-            </button>
-            <a
-              href="https://x.com/twinS_KNSN1415"
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-md border border-[#30363D] px-4 py-2 hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
-            >
-              X / @twinS_KNSN1415 ↗
-            </a>
-            <button
-              type="button"
-              onClick={() => setMode('editorial')}
-              className={`rounded-md border border-[#30363D] px-4 py-2 ${MUTED} hover:text-[#E6EDF3]`}
-            >
-              ◧ editorial サイトの問い合わせフォームへ
-            </button>
-          </div>
-        </section>
+        <TerminalContact />
       </main>
 
       {/* status bar */}
@@ -297,5 +306,149 @@ export function TerminalSite() {
 
       <ChatWidget />
     </div>
+  );
+}
+
+type ContactStatus = 'idle' | 'sending' | 'success' | 'error';
+
+function TerminalContact() {
+  const askClone = () => window.dispatchEvent(new CustomEvent('shiyow:open-chat'));
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<ContactStatus>('idle');
+  const [error, setError] = useState('');
+  const { containerRef, token, enabled } = useTurnstile();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (status === 'sending') return;
+    if (enabled && !token) {
+      setStatus('error');
+      setError('認証（Turnstile）を完了してください');
+      return;
+    }
+    setStatus('sending');
+    setError('');
+    const result = await submitContact(
+      { name: name.trim(), email: email.trim(), message: message.trim() },
+      token,
+    );
+    if (result.ok) setStatus('success');
+    else {
+      setStatus('error');
+      setError(result.error ?? '送信に失敗しました');
+    }
+  };
+
+  const field =
+    'w-full rounded-md border border-[#30363D] bg-[#0D1117] px-3 py-2 text-[13px] text-[#E6EDF3] outline-none transition-colors focus:border-[#2DD4BF]';
+
+  return (
+    <section
+      id="contact"
+      className="mt-10 rounded-md border border-[#30363D] bg-[#161B22] p-6 md:p-8"
+    >
+      <SectionLabel>contact.sh — 採用・カジュアル面談歓迎</SectionLabel>
+      <div className="space-y-2">
+        <Prompt cmd="cat contact.sh">
+          <span className="text-[#E6EDF3]/90">
+            就職活動中です。AI / LLM・エージェント・ML
+            を中心に、プロダクトを実装して届けられる環境を探しています。カジュアル面談・選考のご相談、歓迎します。
+          </span>
+        </Prompt>
+        <Prompt cmd="cat reply.txt">
+          <span className={MUTED}>
+            下記フォーム（送信内容は本人に届きます）か、X の DM からどうぞ。経歴・スキルは右下の AI
+            クローンにも聞けます。
+          </span>
+        </Prompt>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-3 text-[13px]">
+        <button
+          type="button"
+          onClick={askClone}
+          className="rounded-md bg-[#2DD4BF] px-4 py-2 font-bold text-[#0D1117] hover:bg-[#5EEAD4]"
+        >
+          ❯ ask my clone
+        </button>
+        <a
+          href="https://x.com/twinS_KNSN1415"
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-md border border-[#30363D] px-4 py-2 hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
+        >
+          X / @twinS_KNSN1415 ↗
+        </a>
+        <a
+          href="https://github.com/shiyow5"
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-md border border-[#30363D] px-4 py-2 hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
+        >
+          GitHub / shiyow5 ↗
+        </a>
+      </div>
+
+      {status === 'success' ? (
+        <div className="mt-6 max-w-xl rounded-md border border-[#7EE787]/50 bg-[#7EE787]/10 p-4 text-[13px]">
+          <p className={GREEN}>✓ 送信しました。</p>
+          <p className="mt-1 text-[#E6EDF3]/80">
+            メッセージを受け取りました。返信までお待ちください。
+          </p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="mt-6 max-w-xl space-y-3">
+          <label className="block">
+            <span className={`mb-1 block text-[12px] ${MUTED}`}>name / お名前</span>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              maxLength={100}
+              autoComplete="name"
+              className={field}
+            />
+          </label>
+          <label className="block">
+            <span className={`mb-1 block text-[12px] ${MUTED}`}>email / メール</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              maxLength={200}
+              autoComplete="email"
+              className={field}
+            />
+          </label>
+          <label className="block">
+            <span className={`mb-1 block text-[12px] ${MUTED}`}>message / メッセージ</span>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+              maxLength={2000}
+              rows={4}
+              className={`${field} resize-y`}
+            />
+          </label>
+          {enabled && <div ref={containerRef} className="min-h-[65px]" />}
+          {status === 'error' && (
+            <p role="alert" className="text-[13px] text-[#FF6B6B]">
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="rounded-md bg-[#2DD4BF] px-5 py-2 text-[13px] font-bold text-[#0D1117] hover:bg-[#5EEAD4] disabled:opacity-50"
+          >
+            {status === 'sending' ? 'sending…' : '❯ send'}
+          </button>
+        </form>
+      )}
+    </section>
   );
 }

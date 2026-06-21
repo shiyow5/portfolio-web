@@ -22,6 +22,8 @@ export interface Work {
   status: string;
   year: number;
   links: WorkLinks;
+  /** Optional screenshot shown as a thumbnail (root-relative, e.g. /works/x.png). */
+  image?: string;
 }
 
 export const WORKS: Work[] = raw as Work[];

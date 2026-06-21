@@ -8,7 +8,7 @@ import { ACTIVITIES, CATEGORY_LABEL, formatDate } from '../../lib/activity';
 import { submitContact } from '../../lib/contact';
 import { useTurnstile } from '../../lib/turnstile';
 import { ChatWidget } from '../chat/ChatWidget';
-import { WorkVideoFromSources } from '../media/WorkVideo';
+import { WorkMedia } from '../media/WorkMedia';
 import { EditorialNav } from './EditorialNav';
 
 // ---------------------------------------------------------------------------
@@ -159,9 +159,8 @@ export function EditorialSite() {
                     {w.title}
                   </h3>
                   <p className="mt-2 text-on-surface-variant max-w-xl">{w.tagline}</p>
-                  <WorkVideoFromSources
-                    urls={(w.links.sources ?? []).map((s) => s.url)}
-                    title={w.title}
+                  <WorkMedia
+                    work={w}
                     className="mt-4 aspect-video w-full max-w-[300px] border-2 border-on-surface/15"
                   />
                 </div>
