@@ -3,12 +3,10 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Send, X } from 'lucide-react';
 import { streamChat, type ChatMessage } from '../../lib/chat';
 import { useMode, type Mode } from '../../lib/mode';
-import { resolveCitation } from '../../lib/persona/citationLinks';
+import { tokenizeAssistantText } from '../../lib/persona/messageTokens';
 import { useTurnstile } from '../../lib/turnstile';
 
-const CITATION_RE = /\[([a-z]+:[a-z0-9-]+)\]/g;
-
-/** Renders assistant text, turning `[id]` citations into clickable links. */
+/** Renders assistant text, turning citations / markdown links / bare urls into links. */
 function CitedText({
   content,
   mode,
@@ -20,33 +18,21 @@ function CitedText({
   linkClass: string;
   onInternal: () => void;
 }): ReactNode {
-  const nodes: ReactNode[] = [];
-  let last = 0;
-  let key = 0;
-  for (const m of content.matchAll(CITATION_RE)) {
-    const start = m.index ?? 0;
-    if (start > last) nodes.push(content.slice(last, start));
-    const c = resolveCitation(m[1]!, mode);
-    if (c) {
-      nodes.push(
-        <a
-          key={`c-${key++}`}
-          href={c.href}
-          title={c.label}
-          className={linkClass}
-          {...(c.external ? { target: '_blank', rel: 'noreferrer' } : { onClick: onInternal })}
-        >
-          [{c.slug}
-          {c.external ? ' ↗' : ''}]
-        </a>,
-      );
-    } else {
-      nodes.push(m[0]);
-    }
-    last = start + m[0].length;
-  }
-  if (last < content.length) nodes.push(content.slice(last));
-  return nodes;
+  return tokenizeAssistantText(content, mode).map((part, i) =>
+    part.kind === 'text' ? (
+      part.text
+    ) : (
+      <a
+        key={`l-${i}`}
+        href={part.href}
+        title={part.text}
+        className={linkClass}
+        {...(part.external ? { target: '_blank', rel: 'noreferrer' } : { onClick: onInternal })}
+      >
+        {part.text}
+      </a>
+    ),
+  );
 }
 
 const CHARACTER_SRC = '/characters/shiyow.png';
