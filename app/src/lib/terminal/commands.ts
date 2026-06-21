@@ -17,6 +17,8 @@ export interface Line {
   href?: string;
   /** Render through the assistant tokenizer (citations / urls become links). */
   rich?: boolean;
+  /** Render with whitespace-pre (no wrap) — for ASCII art / the sl train. */
+  pre?: boolean;
 }
 
 export interface ManEntry {
@@ -30,7 +32,8 @@ export type CmdAction =
   | { type: 'mode' }
   | { type: 'openChat' }
   | { type: 'open'; url: string }
-  | { type: 'ask'; question: string };
+  | { type: 'ask'; question: string }
+  | { type: 'sl' };
 
 export interface CmdResult {
   lines: Line[];
@@ -264,6 +267,9 @@ export function runCommand(input: string, ctx: CmdCtx): CmdResult {
       return { lines: [t(arg)] };
 
     // ---- easter eggs ----
+    case 'sl':
+      return { lines: [], action: { type: 'sl' } };
+
     case 'sudo':
       return {
         lines: [

@@ -69,6 +69,10 @@ describe('runCommand', () => {
     expect(run('man nope').lines[0]!.tone).toBe('error');
   });
 
+  it('sl emits the train action', () => {
+    expect(run('sl').action).toEqual({ type: 'sl' });
+  });
+
   it('ls errors on an invalid argument (typo)', () => {
     expect(run('ls projets/').lines[0]!.tone).toBe('error');
     expect(flat('ls')).toContain('projects/');

@@ -34,6 +34,21 @@ function lcp(items: string[]): string {
   return prefix;
 }
 
+// The classic `sl` steam locomotive (D51).
+const TRAIN = [
+  '      ====        ________                ___________',
+  '  _D _|  |_______/        \\__I_I_____===__|_________|',
+  '   |(_)---  |   H\\________/ |   |        =|___ ___|',
+  '   /     |  |   H  |  |     |   |         ||_| |_||',
+  '  |      |  |   H  |__--------------------| [___] |',
+  '  | ________|___H__/__|_____/[][]~\\_______|       |',
+  '  |/ |   |-----------I_____I [][] []  D   |=======|__',
+  '__/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__',
+  ' |/-=|___|=O=====O=====O=====O   |_____/~\\___/',
+  '  \\_/      \\__/  \\__/  \\__/  \\__/      \\_/',
+];
+const TRAIN_W = Math.max(...TRAIN.map((l) => l.length));
+
 /** Renders assistant text with clickable citations / urls (for `ask` answers). */
 function RichLine({ text }: { text: string }) {
   return (
@@ -81,6 +96,7 @@ export function TerminalRepl() {
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const trainRef = useRef<number | null>(null);
   const { containerRef, token, enabled, reset } = useTurnstile(true, 'interaction-only');
 
   useEffect(() => {
@@ -88,7 +104,44 @@ export function TerminalRepl() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [output]);
 
-  useEffect(() => () => abortRef.current?.abort(), []);
+  useEffect(
+    () => () => {
+      abortRef.current?.abort();
+      if (trainRef.current) window.clearInterval(trainRef.current);
+    },
+    [],
+  );
+
+  // `sl` easter egg — chug a steam locomotive across the console, then clear it.
+  const runTrain = () => {
+    if (trainRef.current) return;
+    const N = TRAIN.length;
+    const cols = Math.max(40, Math.floor((scrollRef.current?.clientWidth ?? 640) / 8.4));
+    setBusy(true);
+    setOutput((prev) => [
+      ...prev,
+      ...TRAIN.map(() => ({ text: '', tone: 'accent' as Tone, pre: true })),
+    ]);
+    let x = cols;
+    trainRef.current = window.setInterval(() => {
+      x -= 2;
+      setOutput((prev) => {
+        const copy = prev.slice();
+        for (let i = 0; i < N; i++) {
+          const line = TRAIN[i]!;
+          const s = (x >= 0 ? ' '.repeat(x) + line : line.slice(-x)).slice(0, cols);
+          copy[copy.length - N + i] = { text: s, tone: 'accent', pre: true };
+        }
+        return copy;
+      });
+      if (x < -TRAIN_W) {
+        if (trainRef.current) window.clearInterval(trainRef.current);
+        trainRef.current = null;
+        setOutput((prev) => prev.slice(0, prev.length - N));
+        setBusy(false);
+      }
+    }, 55);
+  };
 
   const append = (lines: Line[]) => setOutput((prev) => [...prev, ...lines]);
   const appendDelta = (delta: string) =>
@@ -152,6 +205,9 @@ export function TerminalRepl() {
         break;
       case 'ask':
         ask(a.question);
+        break;
+      case 'sl':
+        runTrain();
         break;
     }
   };
@@ -267,7 +323,7 @@ export function TerminalRepl() {
       <div
         ref={scrollRef}
         onClick={focusUnlessSelecting}
-        className="h-[clamp(300px,46vh,480px)] select-text space-y-1 overflow-y-auto rounded-md bg-[#0D1117] pr-1"
+        className="h-[clamp(300px,46vh,480px)] select-text space-y-1 overflow-y-auto rounded-md bg-[#0D1117] px-1 pb-4 pt-1"
       >
         {output.map((l, i) =>
           l.href ? (
@@ -281,7 +337,10 @@ export function TerminalRepl() {
               {l.text}
             </a>
           ) : (
-            <div key={i} className={`whitespace-pre-wrap break-words ${TONE[l.tone ?? 'default']}`}>
+            <div
+              key={i}
+              className={`${l.pre ? 'overflow-hidden whitespace-pre' : 'whitespace-pre-wrap break-words'} ${TONE[l.tone ?? 'default']}`}
+            >
               {l.rich ? <RichLine text={l.text} /> : l.text || ' '}
             </div>
           ),
