@@ -1,74 +1,67 @@
 [
   {
-    "id": "portfolio-v0-2",
-    "date": "2026-04-22",
-    "title": "shiyow.dev v0.2.0 を公開",
-    "category": "release",
-    "summary": "16-Bit Atélier デザイン / 部屋を歩き回るキャラ / ハンバーガーナビ / 全ページのスクロールリビールを実装。",
-    "tags": ["portfolio", "web"],
-    "links": [{ "label": "Source", "url": "https://github.com/shiyow5/portfolio-web" }]
-  },
-  {
-    "id": "post-pixel-tokens",
-    "date": "2026-03-18",
-    "title": "Tailwind v4 @theme でドット絵トークンを組む",
-    "category": "post",
-    "summary": "4px 刻みボーダー・ドット絵アイコンのレンダリング指針・BackgroundFX のレイヤ構成まで解説。",
-    "tags": ["tailwind", "pixel-art"],
-    "links": []
-  },
-  {
-    "id": "lt-pixel-webdev",
-    "date": "2025-11-02",
-    "title": "LT: 個人開発でも続くピクセルアート UI 運用",
-    "category": "talk",
-    "summary": "ローカル勉強会 15 分枠。デザインガイドライン / Aseprite パイプライン / Figma との往復フロー。",
-    "tags": ["talk", "ui"],
-    "links": []
-  },
-  {
-    "id": "neon-circuit-v2",
-    "date": "2025-09-12",
-    "title": "Neon Circuit v2.1.0 を OSS リリース",
-    "category": "release",
-    "summary": "サイバーパンク UI キット。140 コンポーネント・3 テーマ・Figma ソースを含む。",
-    "tags": ["ui-kit", "oss"],
-    "links": [{ "label": "GitHub", "url": "https://github.com/shiyow5/neon-circuit" }]
-  },
-  {
-    "id": "feature-x-weekly",
-    "date": "2025-06-04",
-    "title": "週刊ピクセル系ニュースレターに掲載",
-    "category": "award",
-    "summary": "Asset Pack 01 が海外のインディー向けニュースレターで紹介された。",
-    "tags": ["recognition"],
-    "links": []
-  },
-  {
-    "id": "asset-pack-01",
-    "date": "2024-11-20",
-    "title": "Asset Pack 01 リリース",
-    "category": "release",
-    "summary": "32x32 CC0 ファンタジーアイコン 120 種。武器・ポーション・食料・UI パーツを網羅。",
-    "tags": ["cc0", "pixel-art"],
-    "links": []
-  },
-  {
-    "id": "switch-to-cloudflare",
-    "date": "2024-06-02",
-    "title": "インフラを Cloudflare に統一",
-    "category": "project",
-    "summary": "個人プロジェクト全体を Pages / Workers / D1 に寄せ、egress ゼロ構成へ移行。",
-    "tags": ["infra"],
-    "links": []
-  },
-  {
-    "id": "career-start",
-    "date": "2024-01-15",
-    "title": "個人開発を本格化 — AI 実装に注力開始",
+    "id": "matsuo-intern",
+    "date": "2026-06-01",
+    "title": "東京大学 松尾研究室 インターン開始",
     "category": "job",
-    "summary": "LLM・エージェント・ML を中心に、プロダクトとして動かす個人開発に注力し始める。",
-    "tags": ["career", "ai"],
+    "summary": "情報の構造化に関するリサーチに従事。",
+    "tags": ["internship", "research"],
+    "links": []
+  },
+  {
+    "id": "grad-school",
+    "date": "2026-04-01",
+    "title": "大学院進学・LLM 効率化研究を開始",
+    "category": "project",
+    "summary": "会津大学大学院 Computer Science 専攻へ。長文脈 LLM 推論の KV キャッシュ効率化を研究。",
+    "tags": ["llm", "research"],
+    "links": []
+  },
+  {
+    "id": "fastbear-release",
+    "date": "2026-05-01",
+    "title": "FASTBEAR を公開（アオタケ採択）",
+    "category": "release",
+    "summary": "クマ出没情報を自動収集・構造化する AI エージェントを開発し公開。",
+    "tags": ["ai-agent", "oss"],
+    "links": [{ "label": "Demo", "url": "https://fastbear.aisometry.com/" }]
+  },
+  {
+    "id": "astralyx-award",
+    "date": "2026-03-01",
+    "title": "GDGoC Japan Hackathon 2026 優秀賞（Astralyx）",
+    "category": "award",
+    "summary": "視聴履歴を 3D 可視化し AI が分析するアプリで優秀賞。AI パイプライン・3D 可視化を主担当。",
+    "tags": ["hackathon", "award"],
+    "links": []
+  },
+  {
+    "id": "onplanetz-intern",
+    "date": "2024-12-01",
+    "title": "Onplanetz 株式会社 インターン開始",
+    "category": "job",
+    "summary": "ドキュメント構造化・RAG システムの精度改善に従事（〜2026.6）。",
+    "tags": ["internship", "rag"],
+    "links": []
+  },
+  {
+    "id": "pokemon-cry-release",
+    "date": "2025-08-01",
+    "title": "Pokémon Cry Stats Predictor を公開",
+    "category": "release",
+    "summary": "鳴き声から種族値を予測する ML プロジェクトを GitHub に公開。",
+    "tags": ["ml", "oss"],
+    "links": [
+      { "label": "GitHub", "url": "https://github.com/shiyow5/pokemon-cry-stats-predictor" }
+    ]
+  },
+  {
+    "id": "thesis",
+    "date": "2025-02-01",
+    "title": "卒業研究（TextWorld 強化学習）を完了",
+    "category": "project",
+    "summary": "RL エージェントを LSTM / Transformer / GPT-2 で比較し、知見を論文化。",
+    "tags": ["rl", "research"],
     "links": []
   }
 ]
