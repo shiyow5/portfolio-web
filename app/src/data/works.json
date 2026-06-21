@@ -8,6 +8,7 @@
     "year": 2026,
     "links": {
       "sources": [
+        { "label": "動画", "url": "https://youtu.be/wilF-7lHfRA" },
         {
           "label": "GDGoC Japan Hackathon 2026",
           "url": "https://gdg.community.dev/events/details/google-gdg-on-campus-university-of-aizu-fukushima-japan-presents-gdgoc-japan-hackathon/"
@@ -94,7 +95,10 @@
     "status": "学園祭企画 · 個人",
     "year": 2025,
     "links": {
-      "sources": [{ "label": "学園祭公式", "url": "https://soshosai.com/" }]
+      "sources": [
+        { "label": "動画", "url": "https://youtu.be/pysfLn6iDng" },
+        { "label": "学園祭公式", "url": "https://soshosai.com/" }
+      ]
     }
   },
   {
@@ -104,7 +108,9 @@
     "tech": ["Python", "PyTorch", "PPO", "TextWorld"],
     "status": "卒業研究 · 個人",
     "year": 2025,
-    "links": {}
+    "links": {
+      "sources": [{ "label": "論文", "url": "/papers/textworld-rl-thesis.pdf" }]
+    }
   },
   {
     "id": "shiyow-dev",

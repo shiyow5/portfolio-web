@@ -24,26 +24,25 @@ describe('WORKS catalogue', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('only exposes absolute http(s) links (no placeholders)', () => {
+  it('exposes absolute primary links (no placeholders)', () => {
     for (const work of WORKS) {
-      const urls = [
-        work.links.github,
-        work.links.demo,
-        work.links.play,
-        ...(work.links.sources ?? []).map((s) => s.url),
-      ].filter(Boolean) as string[];
-      for (const url of urls) {
+      const primary = [work.links.github, work.links.demo, work.links.play].filter(
+        Boolean,
+      ) as string[];
+      for (const url of primary) {
         expect(url).toMatch(/^https?:\/\//);
         expect(url).not.toContain('example.com');
       }
     }
   });
 
-  it('gives every source link a label and absolute url', () => {
+  it('gives every source link a label and an absolute or root-relative url', () => {
     for (const work of WORKS) {
       for (const source of work.links.sources ?? []) {
         expect(source.label).toBeTruthy();
-        expect(source.url).toMatch(/^https?:\/\//);
+        // external (https://…) or an internal asset (/papers/…)
+        expect(source.url).toMatch(/^(https?:\/\/|\/)/);
+        expect(source.url).not.toContain('example.com');
       }
     }
   });
