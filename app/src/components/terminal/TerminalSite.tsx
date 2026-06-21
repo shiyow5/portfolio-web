@@ -219,10 +219,10 @@ export function TerminalSite() {
 
         {/* activity */}
         <section id="activity" className="mt-10">
-          <SectionLabel>activity.log — 直近の活動</SectionLabel>
+          <SectionLabel>activity.log — タイムライン</SectionLabel>
           <div className="rounded-md border border-[#30363D] bg-[#161B22] p-4">
             <ul className="space-y-2 text-[13px]">
-              {ACTIVITIES.slice(0, 6).map((a) => (
+              {ACTIVITIES.map((a) => (
                 <li key={a.id} className="flex flex-wrap items-baseline gap-x-3">
                   <span className={MUTED}>{formatDate(a.date)}</span>
                   <span className={`${GREEN} text-[12px]`}>[{CATEGORY_LABEL[a.category]}]</span>

@@ -1,6 +1,13 @@
 import raw from '../data/activity.json';
 
-export type ActivityCategory = 'project' | 'release' | 'talk' | 'award' | 'job' | 'post';
+export type ActivityCategory =
+  | 'project'
+  | 'release'
+  | 'talk'
+  | 'award'
+  | 'job'
+  | 'post'
+  | 'education';
 
 export interface ActivityLink {
   label: string;
@@ -48,6 +55,7 @@ export const CATEGORY_LABEL: Record<ActivityCategory, string> = {
   award: 'Award',
   job: 'Job',
   post: 'Post',
+  education: 'Education',
 };
 
 export const CATEGORY_ICON: Record<ActivityCategory, string> = {
@@ -57,6 +65,7 @@ export const CATEGORY_ICON: Record<ActivityCategory, string> = {
   award: 'military_tech',
   job: 'work',
   post: 'edit_note',
+  education: 'school',
 };
 
 export const CATEGORY_COLOR: Record<ActivityCategory, string> = {
@@ -66,9 +75,10 @@ export const CATEGORY_COLOR: Record<ActivityCategory, string> = {
   award: 'bg-primary-container text-on-primary-container border-2 border-primary',
   job: 'bg-tertiary-container text-on-tertiary-container border-2 border-tertiary',
   post: 'bg-surface-container-highest text-on-surface border-2 border-outline',
+  education: 'bg-secondary-container text-on-secondary-container border-2 border-secondary',
 };
 
 export function formatDate(iso: string): string {
-  const [y, m, d] = iso.split('-');
-  return `${y}.${m}.${d}`;
+  const [y, m] = iso.split('-');
+  return `${y}.${m}`;
 }
