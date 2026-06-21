@@ -148,6 +148,14 @@ export function ChatWidget() {
     });
   }, [messages, sending, reduce]);
 
+  // The panel remounts on open, so jump to the latest message (not the top).
+  useEffect(() => {
+    if (!open) return;
+    atBottomRef.current = true;
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [open]);
+
   // Focus the input on open; Escape closes the panel.
   useEffect(() => {
     if (!open) return;
