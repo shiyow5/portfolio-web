@@ -11,6 +11,7 @@ interface TurnstileApi {
     },
   ) => string;
   remove: (id: string) => void;
+  reset: (id?: string) => void;
 }
 
 declare global {
@@ -27,14 +28,19 @@ const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render
  * VITE_TURNSTILE_SITEKEY is configured. Without a sitekey it is a no-op and
  * `token` stays undefined — the backend only enforces verification when
  * TURNSTILE_SECRET is also set, so the form still works in local/dev.
+ *
+ * `active` lets callers whose container only mounts conditionally (e.g. the
+ * chat panel) defer rendering until the container is in the DOM; pass the
+ * open/visible flag so the widget renders when the container appears.
  */
-export function useTurnstile() {
+export function useTurnstile(active = true) {
   const sitekey = import.meta.env.VITE_TURNSTILE_SITEKEY as string | undefined;
   const containerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | undefined>(undefined);
   const [token, setToken] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!sitekey) return;
+    if (!sitekey || !active) return;
     let cancelled = false;
     let widgetId: string | undefined;
 
@@ -46,6 +52,7 @@ export function useTurnstile() {
         'error-callback': () => setToken(undefined),
         'expired-callback': () => setToken(undefined),
       });
+      widgetIdRef.current = widgetId;
     };
 
     if (window.turnstile) {
@@ -65,6 +72,8 @@ export function useTurnstile() {
 
     return () => {
       cancelled = true;
+      setToken(undefined);
+      widgetIdRef.current = undefined;
       if (widgetId && window.turnstile) {
         try {
           window.turnstile.remove(widgetId);
@@ -73,7 +82,20 @@ export function useTurnstile() {
         }
       }
     };
-  }, [sitekey]);
+  }, [sitekey, active]);
 
-  return { sitekey, containerRef, token, enabled: !!sitekey };
+  // Turnstile tokens are single-use; call after a successful submit to fetch a
+  // fresh token for the next request (e.g. the next chat message).
+  const reset = () => {
+    setToken(undefined);
+    if (widgetIdRef.current && window.turnstile) {
+      try {
+        window.turnstile.reset(widgetIdRef.current);
+      } catch {
+        // widget already gone
+      }
+    }
+  };
+
+  return { sitekey, containerRef, token, enabled: !!sitekey, reset };
 }

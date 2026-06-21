@@ -113,9 +113,16 @@ body {
   background: var(--color-tertiary-dim);
 }
 
-/* terminal mode re-skins the global scrollbar / selection to match the IDE look */
+/* terminal mode re-skins the global scrollbar / selection / focus to match the IDE look */
 [data-mode='terminal'] {
   color-scheme: dark;
+  background-color: #0d1117;
+}
+[data-mode='terminal'] body {
+  background-color: #0d1117;
+}
+[data-mode='terminal'] :focus-visible {
+  outline-color: #2dd4bf;
 }
 [data-mode='terminal'] *::selection {
   background-color: #2dd4bf;

@@ -56,7 +56,3 @@ export const FAQ_PAIRS: Array<{ q: string; a: string }> = [
     a: 'AI は Gemini / Claude / LangChain、言語は Python・TypeScript・Go、基盤は Cloudflare (Pages Functions / Workers / KV) や GCP です。',
   },
 ];
-
-export function buildGreeting(): string {
-  return 'shiyow の AI クローンです（Gemini 製）。経歴・スキル・作ったもの、何でも聞いてください。';
-}

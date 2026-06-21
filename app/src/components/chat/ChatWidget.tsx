@@ -83,8 +83,8 @@ export function ChatWidget() {
   const { mode } = useMode();
   const t = THEMES[mode];
   const reduce = useReducedMotion();
-  const { containerRef, token, enabled } = useTurnstile();
   const [open, setOpen] = useState(false);
+  const { containerRef, token, enabled, reset } = useTurnstile(open);
   const [teaserHidden, setTeaserHidden] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
@@ -159,6 +159,8 @@ export function ChatWidget() {
           prev.map((m) => (m.id === assistantId ? { ...m, pending: false } : m)),
         );
         setSending(false);
+        // Turnstile tokens are single-use — refresh for the next message.
+        reset();
       },
       onError: (message) => {
         setMessages((prev) =>
@@ -276,6 +278,11 @@ export function ChatWidget() {
             </div>
 
             {enabled && <div ref={containerRef} className="px-3 pt-2" />}
+            {enabled && !token && (
+              <p className="px-4 pb-1 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                送信には認証 (Turnstile) の完了が必要です
+              </p>
+            )}
 
             {import.meta.env.DEV && !TURNSTILE_SITEKEY && (
               <div className="px-4 py-1 text-[10px] font-black uppercase tracking-widest bg-error-container text-on-error">

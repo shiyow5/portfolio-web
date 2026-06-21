@@ -18,9 +18,13 @@ export function Layout() {
     document.title = 'Shiyow — AI Engineer';
   }, []);
 
-  // expose the mode on <html> so global CSS (scrollbar / selection) can re-skin
+  // expose the mode on <html> so global CSS (scrollbar / selection / focus) can
+  // re-skin, and keep the browser theme-color in sync with the active palette.
   useEffect(() => {
     document.documentElement.dataset.mode = mode;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', mode === 'terminal' ? '#161b22' : '#fbf9f4');
   }, [mode]);
 
   // A mode switch swaps the entire tree; move focus to the new <main> and

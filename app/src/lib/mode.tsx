@@ -7,15 +7,14 @@ const STORAGE_KEY = 'shiyow:mode';
 interface ModeContextValue {
   mode: Mode;
   setMode: (mode: Mode) => void;
-  toggle: () => void;
 }
 
 const ModeContext = createContext<ModeContextValue | null>(null);
 
 /**
- * Holds the site presentation mode — 'quest' (pixel / RPG, default) or
- * 'terminal' (IDE / devstation) — persisted to localStorage so a visitor's
- * choice survives reloads.
+ * Holds the site presentation mode — 'editorial' (default) or 'terminal'
+ * (IDE / devstation) — persisted to localStorage so a visitor's choice
+ * survives reloads.
  */
 function readStoredMode(): Mode {
   try {
@@ -38,9 +37,7 @@ export function ModeProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const toggle = () => setMode(mode === 'terminal' ? 'editorial' : 'terminal');
-
-  return <ModeContext.Provider value={{ mode, setMode, toggle }}>{children}</ModeContext.Provider>;
+  return <ModeContext.Provider value={{ mode, setMode }}>{children}</ModeContext.Provider>;
 }
 
 export function useMode(): ModeContextValue {

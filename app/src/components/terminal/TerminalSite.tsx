@@ -48,7 +48,7 @@ export function TerminalSite() {
   return (
     <div className="min-h-screen bg-[#0D1117] pb-12 font-mono text-[14px] text-[#E6EDF3] selection:bg-[#2DD4BF]/30">
       <a
-        href="#home"
+        href="#terminal-top"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[110] focus:bg-[#2DD4BF] focus:px-4 focus:py-2 focus:text-[12px] focus:text-[#0D1117]"
       >
         Skip to content
@@ -87,7 +87,7 @@ export function TerminalSite() {
         </nav>
       </header>
 
-      <main tabIndex={-1} className="mx-auto max-w-[960px] px-4 outline-none">
+      <main id="terminal-top" tabIndex={-1} className="mx-auto max-w-[960px] px-4 outline-none">
         <h1 className="sr-only">
           {PROFILE.name} — {title}
         </h1>

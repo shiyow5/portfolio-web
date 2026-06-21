@@ -276,6 +276,11 @@ function ContactSection({ askClone }: { askClone: () => void }) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (status === 'sending') return;
+    if (enabled && !token) {
+      setStatus('error');
+      setError('認証（Turnstile）を完了してください');
+      return;
+    }
     setStatus('sending');
     setError('');
     const result = await submitContact(

@@ -28,7 +28,7 @@
       "id": "frameworks",
       "label": "Frameworks & Runtime",
       "icon": "deployed_code",
-      "items": ["React 19", "Vite 8", "Tailwind CSS v4", "Motion", "React Router", "Node.js"]
+      "items": ["React 19", "Vite 8", "Tailwind CSS v4", "Motion", "Node.js"]
     },
     {
       "id": "cloud",

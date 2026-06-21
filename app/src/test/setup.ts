@@ -4,8 +4,8 @@ import { cleanup } from '@testing-library/react';
 
 /**
  * jsdom (Vitest 環境) では IntersectionObserver / ResizeObserver が未実装。
- * motion/react の `whileInView` や TopNav の ResizeObserver が参照する
- * のでダミーを生やしておく。厳密な DOM 型に準拠させる必要はないので
+ * motion/react の `whileInView` 等が参照するのでダミーを生やしておく。
+ * 厳密な DOM 型に準拠させる必要はないので
  * `unknown as typeof ...` でキャストして最低限のメソッドだけ提供する。
  */
 
