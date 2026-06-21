@@ -119,7 +119,7 @@ export function ChatWidget() {
   const t = THEMES[mode];
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
-  const { containerRef, token, enabled, reset } = useTurnstile(open);
+  const { containerRef, token, enabled, reset } = useTurnstile(open, 'interaction-only');
   const [teaserHidden, setTeaserHidden] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
@@ -175,12 +175,6 @@ export function ChatWidget() {
     const openChat = () => setOpen(true);
     window.addEventListener('shiyow:open-chat', openChat);
     return () => window.removeEventListener('shiyow:open-chat', openChat);
-  }, []);
-
-  // The teaser bubble greets once, then tucks away so it stops overlapping content.
-  useEffect(() => {
-    const timer = setTimeout(() => setTeaserHidden(true), 6000);
-    return () => clearTimeout(timer);
   }, []);
 
   const handleSend = () => {
@@ -248,8 +242,19 @@ export function ChatWidget() {
               initial={{ opacity: 0, y: 8, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.95 }}
-              className={`relative p-3 max-w-[230px] ${t.teaser}`}
+              className={`relative p-3 pr-7 max-w-[230px] ${t.teaser}`}
             >
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setTeaserHidden(true);
+                }}
+                aria-label="吹き出しを閉じる"
+                className={`absolute top-1 right-1 p-0.5 opacity-60 hover:opacity-100 ${t.teaserText}`}
+              >
+                <X size={12} />
+              </button>
               <p className={`text-[11px] font-black uppercase leading-snug ${t.teaserText}`}>
                 {isTerminal ? '❯ ask my clone' : 'shiyow の AI クローンに聞いてみる?'}
               </p>

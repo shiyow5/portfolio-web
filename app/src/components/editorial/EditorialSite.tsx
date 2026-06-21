@@ -124,7 +124,7 @@ export function EditorialSite() {
             variants={fadeUp}
             className="mt-4 font-mono text-[11px] uppercase tracking-widest text-on-surface-variant"
           >
-            {'// ▶ Ask my AI clone — 本人が Gemini で実装したライブデモ (SSE / Turnstile / KV)'}
+            {'// ▶ Ask my AI clone — Gemini で実装した shiyow のクローン、何でも聞いてね'}
           </motion.p>
         </motion.section>
 
@@ -150,10 +150,10 @@ export function EditorialSite() {
                 variants={fadeUp}
                 className="grid grid-cols-12 gap-3 border-t-2 border-on-surface/15 py-7 group"
               >
-                <span className="col-span-12 md:col-span-1 font-mono text-sm text-primary">
-                  {String(i + 1).padStart(2, '0')}
+                <span className="col-span-12 md:col-span-2 font-mono text-sm text-primary">
+                  {`${String(i + 1).padStart(2, '0')} / ${String(WORKS.length).padStart(2, '0')}`}
                 </span>
-                <div className="col-span-12 md:col-span-7">
+                <div className="col-span-12 md:col-span-6">
                   <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tight group-hover:text-primary transition-colors">
                     {w.title}
                   </h3>
@@ -208,7 +208,7 @@ export function EditorialSite() {
 
         {/* ===== stack ===== */}
         <motion.section id="stack" className="py-12 md:py-16" {...reveal}>
-          <SectionHead index="02" title="Stack" note="AI を主軸に" />
+          <SectionHead index="02" title="Stack" note="技術スタック" />
           <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
             {PROFILE.techStack.map((g) => (
               <div key={g.id} className="border-t-2 border-on-surface/15 pt-4">

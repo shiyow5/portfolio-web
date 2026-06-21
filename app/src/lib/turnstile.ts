@@ -34,7 +34,9 @@ const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render
  * chat panel) defer rendering until the container is in the DOM; pass the
  * open/visible flag so the widget renders when the container appears.
  */
-export function useTurnstile(active = true) {
+export type TurnstileAppearance = 'always' | 'execute' | 'interaction-only';
+
+export function useTurnstile(active = true, appearance: TurnstileAppearance = 'always') {
   const sitekey = import.meta.env.VITE_TURNSTILE_SITEKEY as string | undefined;
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | undefined>(undefined);
@@ -52,8 +54,7 @@ export function useTurnstile(active = true) {
         callback: (t) => setToken(t),
         'error-callback': () => setToken(undefined),
         'expired-callback': () => setToken(undefined),
-        // Stay invisible unless Cloudflare actually needs a human interaction.
-        appearance: 'interaction-only',
+        appearance,
       });
       widgetIdRef.current = widgetId;
     };
@@ -85,7 +86,7 @@ export function useTurnstile(active = true) {
         }
       }
     };
-  }, [sitekey, active]);
+  }, [sitekey, active, appearance]);
 
   // Turnstile tokens are single-use; call after a successful submit to fetch a
   // fresh token for the next request (e.g. the next chat message).
