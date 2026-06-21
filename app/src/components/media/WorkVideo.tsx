@@ -50,15 +50,15 @@ export function WorkVideo({
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`${title} の動画を再生`}
-        className={`group relative block overflow-hidden ${className}`}
+        className={`group/media relative block overflow-hidden ${className}`}
       >
         <img
           src={youtubeThumb(id)}
           alt={`${title} の動画サムネイル`}
           loading="lazy"
-          className="block h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          className="block h-full w-full object-cover transition-transform duration-300 group-hover/media:scale-[1.03]"
         />
-        <span className="absolute inset-0 flex items-center justify-center bg-black/25 transition-colors group-hover:bg-black/35">
+        <span className="absolute inset-0 flex items-center justify-center bg-black/25 transition-colors group-hover/media:bg-black/35">
           <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-black shadow-lg">
             <Play size={18} className="ml-0.5 fill-current" />
           </span>
