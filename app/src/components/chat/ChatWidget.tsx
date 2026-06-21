@@ -1,9 +1,53 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Send, X } from 'lucide-react';
 import { streamChat, type ChatMessage } from '../../lib/chat';
 import { useMode, type Mode } from '../../lib/mode';
+import { resolveCitation } from '../../lib/persona/citationLinks';
 import { useTurnstile } from '../../lib/turnstile';
+
+const CITATION_RE = /\[([a-z]+:[a-z0-9-]+)\]/g;
+
+/** Renders assistant text, turning `[id]` citations into clickable links. */
+function CitedText({
+  content,
+  mode,
+  linkClass,
+  onInternal,
+}: {
+  content: string;
+  mode: Mode;
+  linkClass: string;
+  onInternal: () => void;
+}): ReactNode {
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  for (const m of content.matchAll(CITATION_RE)) {
+    const start = m.index ?? 0;
+    if (start > last) nodes.push(content.slice(last, start));
+    const c = resolveCitation(m[1]!, mode);
+    if (c) {
+      nodes.push(
+        <a
+          key={`c-${key++}`}
+          href={c.href}
+          title={c.label}
+          className={linkClass}
+          {...(c.external ? { target: '_blank', rel: 'noreferrer' } : { onClick: onInternal })}
+        >
+          [{c.slug}
+          {c.external ? ' ↗' : ''}]
+        </a>,
+      );
+    } else {
+      nodes.push(m[0]);
+    }
+    last = start + m[0].length;
+  }
+  if (last < content.length) nodes.push(content.slice(last));
+  return nodes;
+}
 
 const CHARACTER_SRC = '/characters/shiyow.png';
 const TURNSTILE_SITEKEY = import.meta.env.VITE_TURNSTILE_SITEKEY as string | undefined;
@@ -35,6 +79,7 @@ interface ChatTheme {
   msgUser: string;
   msgAssistant: string;
   msgError: string;
+  citation: string;
   form: string;
   input: string;
   sendBtn: string;
@@ -55,6 +100,8 @@ const THEMES: Record<Mode, ChatTheme> = {
     msgUser: 'bg-primary border-2 border-primary text-on-primary',
     msgAssistant: 'bg-surface-container-low border-2 border-on-surface/20 text-on-surface',
     msgError: 'bg-error-container border-2 border-error text-on-error',
+    citation:
+      'font-mono text-[11px] text-primary underline decoration-dotted underline-offset-2 hover:bg-primary/10',
     form: 'border-t-2 border-on-surface bg-surface-container-low',
     input: 'bg-surface-container-lowest border-2 border-on-surface/30 focus:border-primary',
     sendBtn: 'bg-primary text-on-primary border-2 border-primary',
@@ -73,6 +120,8 @@ const THEMES: Record<Mode, ChatTheme> = {
     msgUser: 'bg-[#2DD4BF]/15 border border-[#2DD4BF]/40 text-[#E6EDF3]',
     msgAssistant: 'bg-[#161B22] border border-[#30363D] text-[#E6EDF3]/90',
     msgError: 'bg-[#FF6B6B]/15 border border-[#FF6B6B] text-[#FF6B6B]',
+    citation:
+      'text-[11px] text-[#2DD4BF] underline decoration-dotted underline-offset-2 hover:bg-[#2DD4BF]/10',
     form: 'border-t border-[#30363D] bg-[#0D1117]',
     input: 'bg-[#0D1117] border border-[#30363D] text-[#E6EDF3] focus:border-[#2DD4BF]',
     sendBtn: 'bg-[#2DD4BF] text-[#0D1117] border border-[#2DD4BF]',
@@ -282,7 +331,22 @@ export function ChatWidget() {
                       m.role === 'user' ? t.msgUser : m.error ? t.msgError : t.msgAssistant
                     }`}
                   >
-                    {m.content || (m.pending ? '…' : '')}
+                    {m.content ? (
+                      m.role === 'assistant' && !m.error ? (
+                        <CitedText
+                          content={m.content}
+                          mode={mode}
+                          linkClass={t.citation}
+                          onInternal={() => setOpen(false)}
+                        />
+                      ) : (
+                        m.content
+                      )
+                    ) : m.pending ? (
+                      '…'
+                    ) : (
+                      ''
+                    )}
                     {m.pending && m.content && (
                       <span className="inline-block w-2 h-4 bg-current ml-1 animate-pulse align-text-bottom" />
                     )}
