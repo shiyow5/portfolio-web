@@ -177,6 +177,18 @@ export function TerminalSite() {
                       demo ↗
                     </a>
                   )}
+                  {(w.links.sources ?? []).map((s) => (
+                    <a
+                      key={s.url}
+                      href={s.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${w.title}: ${s.label}`}
+                      className={`${MUTED} hover:text-[#2DD4BF] hover:underline`}
+                    >
+                      {s.label} ↗
+                    </a>
+                  ))}
                 </div>
               </article>
             ))}
@@ -215,6 +227,17 @@ export function TerminalSite() {
                   <span className={MUTED}>{formatDate(a.date)}</span>
                   <span className={`${GREEN} text-[12px]`}>[{CATEGORY_LABEL[a.category]}]</span>
                   <span className="text-[#E6EDF3]/90">{a.title}</span>
+                  {a.links.map((l) => (
+                    <a
+                      key={l.url}
+                      href={l.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`${ACCENT} text-[12px] hover:underline`}
+                    >
+                      {l.label} ↗
+                    </a>
+                  ))}
                 </li>
               ))}
             </ul>

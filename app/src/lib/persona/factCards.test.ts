@@ -51,6 +51,12 @@ describe('buildFactCards', () => {
     expect(text).toContain('https://github.com/shiyow5/DuelMasters-AI');
   });
 
+  it('surfaces work and activity source links for citing provenance', () => {
+    // a work source (PTCG official page) and an activity source (GDGoC event)
+    expect(text).toContain('https://ptcg-abc.pokemon.co.jp/');
+    expect(text).toContain('gdg.community.dev');
+  });
+
   it('never emits a citation token that is not a known id', () => {
     const ids = factCardIds();
     for (const m of text.matchAll(CITATION_RE)) {

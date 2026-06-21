@@ -22,7 +22,11 @@ export function factCardIds(): ReadonlySet<string> {
 }
 
 function workLinks(links: (typeof WORKS)[number]['links']): string {
-  const urls = Object.values(links).filter(Boolean) as string[];
+  const urls: string[] = [];
+  if (links.github) urls.push(links.github);
+  if (links.demo) urls.push(links.demo);
+  if (links.play) urls.push(links.play);
+  for (const s of links.sources ?? []) urls.push(`${s.label}: ${s.url}`);
   return urls.length ? urls.join(' , ') : 'なし';
 }
 
@@ -41,9 +45,11 @@ export function buildFactCards(): string {
       `技術: ${w.tech.join(', ')}. リンク: ${workLinks(w.links)}`,
   );
 
-  const activities = ACTIVITIES.map(
-    (a) => `- [act:${a.id}] ${formatDate(a.date)} ${a.title} — ${a.summary}`,
-  );
+  const activities = ACTIVITIES.map((a) => {
+    const sources = a.links.map((l) => `${l.label}: ${l.url}`).join(' , ');
+    const base = `- [act:${a.id}] ${formatDate(a.date)} ${a.title} — ${a.summary}`;
+    return sources ? `${base} 出典: ${sources}` : base;
+  });
 
   return [
     '# 事実カード（FACT CARDS）',

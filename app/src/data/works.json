@@ -6,7 +6,14 @@
     "tech": ["Next.js", "Three.js (R3F)", "Go", "Gemini", "Vertex AI"],
     "status": "ハッカソン優秀賞 · Team",
     "year": 2026,
-    "links": {}
+    "links": {
+      "sources": [
+        {
+          "label": "GDGoC Japan Hackathon 2026",
+          "url": "https://gdg.community.dev/events/details/google-gdg-on-campus-university-of-aizu-fukushima-japan-presents-gdgoc-japan-hackathon/"
+        }
+      ]
+    }
   },
   {
     "id": "llm-kv-cache",
@@ -24,7 +31,20 @@
     "tech": ["Python", "Gemini", "LangGraph", "Supabase", "Next.js", "Leaflet"],
     "status": "公開中 · Team（アオタケ採択）",
     "year": 2025,
-    "links": { "demo": "https://fastbear.aisometry.com/" }
+    "links": {
+      "demo": "https://fastbear.aisometry.com/",
+      "sources": [
+        { "label": "アオタケ", "url": "https://aizu-startups-foundation.com/aotake/2025" },
+        {
+          "label": "成果報告",
+          "url": "https://miyagi.publishing.3rd-in.co.jp/article/e407a446-fdca-11f0-92e7-9ca3ba0a67df"
+        },
+        {
+          "label": "プレスリリース",
+          "url": "https://prtimes.jp/main/html/rd/p/000000002.000175363.html"
+        }
+      ]
+    }
   },
   {
     "id": "dm-ai",
@@ -51,7 +71,20 @@
     "tech": ["Python", "Docker", "Kaggle"],
     "status": "コンペ · Team",
     "year": 2026,
-    "links": { "demo": "https://www.kaggle.com/sshow14" }
+    "links": {
+      "demo": "https://www.kaggle.com/sshow14",
+      "sources": [
+        { "label": "公式", "url": "https://ptcg-abc.pokemon.co.jp/" },
+        {
+          "label": "Kaggle: ABC",
+          "url": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/overview"
+        },
+        {
+          "label": "Kaggle: Strategy",
+          "url": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/overview"
+        }
+      ]
+    }
   },
   {
     "id": "oekaki-battler",
@@ -60,7 +93,9 @@
     "tech": ["Python", "Gemini", "Pygame", "LINE Bot"],
     "status": "学園祭企画 · 個人",
     "year": 2025,
-    "links": {}
+    "links": {
+      "sources": [{ "label": "学園祭公式", "url": "https://soshosai.com/" }]
+    }
   },
   {
     "id": "textworld-rl",

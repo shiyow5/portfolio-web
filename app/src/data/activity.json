@@ -24,7 +24,18 @@
     "category": "release",
     "summary": "クマ出没情報を自動収集・構造化する AI エージェントを開発し公開。",
     "tags": ["ai-agent", "oss"],
-    "links": [{ "label": "Demo", "url": "https://fastbear.aisometry.com/" }]
+    "links": [
+      { "label": "Demo", "url": "https://fastbear.aisometry.com/" },
+      { "label": "アオタケ", "url": "https://aizu-startups-foundation.com/aotake/2025" },
+      {
+        "label": "成果報告",
+        "url": "https://miyagi.publishing.3rd-in.co.jp/article/e407a446-fdca-11f0-92e7-9ca3ba0a67df"
+      },
+      {
+        "label": "プレスリリース",
+        "url": "https://prtimes.jp/main/html/rd/p/000000002.000175363.html"
+      }
+    ]
   },
   {
     "id": "astralyx-award",
@@ -33,7 +44,12 @@
     "category": "award",
     "summary": "視聴履歴を 3D 可視化し AI が分析するアプリで優秀賞。AI パイプライン・3D 可視化を主担当。",
     "tags": ["hackathon", "award"],
-    "links": []
+    "links": [
+      {
+        "label": "GDGoC Japan Hackathon 2026",
+        "url": "https://gdg.community.dev/events/details/google-gdg-on-campus-university-of-aizu-fukushima-japan-presents-gdgoc-japan-hackathon/"
+      }
+    ]
   },
   {
     "id": "onplanetz-intern",
