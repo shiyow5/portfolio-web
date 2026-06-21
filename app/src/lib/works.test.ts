@@ -26,11 +26,24 @@ describe('WORKS catalogue', () => {
 
   it('only exposes absolute http(s) links (no placeholders)', () => {
     for (const work of WORKS) {
-      for (const url of Object.values(work.links)) {
-        if (url) {
-          expect(url).toMatch(/^https?:\/\//);
-          expect(url).not.toContain('example.com');
-        }
+      const urls = [
+        work.links.github,
+        work.links.demo,
+        work.links.play,
+        ...(work.links.sources ?? []).map((s) => s.url),
+      ].filter(Boolean) as string[];
+      for (const url of urls) {
+        expect(url).toMatch(/^https?:\/\//);
+        expect(url).not.toContain('example.com');
+      }
+    }
+  });
+
+  it('gives every source link a label and absolute url', () => {
+    for (const work of WORKS) {
+      for (const source of work.links.sources ?? []) {
+        expect(source.label).toBeTruthy();
+        expect(source.url).toMatch(/^https?:\/\//);
       }
     }
   });

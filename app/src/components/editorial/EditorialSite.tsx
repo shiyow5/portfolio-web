@@ -187,6 +187,18 @@ export function EditorialSite() {
                         demo ↗
                       </a>
                     )}
+                    {(w.links.sources ?? []).map((s) => (
+                      <a
+                        key={s.url}
+                        href={s.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${w.title}: ${s.label}`}
+                        className="text-on-surface-variant hover:text-primary hover:underline"
+                      >
+                        {s.label} ↗
+                      </a>
+                    ))}
                   </p>
                 </div>
               </motion.li>
@@ -229,7 +241,24 @@ export function EditorialSite() {
                 <span className="col-span-8 md:col-span-2 font-mono text-[11px] uppercase tracking-widest text-secondary">
                   [{CATEGORY_LABEL[a.category]}]
                 </span>
-                <span className="col-span-12 md:col-span-8 font-bold">{a.title}</span>
+                <span className="col-span-12 md:col-span-8 font-bold">
+                  {a.title}
+                  {a.links.length > 0 && (
+                    <span className="ml-2 inline-flex flex-wrap gap-x-3 font-mono text-[11px] font-normal">
+                      {a.links.map((l) => (
+                        <a
+                          key={l.url}
+                          href={l.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          {l.label} ↗
+                        </a>
+                      ))}
+                    </span>
+                  )}
+                </span>
               </li>
             ))}
           </ul>

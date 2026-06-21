@@ -1,9 +1,16 @@
 import raw from '../data/works.json';
 
+export interface WorkSource {
+  label: string;
+  url: string;
+}
+
 export interface WorkLinks {
   github?: string;
   demo?: string;
   play?: string;
+  /** Labeled source/reference links (official event page, press, competition). */
+  sources?: WorkSource[];
 }
 
 export interface Work {
