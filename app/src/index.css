@@ -74,7 +74,9 @@ body {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   font-family: var(--font-body);
-  overflow-x: hidden;
+  /* NOTE: do NOT set overflow-x:hidden here — it makes <body> a scroll container
+     and breaks `position: sticky` headers. Horizontal overflow is clipped on the
+     site root wrappers with `overflow-x: clip` (which does not break sticky). */
 }
 
 body {
