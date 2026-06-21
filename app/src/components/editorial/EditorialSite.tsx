@@ -33,7 +33,7 @@ export function EditorialSite() {
   const askClone = () => window.dispatchEvent(new CustomEvent('shiyow:open-chat'));
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface">
+    <div className="min-h-screen overflow-x-clip bg-surface text-on-surface">
       <a
         href="#top"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[110] focus:bg-on-surface focus:text-surface focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"

@@ -265,33 +265,30 @@ export function TerminalRepl() {
       )}
 
       <div
+        ref={scrollRef}
         onClick={focusUnlessSelecting}
-        className="flex h-[clamp(300px,46vh,480px)] select-text flex-col rounded-md bg-[#0D1117]"
+        className="h-[clamp(300px,46vh,480px)] select-text space-y-1 overflow-y-auto rounded-md bg-[#0D1117] pr-1"
       >
-        <div ref={scrollRef} className="flex-1 space-y-1 overflow-y-auto pr-1">
-          {output.map((l, i) =>
-            l.href ? (
-              <a
-                key={i}
-                href={l.href}
-                target="_blank"
-                rel="noreferrer"
-                className={`block whitespace-pre-wrap break-words ${TONE.accent} hover:underline`}
-              >
-                {l.text}
-              </a>
-            ) : (
-              <div
-                key={i}
-                className={`whitespace-pre-wrap break-words ${TONE[l.tone ?? 'default']}`}
-              >
-                {l.rich ? <RichLine text={l.text} /> : l.text || ' '}
-              </div>
-            ),
-          )}
-        </div>
+        {output.map((l, i) =>
+          l.href ? (
+            <a
+              key={i}
+              href={l.href}
+              target="_blank"
+              rel="noreferrer"
+              className={`block whitespace-pre-wrap break-words ${TONE.accent} hover:underline`}
+            >
+              {l.text}
+            </a>
+          ) : (
+            <div key={i} className={`whitespace-pre-wrap break-words ${TONE[l.tone ?? 'default']}`}>
+              {l.rich ? <RichLine text={l.text} /> : l.text || ' '}
+            </div>
+          ),
+        )}
 
-        <div className="mt-1 flex items-center gap-2 border-t border-[#30363D] pt-2">
+        {/* prompt follows the last line — like a real shell */}
+        <div className="flex items-center gap-2">
           <span className={TONE.accent}>❯</span>
           <input
             ref={inputRef}
