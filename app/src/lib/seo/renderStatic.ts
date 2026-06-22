@@ -184,7 +184,9 @@ export function renderBodyHtml(site: SeoSite, works: Work[], activities: Activit
   const worksHtml = works
     .map((w) => {
       const tech =
-        w.tech.length > 0 ? `<p class="tech">Tech: ${escapeHtml(w.tech.join(', '))}</p>` : '';
+        w.tech.length > 0
+          ? `<ul class="tech">${w.tech.map((t) => `<li>${escapeHtml(t)}</li>`).join('')}</ul>`
+          : '';
       return (
         `<article id="work-${escapeHtml(w.id)}">` +
         `<h3>${escapeHtml(w.title)}</h3>` +
@@ -225,16 +227,26 @@ export function renderBodyHtml(site: SeoSite, works: Work[], activities: Activit
   return (
     `<div id="seo-prerender" style="${style}">` +
     `<header>` +
-    `<img src="${escapeHtml(site.image)}" alt="${escapeHtml(site.name)}（AIエンジニア / AI Engineer）のアイコン" width="96" height="96" style="display:block;margin-bottom:0.75rem" />` +
+    `<img src="${escapeHtml(site.image)}" alt="${escapeHtml(site.name)}（AIエンジニア / AI Engineer）のアイコン" width="96" height="96" loading="lazy" style="display:block;margin-bottom:0.75rem" />` +
     `<h1>${escapeHtml(site.name)}（しよを）— AIエンジニア / AI Engineer</h1>` +
     `<p>${escapeHtml(site.tagline)}</p>` +
     `<p>${escapeHtml(site.about)}</p>` +
     `<p>${escapeHtml(site.location)}</p>` +
+    `<nav aria-label="目次"><ul>` +
+    `<li><a href="#works">作品 (Works)</a></li>` +
+    `<li><a href="#activity">経歴・活動 (Activity)</a></li>` +
+    `<li><a href="#tech">技術スタック (Tech Stack)</a></li>` +
+    `<li><a href="#faq">よくある質問 (FAQ)</a></li>` +
+    `</ul></nav>` +
     `</header>` +
-    `<section><h2>作品 (Works)</h2>${worksHtml}</section>` +
-    `<section><h2>経歴・活動 (Activity)</h2><ol>${activitiesHtml}</ol></section>` +
-    `<section><h2>技術スタック (Tech Stack)</h2><dl>${stackHtml}</dl></section>` +
-    `<section><h2>よくある質問 (FAQ)</h2>${faqHtml}</section>` +
+    `<section id="works"><h2>作品 (Works)</h2>` +
+    `<p>AIエンジニアとして個人・チームで開発した、生成AI・LLM・機械学習の代表作です。</p>${worksHtml}</section>` +
+    `<section id="activity"><h2>経歴・活動 (Activity)</h2>` +
+    `<p>会津大学・大学院での研究、インターン、受賞・公開を時系列でまとめています。</p><ol>${activitiesHtml}</ol></section>` +
+    `<section id="tech"><h2>技術スタック (Tech Stack)</h2>` +
+    `<p>生成AI・LLMアプリ・AIエージェント・機械学習をプロダクト実装する主な技術です。</p><dl>${stackHtml}</dl></section>` +
+    `<section id="faq"><h2>よくある質問 (FAQ)</h2>` +
+    `<p>shiyow（しよを）についてよく聞かれる質問への回答です。</p>${faqHtml}</section>` +
     `<footer><p>${sameAsHtml}</p></footer>` +
     `</div>`
   );
@@ -278,6 +290,18 @@ export function renderJsonLd(site: SeoSite, works: Work[]): JsonLdNode {
     })),
   };
 
+  const breadcrumb: JsonLdNode = {
+    '@type': 'BreadcrumbList',
+    '@id': `${site.url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: site.url },
+      { '@type': 'ListItem', position: 2, name: '作品', item: `${site.url}#works` },
+      { '@type': 'ListItem', position: 3, name: '経歴・活動', item: `${site.url}#activity` },
+      { '@type': 'ListItem', position: 4, name: '技術スタック', item: `${site.url}#tech` },
+      { '@type': 'ListItem', position: 5, name: 'FAQ', item: `${site.url}#faq` },
+    ],
+  };
+
   const website: JsonLdNode = {
     '@type': 'WebSite',
     '@id': `${site.url}#website`,
@@ -318,7 +342,7 @@ export function renderJsonLd(site: SeoSite, works: Work[]): JsonLdNode {
 
   return {
     '@context': 'https://schema.org',
-    '@graph': [person, website, faqPage, itemList, ...creativeWorks],
+    '@graph': [person, website, faqPage, breadcrumb, itemList, ...creativeWorks],
   };
 }
 
@@ -341,4 +365,38 @@ export function renderSitemap(entries: SitemapEntry[]): string {
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
   );
+}
+
+/**
+ * /llms.txt — the emerging LLMO convention: a plain-Markdown digest of the site
+ * for AI assistants. Generated from the same grounded data so it never drifts.
+ */
+export function renderLlmsTxt(site: SeoSite, works: Work[], activities: Activity[]): string {
+  const lines: string[] = [
+    `# ${site.name}（しよを）— AIエンジニア / AI Engineer`,
+    '',
+    `> ${site.tagline}`,
+    '',
+    site.about,
+    '',
+    '## Works（作品）',
+    ...works.map(
+      (w) => `- [${w.title}](${workUrl(w, site.url)})（${w.status}・${w.year}）: ${w.tagline}`,
+    ),
+    '',
+    '## Activity（経歴・活動）',
+    ...activities.map((a) => `- ${formatMonth(a.date)} ${a.title}: ${a.summary}`),
+    '',
+    '## Tech Stack（技術スタック）',
+    ...site.techStack.map((g) => `- ${g.label}: ${g.items.join(', ')}`),
+    '',
+    '## FAQ',
+    ...FAQ.flatMap((f) => [`- Q: ${f.q}`, `  A: ${f.a}`]),
+    '',
+    '## Links',
+    `- Site: ${site.url}`,
+    ...site.sameAs.map((u) => `- ${u}`),
+    '',
+  ];
+  return lines.join('\n');
 }

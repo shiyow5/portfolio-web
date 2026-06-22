@@ -28,7 +28,9 @@ const dataDir = join(appRoot, 'src', 'data');
 const renderSrc = readFileSync(join(appRoot, 'src/lib/seo/renderStatic.ts'), 'utf8');
 const { code } = await transform(renderSrc, { loader: 'ts', format: 'esm' });
 const renderUrl = `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
-const { buildSite, renderBodyHtml, renderJsonLd, renderSitemap } = await import(renderUrl);
+const { buildSite, renderBodyHtml, renderJsonLd, renderSitemap, renderLlmsTxt } = await import(
+  renderUrl
+);
 
 const readJson = (name) => JSON.parse(readFileSync(join(dataDir, name), 'utf8'));
 const profile = readJson('profile.json');
@@ -63,9 +65,10 @@ html = html.replace(
 
 writeFileSync(indexPath, html);
 
-// 3. Sitemap (single URL today; lastmod = build date).
+// 3. Sitemap (single URL today; lastmod = build date) + llms.txt digest.
 const lastmod = new Date().toISOString().slice(0, 10);
 writeFileSync(join(distDir, 'sitemap.xml'), renderSitemap([{ loc: site.url, lastmod }]));
+writeFileSync(join(distDir, 'llms.txt'), renderLlmsTxt(site, works, activities));
 
 // 4. Sanity gate: the rendered HTML must actually contain every work title.
 for (const w of works) {
@@ -77,5 +80,5 @@ for (const w of works) {
 const graphNodes = graph['@graph'].length;
 console.log(
   `prerender: baked ${works.length} works + ${activities.length} activities, ` +
-    `JSON-LD @graph (${graphNodes} nodes), and sitemap.xml into dist/`,
+    `JSON-LD @graph (${graphNodes} nodes), sitemap.xml and llms.txt into dist/`,
 );
