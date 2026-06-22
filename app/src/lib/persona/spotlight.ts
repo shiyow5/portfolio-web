@@ -32,6 +32,20 @@ export function wrapVisitorInput(content: string, nonce: string): string {
   return `${openTag(nonce)}\n${defanged}\n${closeTag(nonce)}`;
 }
 
+/**
+ * Output-side canary scrub (defense-in-depth): strips the per-request nonce and
+ * the fence delimiter tokens if they ever surface in the model's output. Both are
+ * internal strings that never appear in a legitimate answer, so removing them
+ * cannot harm real content — it only neutralizes a leak of the spotlight
+ * mechanism (a known-answer / canary detection defense; cf. detection-based
+ * prompt-injection defenses). Pure: text in, text out, no I/O.
+ */
+export function scrubInternalTokens(text: string, nonce: string): string {
+  let out = text.replace(/<<\s*\/?\s*(?:VISITOR_INPUT|END)\b[^>\n]*>>/gi, '');
+  if (nonce) out = out.split(nonce).join('');
+  return out;
+}
+
 /** The system-prompt clause that explains the fence (with the live nonce). */
 export function spotlightInstruction(nonce: string): string {
   return [
