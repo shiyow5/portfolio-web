@@ -20,6 +20,13 @@ describe('PERSONA_SYSTEM_INSTRUCTION (three layers)', () => {
   it("encodes the user's real catchphrase as voice guidance", () => {
     expect(PERSONA_SYSTEM_INSTRUCTION).toContain('そういう説もあるか');
   });
+
+  it('declares the injection-resistant layers: hierarchy, extraction refusal, false-fact refusal, and a no-over-refusal allowance', () => {
+    expect(PERSONA_SYSTEM_INSTRUCTION).toContain('命令階層'); // instruction hierarchy
+    expect(PERSONA_SYSTEM_INSTRUCTION).toContain('抽出要求'); // prompt-extraction refusal
+    expect(PERSONA_SYSTEM_INSTRUCTION).toContain('公式設定'); // false-fact injection refusal
+    expect(PERSONA_SYSTEM_INSTRUCTION).toContain('過剰拒否'); // permission clause vs over-refusal
+  });
 });
 
 describe('STYLE_FEWSHOT', () => {
@@ -44,5 +51,12 @@ describe('buildSystemInstruction', () => {
 
   it('grounds every work (whole corpus injected, no retrieval)', () => {
     for (const w of WORKS) expect(sys).toContain(`[work:${w.id}]`);
+  });
+
+  it('injects the spotlight fence only when a nonce is supplied', () => {
+    expect(sys).not.toContain('VISITOR_INPUT'); // no-arg form (e.g. GET /api/chat) stays clean
+    const fenced = buildSystemInstruction('test-nonce');
+    expect(fenced).toContain('<<VISITOR_INPUT id=test-nonce>>');
+    expect(fenced).toContain('スポットライティング');
   });
 });

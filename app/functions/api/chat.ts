@@ -2,6 +2,7 @@
 import { buildSystemInstruction } from '../../src/lib/persona/persona';
 import { factCardIds } from '../../src/lib/persona/factCards';
 import { makeCitationGuard, type CitationGuard } from '../../src/lib/persona/citations';
+import { makeNonce, wrapVisitorInput } from '../../src/lib/persona/spotlight';
 import { splitSSEEvents, extractDelta } from '../../src/lib/gemini-sse';
 
 interface Env {
@@ -91,10 +92,15 @@ function sanitizeMessages(messages: ChatMessage[]): ChatMessage[] {
     }));
 }
 
-function buildGeminiContents(messages: ChatMessage[]) {
+/**
+ * Maps chat history to Gemini contents. Visitor (user) turns are fenced with the
+ * request nonce (spotlighting) so the model treats them as data, not as
+ * instructions; the model's own prior turns are passed through untouched.
+ */
+function buildGeminiContents(messages: ChatMessage[], nonce: string) {
   return messages.map((m) => ({
     role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: m.content }],
+    parts: [{ text: m.role === 'assistant' ? m.content : wrapVisitorInput(m.content, nonce) }],
   }));
 }
 
@@ -222,6 +228,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }
   }
 
+  // Per-request nonce fences visitor input against the system prompt (spotlighting).
+  const nonce = makeNonce();
+
   const model = env.GEMINI_MODEL || DEFAULT_MODEL;
   const url =
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent` +
@@ -236,8 +245,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: buildSystemInstruction() }] },
-      contents: buildGeminiContents(messages),
+      systemInstruction: { parts: [{ text: buildSystemInstruction(nonce) }] },
+      contents: buildGeminiContents(messages, nonce),
       generationConfig: {
         maxOutputTokens: MAX_OUTPUT_TOKENS,
         temperature: 0.7,

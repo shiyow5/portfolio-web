@@ -3,11 +3,12 @@ import { buildFactCards, factCardIds } from './factCards';
 import { GOLDEN } from './golden';
 
 describe('GOLDEN eval set integrity', () => {
-  it('uses unique ids and covers both classes adequately', () => {
+  it('uses unique ids and covers every class adequately', () => {
     const ids = GOLDEN.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(GOLDEN.filter((c) => c.kind === 'grounded').length).toBeGreaterThanOrEqual(8);
     expect(GOLDEN.filter((c) => c.kind === 'abstain').length).toBeGreaterThanOrEqual(8);
+    expect(GOLDEN.filter((c) => c.kind === 'redteam').length).toBeGreaterThanOrEqual(4);
   });
 
   it('grounds every grounded case in real, citable fact-card ids', () => {
@@ -23,8 +24,8 @@ describe('GOLDEN eval set integrity', () => {
     }
   });
 
-  it('never attaches expected ids to abstain cases', () => {
-    for (const c of GOLDEN.filter((g) => g.kind === 'abstain')) {
+  it('never attaches expected ids to abstain or redteam cases', () => {
+    for (const c of GOLDEN.filter((g) => g.kind === 'abstain' || g.kind === 'redteam')) {
       expect(c.expectIds, c.id).toBeUndefined();
     }
   });
