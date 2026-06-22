@@ -5,6 +5,7 @@ import {
   FAQ,
   renderBodyHtml,
   renderJsonLd,
+  renderLlmsTxt,
   renderSitemap,
   workUrl,
 } from './renderStatic';
@@ -65,6 +66,15 @@ describe('renderBodyHtml', () => {
     for (const f of FAQ) expect(body).toContain(escapeHtml(f.q));
     expect(body).toMatch(/<img[^>]*\salt="[^"]+"/);
   });
+
+  it('emits section anchors, an internal nav, lazy images and tech lists', () => {
+    for (const id of ['works', 'activity', 'tech', 'faq']) {
+      expect(body).toContain(`id="${id}"`);
+      expect(body).toContain(`href="#${id}"`); // internal nav link
+    }
+    expect(body).toContain('loading="lazy"');
+    expect(body).toMatch(/<ul class="tech">/);
+  });
 });
 
 describe('renderJsonLd', () => {
@@ -111,6 +121,25 @@ describe('renderJsonLd', () => {
     expect(questions).toHaveLength(FAQ.length);
     expect(questions[0]!['@type']).toBe('Question');
     expect((questions[0]!.acceptedAnswer as Record<string, unknown>)['@type']).toBe('Answer');
+  });
+
+  it('includes a BreadcrumbList', () => {
+    const crumb = (graph['@graph'] as Array<Record<string, unknown>>).find(
+      (n) => n['@type'] === 'BreadcrumbList',
+    );
+    expect(crumb).toBeTruthy();
+    expect((crumb!.itemListElement as unknown[]).length).toBeGreaterThan(1);
+  });
+});
+
+describe('renderLlmsTxt', () => {
+  const txt = renderLlmsTxt(site, WORKS, ACTIVITIES);
+
+  it('is a Markdown digest covering works, FAQ and links', () => {
+    expect(txt.startsWith('# ')).toBe(true);
+    for (const w of WORKS) expect(txt).toContain(w.title);
+    for (const f of FAQ) expect(txt).toContain(f.q);
+    for (const u of site.sameAs) expect(txt).toContain(u);
   });
 });
 
