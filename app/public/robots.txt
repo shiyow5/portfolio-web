@@ -1,0 +1,59 @@
+# shiyow.dev — crawler policy
+#   - Normal search (Googlebot / Bingbot, via *): allowed
+#   - AI *search / answer* engines: allowed → maximize discovery & citation
+#   - AI *training / bulk data* crawlers: disallowed → not used for model training
+
+User-agent: *
+Allow: /
+
+# --- AI search / answer engines (allowed: drive discovery & citation) ---
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# --- AI training / bulk data collection (disallowed: no training use) ---
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+Sitemap: https://shiyow.dev/sitemap.xml
