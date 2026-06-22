@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   buildSite,
   escapeHtml,
+  FAQ,
   renderBodyHtml,
   renderJsonLd,
   renderSitemap,
@@ -53,6 +54,17 @@ describe('renderBodyHtml', () => {
   it('does not hide content with display:none (cloaking guard)', () => {
     expect(body).not.toMatch(/display\s*:\s*none/i);
   });
+
+  it('places high-value JP keywords verbatim (keyword optimization)', () => {
+    for (const kw of ['AIエンジニア', '生成AI', '機械学習', 'ポートフォリオ', 'LLMアプリ']) {
+      expect(body).toContain(kw);
+    }
+  });
+
+  it('renders the FAQ questions and an image with alt text', () => {
+    for (const f of FAQ) expect(body).toContain(escapeHtml(f.q));
+    expect(body).toMatch(/<img[^>]*\salt="[^"]+"/);
+  });
 });
 
 describe('renderJsonLd', () => {
@@ -80,13 +92,25 @@ describe('renderJsonLd', () => {
     }
   });
 
-  it('carries the enriched Person fields', () => {
+  it('carries the enriched Person fields incl. an image', () => {
     const person = (graph['@graph'] as Array<Record<string, unknown>>).find(
       (n) => n['@type'] === 'Person',
     )!;
     expect(person.alumniOf).toBeTruthy();
     expect(person.worksFor).toBeTruthy();
     expect(Array.isArray(person.knowsAbout)).toBe(true);
+    expect(person.image).toBeTruthy();
+  });
+
+  it('includes a FAQPage whose questions match the FAQ source', () => {
+    const faq = (graph['@graph'] as Array<Record<string, unknown>>).find(
+      (n) => n['@type'] === 'FAQPage',
+    );
+    expect(faq).toBeTruthy();
+    const questions = faq!.mainEntity as Array<Record<string, unknown>>;
+    expect(questions).toHaveLength(FAQ.length);
+    expect(questions[0]!['@type']).toBe('Question');
+    expect((questions[0]!.acceptedAnswer as Record<string, unknown>)['@type']).toBe('Answer');
   });
 });
 
