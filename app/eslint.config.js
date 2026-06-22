@@ -45,5 +45,14 @@ export default tseslint.config(
       'no-console': 'off',
     },
   },
+  {
+    // Build-time Node scripts (e.g. the post-build prerender).
+    files: ['scripts/**/*.{js,mjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
   prettier,
 );

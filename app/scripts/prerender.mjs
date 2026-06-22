@@ -4,8 +4,13 @@
  * Runs after `vite build` (see package.json "build"). It reads the same JSON the
  * app renders, injects a semantic-HTML body into dist/index.html's empty
  * <div id="root">, replaces the static Person JSON-LD with a generated @graph,
- * and writes dist/sitemap.xml. Node ≥22.18 strips the TypeScript types, so this
- * imports the typed pure render module directly — no bundler step.
+ * and writes dist/sitemap.xml.
+ *
+ * The render helpers live in typed TS (src/lib/seo/renderStatic.ts) shared with
+ * the vitest regression test. They import only types, so esbuild-transpiling that
+ * file yields a self-contained ESM module we import from a data: URL — this works
+ * on ANY Node version and does NOT depend on Node's own TS type-stripping (which
+ * CI / Cloudflare's Node may not enable, hence plain .mjs here, not .mts).
  *
  * The build fails loudly if an expected anchor is missing, so a refactor that
  * silently drops the content can't ship a blank page again.
@@ -13,29 +18,23 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import {
-  buildSite,
-  renderBodyHtml,
-  renderJsonLd,
-  renderSitemap,
-} from '../src/lib/seo/renderStatic.ts';
-import type { Work } from '../src/lib/works.ts';
-import type { Activity } from '../src/lib/activity.ts';
-import type { Profile } from '../src/lib/profile.ts';
+import { transform } from 'esbuild';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(here, '..');
 const distDir = join(appRoot, 'dist');
 const dataDir = join(appRoot, 'src', 'data');
 
-function readJson<T>(name: string): T {
-  return JSON.parse(readFileSync(join(dataDir, name), 'utf8')) as T;
-}
+const renderSrc = readFileSync(join(appRoot, 'src/lib/seo/renderStatic.ts'), 'utf8');
+const { code } = await transform(renderSrc, { loader: 'ts', format: 'esm' });
+const renderUrl = `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
+const { buildSite, renderBodyHtml, renderJsonLd, renderSitemap } = await import(renderUrl);
 
-const profile = readJson<Profile>('profile.json');
-const works = readJson<Work[]>('works.json');
+const readJson = (name) => JSON.parse(readFileSync(join(dataDir, name), 'utf8'));
+const profile = readJson('profile.json');
+const works = readJson('works.json');
 // Newest first — mirrors src/lib/activity.ts so the static timeline matches the UI.
-const activities = readJson<Activity[]>('activity.json')
+const activities = readJson('activity.json')
   .slice()
   .sort((a, b) => (a.date < b.date ? 1 : -1));
 
@@ -75,7 +74,7 @@ for (const w of works) {
   }
 }
 
-const graphNodes = (graph['@graph'] as unknown[]).length;
+const graphNodes = graph['@graph'].length;
 console.log(
   `prerender: baked ${works.length} works + ${activities.length} activities, ` +
     `JSON-LD @graph (${graphNodes} nodes), and sitemap.xml into dist/`,
