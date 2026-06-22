@@ -241,26 +241,42 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // it where supported (older models reject thinkingConfig).
   const supportsThinking = /2\.5|latest/.test(model);
 
-  const upstream = await fetch(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: buildSystemInstruction(nonce) }] },
-      contents: buildGeminiContents(messages, nonce),
-      generationConfig: {
-        maxOutputTokens: MAX_OUTPUT_TOKENS,
-        temperature: 0.7,
-        topP: 0.9,
-        ...(supportsThinking ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+  // The upstream call can THROW (network error, edge subrequest timeout) — not
+  // just return non-ok. An unhandled throw here surfaces to the visitor as a bare
+  // "HTTP 502" (Cloudflare's HTML error page, no JSON), so catch it and return a
+  // friendly, parseable error the client can render.
+  let upstream: Response;
+  try {
+    upstream = await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: buildSystemInstruction(nonce) }] },
+        contents: buildGeminiContents(messages, nonce),
+        generationConfig: {
+          maxOutputTokens: MAX_OUTPUT_TOKENS,
+          temperature: 0.7,
+          topP: 0.9,
+          ...(supportsThinking ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+        },
+        safetySettings: [
+          { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+          { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+          { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+          { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        ],
+      }),
+    });
+  } catch (err) {
+    return json(
+      {
+        error: 'AI への接続でエラーが発生しました。少し時間をおいて再度お試しください。',
+        code: 'upstream_unreachable',
+        detail: ((err as Error)?.message ?? 'fetch failed').slice(0, 200),
       },
-      safetySettings: [
-        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-      ],
-    }),
-  });
+      { status: 502 },
+    );
+  }
 
   if (!upstream.ok || !upstream.body) {
     const detail = await upstream.text().catch(() => '');

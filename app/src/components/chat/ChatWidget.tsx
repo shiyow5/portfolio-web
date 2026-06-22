@@ -226,6 +226,11 @@ export function ChatWidget() {
           ),
         );
         setSending(false);
+        // The server consumes the single-use Turnstile token during verification
+        // (even when the request later fails), so a stale token would make the
+        // NEXT message fail with "turnstile verification failed". Refresh it here
+        // too, not just on success.
+        reset();
       },
     });
   };
