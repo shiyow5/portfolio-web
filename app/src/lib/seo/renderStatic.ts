@@ -26,12 +26,43 @@ export interface SeoSite {
   url: string;
   location: string;
   tagline: string;
+  /** Keyword-rich, grounded summary placed in the body and Person.description. */
+  about: string;
+  /** Target search keywords (verbatim) for meta + knowsAbout reinforcement. */
+  keywords: string[];
+  /** Root-relative avatar/representative image, e.g. "/characters/shiyow.png". */
+  image: string;
   sameAs: string[];
   knowsAbout: string[];
   alumniOf: string;
   worksFor: string;
   techStack: Profile['techStack'];
 }
+
+/** Grounded Q&A for FAQPage schema — what AI answer engines lift and cite. */
+export interface FaqEntry {
+  q: string;
+  a: string;
+}
+
+export const FAQ: FaqEntry[] = [
+  {
+    q: 'shiyow（しよを）はどんな人ですか？',
+    a: '生成AI・LLMアプリ・AIエージェント・RAG・機械学習をプロダクトとして実装するAIエンジニアです。会津大学大学院で長文脈LLM推論（KVキャッシュ効率化）を研究しています。',
+  },
+  {
+    q: 'shiyow の代表的な作品・実績は？',
+    a: 'YouTube視聴履歴を3D可視化しAIが分析するAstralyxでハッカソン優秀賞を受賞。クマ出没情報をAIが自動収集するFASTBEAR、RAGチャットボットのDM-AIなど、生成AIプロダクトを個人・チームで開発しています。',
+  },
+  {
+    q: 'shiyow が使える技術・スキルは？',
+    a: 'Gemini / Vertex AI、LangGraph、RAG（pgvector）、Function Calling、PyTorch、強化学習（PPO）、Python・TypeScript・Go などで、LLMアプリ・AIエージェント・機械学習をプロダクト実装できます。',
+  },
+  {
+    q: 'shiyow への連絡・採用の問い合わせ方法は？',
+    a: 'ポートフォリオサイト shiyow.dev の問い合わせフォーム、またはGitHub・X から連絡できます。サイト内の自作クローンAI（Gemini製）に質問することもできます。',
+  },
+];
 
 /** Site identity for the static render — derived from PROFILE plus authored copy. */
 export function buildSite(profile: Profile): SeoSite {
@@ -42,11 +73,39 @@ export function buildSite(profile: Profile): SeoSite {
     url: 'https://shiyow.dev/',
     location: profile.location,
     tagline:
-      'LLM アプリ・AI エージェント・ML をプロダクトとして実装する AI エンジニア。自作のクローン AI と話せるポートフォリオ。',
+      'LLMアプリ・AIエージェント・機械学習をプロダクトとして実装するAIエンジニア。自作のクローンAIと話せるポートフォリオ。',
+    about:
+      'shiyow（しよを）は、生成AI・LLMアプリ・AIエージェント・RAG・機械学習をプロダクトとして実装するAIエンジニアです。' +
+      '会津大学大学院で長文脈LLM推論（KVキャッシュ効率化）を研究しながら、ハッカソン優秀賞のAstralyxや、クマ出没情報を' +
+      'AIが自動収集するFASTBEARなど、生成AIプロダクトを個人・チームで開発してきました。このポートフォリオサイトでは、' +
+      'モデル選定からコスト最適化・本番デプロイまで一人で通せる実装力の例として、自作のクローンAI（Gemini製）と対話できます。',
+    keywords: [
+      'AIエンジニア',
+      'AIエンジニア ポートフォリオ',
+      'ポートフォリオ',
+      '生成AI',
+      'LLM',
+      'LLMアプリ開発',
+      'AIエージェント',
+      'RAG',
+      '機械学習',
+      'Gemini',
+      'PyTorch',
+      '強化学習',
+      '会津大学',
+      'shiyow',
+    ],
+    image: '/characters/shiyow.png',
     sameAs: ['https://github.com/shiyow5', 'https://x.com/twinS_KNSN1415'],
     knowsAbout: [
+      'AIエンジニア',
+      '生成AI',
+      'LLMアプリ開発',
+      'AIエージェント開発',
+      '機械学習',
       'LLM',
       'RAG',
+      'Retrieval-Augmented Generation',
       'AI Agents',
       'Machine Learning',
       'Reinforcement Learning',
@@ -154,6 +213,10 @@ export function renderBodyHtml(site: SeoSite, works: Work[], activities: Activit
     .map((u) => `<a href="${escapeHtml(u)}">${escapeHtml(u)}</a>`)
     .join(' · ');
 
+  const faqHtml = FAQ.map(
+    (f) => `<article><h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p></article>`,
+  ).join('');
+
   const style =
     'max-width:880px;margin:0 auto;padding:2.5rem 1.25rem;' +
     "font-family:system-ui,-apple-system,'Segoe UI',sans-serif;" +
@@ -162,13 +225,16 @@ export function renderBodyHtml(site: SeoSite, works: Work[], activities: Activit
   return (
     `<div id="seo-prerender" style="${style}">` +
     `<header>` +
-    `<h1>${escapeHtml(site.name)} — ${escapeHtml(site.role)}</h1>` +
+    `<img src="${escapeHtml(site.image)}" alt="${escapeHtml(site.name)}（AIエンジニア / AI Engineer）のアイコン" width="96" height="96" style="display:block;margin-bottom:0.75rem" />` +
+    `<h1>${escapeHtml(site.name)}（しよを）— AIエンジニア / AI Engineer</h1>` +
     `<p>${escapeHtml(site.tagline)}</p>` +
+    `<p>${escapeHtml(site.about)}</p>` +
     `<p>${escapeHtml(site.location)}</p>` +
     `</header>` +
-    `<section><h2>Works</h2>${worksHtml}</section>` +
-    `<section><h2>Activity</h2><ol>${activitiesHtml}</ol></section>` +
-    `<section><h2>Tech Stack</h2><dl>${stackHtml}</dl></section>` +
+    `<section><h2>作品 (Works)</h2>${worksHtml}</section>` +
+    `<section><h2>経歴・活動 (Activity)</h2><ol>${activitiesHtml}</ol></section>` +
+    `<section><h2>技術スタック (Tech Stack)</h2><dl>${stackHtml}</dl></section>` +
+    `<section><h2>よくある質問 (FAQ)</h2>${faqHtml}</section>` +
     `<footer><p>${sameAsHtml}</p></footer>` +
     `</div>`
   );
@@ -191,13 +257,25 @@ export function renderJsonLd(site: SeoSite, works: Work[]): JsonLdNode {
     '@type': 'Person',
     '@id': personId,
     name: site.name,
-    jobTitle: site.role,
-    description: site.tagline,
+    alternateName: 'しよを',
+    jobTitle: 'AIエンジニア / AI Engineer',
+    description: site.about,
     url: site.url,
+    image: `${origin(site.url)}${site.image}`,
     knowsAbout,
     alumniOf: { '@type': 'CollegeOrUniversity', name: site.alumniOf },
     worksFor: { '@type': 'Organization', name: site.worksFor },
     sameAs: site.sameAs,
+  };
+
+  const faqPage: JsonLdNode = {
+    '@type': 'FAQPage',
+    '@id': `${site.url}#faq`,
+    mainEntity: FAQ.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
   };
 
   const website: JsonLdNode = {
@@ -240,7 +318,7 @@ export function renderJsonLd(site: SeoSite, works: Work[]): JsonLdNode {
 
   return {
     '@context': 'https://schema.org',
-    '@graph': [person, website, itemList, ...creativeWorks],
+    '@graph': [person, website, faqPage, itemList, ...creativeWorks],
   };
 }
 
