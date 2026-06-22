@@ -10,14 +10,29 @@
 /** Matches a citation token like `[work:dm-ai]` (requires the `type:slug` colon). */
 const CITATION_RE = /\[([a-z]+:[a-z0-9-]+)\]/gi;
 
+/**
+ * Bare tokens that reuse a real card TYPE but drop the `:slug` colon, e.g.
+ * `[identity]` / `[prof]` / `[work]`. A real citation always carries the colon,
+ * so these are never legitimate — they're authority-looking decoration a model
+ * emits when laundering an ungrounded claim (the demonstrated `[identity]`
+ * attack). Scoped to known type names on purpose, so genuine non-citation
+ * brackets like `[1]` / `[TODO]` / `[未確認]` are left untouched.
+ */
+const BARE_TYPE_RE = /\[(identity|prof|work|act)\]/gi;
+
 /** Longest a real citation can be; past this an unclosed `[` is treated as prose. */
 const MAX_HELD = 48;
 
-/** Removes citation tokens whose id is not in `validIds`; valid ones are kept verbatim. */
+/**
+ * Removes citation tokens whose id is not in `validIds` (valid ones kept
+ * verbatim), then strips bare colon-less type tokens. NOTE: this scrubs the
+ * *look* of a source; it cannot detect a claim that launders a real id, so it is
+ * a backstop — grounding lives in the persona + few-shot, verified by red-team.
+ */
 export function stripUnknownCitations(text: string, validIds: ReadonlySet<string>): string {
-  return text.replace(CITATION_RE, (full, id: string) =>
-    validIds.has(id.toLowerCase()) ? full : '',
-  );
+  return text
+    .replace(CITATION_RE, (full, id: string) => (validIds.has(id.toLowerCase()) ? full : ''))
+    .replace(BARE_TYPE_RE, '');
 }
 
 export interface CitationGuard {

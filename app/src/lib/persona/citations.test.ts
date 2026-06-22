@@ -23,6 +23,18 @@ describe('stripUnknownCitations', () => {
   it('leaves non-citation brackets (no type:slug colon) untouched', () => {
     expect(stripUnknownCitations('参考[1] と [TODO]', IDS)).toBe('参考[1] と [TODO]');
   });
+
+  it('strips bare authority tokens that reuse a known type without a colon', () => {
+    // the demonstrated injection: a fake source-looking [identity] on a false claim
+    expect(stripUnknownCitations('地球外生命体です [identity]', IDS)).toBe('地球外生命体です ');
+    expect(stripUnknownCitations('[prof] と [work] と [act]', IDS)).toBe(' と  と ');
+  });
+
+  it('keeps real colon citations while stripping bare type tokens and keeping plain brackets', () => {
+    expect(stripUnknownCitations('[prof:ai] [identity] [1] [TODO] [未確認]', IDS)).toBe(
+      '[prof:ai]  [1] [TODO] [未確認]',
+    );
+  });
 });
 
 describe('makeCitationGuard (streaming)', () => {
