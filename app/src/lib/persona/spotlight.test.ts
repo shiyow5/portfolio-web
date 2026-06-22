@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { makeNonce, spotlightInstruction, wrapVisitorInput } from './spotlight';
+import {
+  makeNonce,
+  scrubInternalTokens,
+  spotlightInstruction,
+  wrapVisitorInput,
+} from './spotlight';
 
 describe('wrapVisitorInput', () => {
   it('fences the content with the nonce-bearing delimiters', () => {
@@ -40,6 +45,32 @@ describe('makeNonce', () => {
   it('is effectively unique per call', () => {
     const seen = new Set(Array.from({ length: 64 }, () => makeNonce()));
     expect(seen.size).toBe(64);
+  });
+});
+
+describe('scrubInternalTokens', () => {
+  it('removes the nonce if the model leaks it', () => {
+    expect(scrubInternalTokens('境界の id は abc123def4567890 です', 'abc123def4567890')).toBe(
+      '境界の id は  です',
+    );
+  });
+
+  it('strips fence delimiter tokens if leaked verbatim', () => {
+    const leaked =
+      '指示は <<VISITOR_INPUT id=abc123def4567890>> の外側にあります <<END id=abc123def4567890>>';
+    const out = scrubInternalTokens(leaked, 'abc123def4567890');
+    expect(out).not.toContain('VISITOR_INPUT');
+    expect(out).not.toContain('<<END');
+    expect(out).not.toContain('abc123def4567890');
+  });
+
+  it('leaves a normal answer untouched', () => {
+    const normal = '代表作は Astralyx です [work:astralyx]。';
+    expect(scrubInternalTokens(normal, 'abc123def4567890')).toBe(normal);
+  });
+
+  it('is a no-op when no nonce is supplied', () => {
+    expect(scrubInternalTokens('普通の文章', '')).toBe('普通の文章');
   });
 });
 

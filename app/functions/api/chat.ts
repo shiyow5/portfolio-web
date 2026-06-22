@@ -2,7 +2,7 @@
 import { buildSystemInstruction } from '../../src/lib/persona/persona';
 import { factCardIds } from '../../src/lib/persona/factCards';
 import { makeCitationGuard, type CitationGuard } from '../../src/lib/persona/citations';
-import { makeNonce, wrapVisitorInput } from '../../src/lib/persona/spotlight';
+import { makeNonce, wrapVisitorInput, scrubInternalTokens } from '../../src/lib/persona/spotlight';
 import { splitSSEEvents, extractDelta } from '../../src/lib/gemini-sse';
 
 interface Env {
@@ -107,18 +107,21 @@ function buildGeminiContents(messages: ChatMessage[], nonce: string) {
 /**
  * Reads the Gemini SSE response body and forwards text deltas to the client as
  * line-delimited JSON chunks: {"delta": "..."}\n. Each delta passes through the
- * citation guard, which strips any [id] the model invents (boundary-safe).
+ * citation guard (strips invented [id]s, boundary-safe) and the canary scrub
+ * (strips the request nonce / fence delimiters if the model ever leaks them).
  */
 function relayStream(
   upstream: ReadableStream<Uint8Array>,
   guard: CitationGuard,
+  nonce: string,
 ): ReadableStream<Uint8Array> {
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   let buffer = '';
 
   const emit = (controller: ReadableStreamDefaultController<Uint8Array>, text: string) => {
-    if (text) controller.enqueue(encoder.encode(JSON.stringify({ delta: text }) + '\n'));
+    const safe = scrubInternalTokens(text, nonce);
+    if (safe) controller.enqueue(encoder.encode(JSON.stringify({ delta: safe }) + '\n'));
   };
 
   return new ReadableStream({
@@ -304,7 +307,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  return new Response(relayStream(upstream.body, makeCitationGuard(factCardIds())), {
+  return new Response(relayStream(upstream.body, makeCitationGuard(factCardIds()), nonce), {
     status: 200,
     headers: {
       'content-type': 'application/x-ndjson; charset=utf-8',
