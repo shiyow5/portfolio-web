@@ -1,26 +1,16 @@
-# shiyow.dev — open to all crawlers, including AI search & answer engines.
-# Goal: maximize discovery and citation by Google, AI Overviews and LLM assistants.
+# shiyow.dev — crawler policy
+#   - Normal search (Googlebot / Bingbot, via *): allowed
+#   - AI *search / answer* engines: allowed → maximize discovery & citation
+#   - AI *training / bulk data* crawlers: disallowed → not used for model training
 
 User-agent: *
 Allow: /
 
-# AI / LLM crawlers (search, answer-engine and training) — explicitly welcomed.
-User-agent: GPTBot
-Allow: /
-
+# --- AI search / answer engines (allowed: drive discovery & citation) ---
 User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: anthropic-ai
 Allow: /
 
 User-agent: PerplexityBot
@@ -29,22 +19,41 @@ Allow: /
 User-agent: Perplexity-User
 Allow: /
 
-User-agent: Google-Extended
+User-agent: Claude-User
 Allow: /
 
-User-agent: CCBot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: Amazonbot
+User-agent: Claude-SearchBot
 Allow: /
 
 User-agent: Applebot
 Allow: /
 
-User-agent: Applebot-Extended
+User-agent: Amazonbot
 Allow: /
+
+# --- AI training / bulk data collection (disallowed: no training use) ---
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
 
 Sitemap: https://shiyow.dev/sitemap.xml
