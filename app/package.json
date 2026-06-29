@@ -22,8 +22,8 @@
     "clean": "rm -rf dist coverage playwright-report test-results"
   },
   "dependencies": {
-    "lucide-react": "^1.21.0",
-    "motion": "^12.40.0",
+    "lucide-react": "^1.22.0",
+    "motion": "^12.42.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
