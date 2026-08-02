@@ -73,7 +73,7 @@
   },
   {
     "id": "thesis",
-    "date": "2025-02-01",
+    "date": "2026-02-01",
     "title": "卒業研究（TextWorld 強化学習）を完了",
     "category": "project",
     "summary": "RL エージェントを LSTM / Transformer / GPT-2 で比較し、知見を論文化。",
