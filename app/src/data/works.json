@@ -108,7 +108,7 @@
     "tagline": "「言語指示→実行コマンド」を学ぶ RL エージェントを LSTM / Transformer / GPT-2 で比較。特定ドメインでは汎用 LLM の微調整より小型 Transformer が安定・高成功率と示した。",
     "tech": ["Python", "PyTorch", "PPO", "TextWorld"],
     "status": "卒業研究 · 個人",
-    "year": 2025,
+    "year": 2026,
     "links": {
       "sources": [{ "label": "論文", "url": "/papers/textworld-rl-thesis.pdf" }]
     }
