@@ -28,8 +28,18 @@ export interface SeoSite {
   tagline: string;
   /** Keyword-rich, grounded summary placed in the body and Person.description. */
   about: string;
-  /** Target search keywords (verbatim) for meta + knowsAbout reinforcement. */
+  /**
+   * Target search keywords (verbatim) for `<meta name="keywords">` + knowsAbout
+   * reinforcement. Curated in docs/SEO_KEYWORDS.md — keep the two in sync.
+   */
   keywords: string[];
+  /**
+   * Name variants a visitor might search (reading, katakana, handles). Emitted
+   * as Person.alternateName so the entity resolves across spellings — the site
+   * is a single page, so the vanity queries in docs/SEO_KEYWORDS.md T0 all have
+   * to land here.
+   */
+  alternateNames: string[];
   /** Root-relative avatar/representative image, e.g. "/characters/shiyow.png". */
   image: string;
   sameAs: string[];
@@ -51,16 +61,32 @@ export const FAQ: FaqEntry[] = [
     a: '生成AI・LLMアプリ・AIエージェント・RAG・機械学習をプロダクトとして実装するAIエンジニアです。会津大学大学院で長文脈LLM推論（KVキャッシュ効率化）を研究しています。',
   },
   {
+    q: 'shiyow の読み方は？',
+    a: '「しよを」と読みます。カタカナでは「シヨヲ」。GitHub は shiyow5、Kaggle は sshow14、X は @twinS_KNSN1415 のハンドルを使っています。',
+  },
+  {
     q: 'shiyow の代表的な作品・実績は？',
-    a: 'YouTube視聴履歴を3D可視化しAIが分析するAstralyxでハッカソン優秀賞を受賞。クマ出没情報をAIが自動収集するFASTBEAR、RAGチャットボットのDM-AIなど、生成AIプロダクトを個人・チームで開発しています。',
+    a: 'YouTube視聴履歴を3D可視化しAIが分析するAstralyxで、GDGoC Japan Hackathon 2026 の優秀賞を受賞しました。ほかに、クマ出没情報をAIが自動収集するFASTBEAR（アオタケ採択・公開中）、RAGとFunction Callingを組み合わせたデュエル・マスターズQ&AボットのDM-AIなどを個人・チームで開発しています。',
   },
   {
     q: 'shiyow が使える技術・スキルは？',
-    a: 'Gemini / Vertex AI、LangGraph、RAG（pgvector）、Function Calling、PyTorch、強化学習（PPO）、Python・TypeScript・Go などで、LLMアプリ・AIエージェント・機械学習をプロダクト実装できます。',
+    a: 'Gemini / Vertex AI、LangGraph、RAG（pgvector）、Function Calling、PyTorch、強化学習（PPO）、Python・TypeScript・Go などで、LLMアプリ・AIエージェント・機械学習をプロダクト実装できます。モデル選定からコスト最適化・本番デプロイまで一人で通せます。',
+  },
+  {
+    q: 'shiyow はどんな研究をしていますか？',
+    a: '会津大学大学院で、長文脈LLM推論の効率化を研究しています。自己検証付きの階層的KVキャッシュ近似により、直近は詳細・古い文脈は要約で保持し、近似が信頼できるかをモデル自身が推論中に検証して、危険なときは正確な計算へfallbackする仕組みです。学部の卒業研究ではTextWorldでの強化学習エージェントをLSTM / Transformer / GPT-2で比較しました。',
+  },
+  {
+    q: 'shiyow の経歴は？',
+    a: '会津大学 コンピュータ理工学部を2026年3月に卒業し、同大学院 コンピュータ理工学研究科へ進学。2024年12月からOnplanetz株式会社でドキュメント構造化・RAGシステムの精度改善に、2026年6月から東京大学 松尾研究室で情報の構造化に関するリサーチに従事しています。',
+  },
+  {
+    q: 'このサイトのクローンAIとは何ですか？',
+    a: 'shiyow.dev に組み込んだ、本人の経歴に接地したAIチャットです。Geminiで実装し、Cloudflare Pages Functions上でSSEストリーミング・Turnstile・KVレート制限まで自作しています。回答はサイトと同じデータから生成した事実カードのみを根拠にし、載っていないことは推測せず人間に回します。',
   },
   {
     q: 'shiyow への連絡・採用の問い合わせ方法は？',
-    a: 'ポートフォリオサイト shiyow.dev の問い合わせフォーム、またはGitHub・X から連絡できます。サイト内の自作クローンAI（Gemini製）に質問することもできます。',
+    a: 'ポートフォリオサイト shiyow.dev の問い合わせフォーム、またはGitHub・X から連絡できます。現在は就職活動中で、採用・カジュアル面談のご連絡を歓迎しています。サイト内の自作クローンAIに経歴やスキルを質問することもできます。',
   },
 ];
 
@@ -79,24 +105,37 @@ export function buildSite(profile: Profile): SeoSite {
       '会津大学大学院で長文脈LLM推論（KVキャッシュ効率化）を研究しながら、ハッカソン優秀賞のAstralyxや、クマ出没情報を' +
       'AIが自動収集するFASTBEARなど、生成AIプロダクトを個人・チームで開発してきました。このポートフォリオサイトでは、' +
       'モデル選定からコスト最適化・本番デプロイまで一人で通せる実装力の例として、自作のクローンAI（Gemini製）と対話できます。',
+    // Ordered by the priority tiers in docs/SEO_KEYWORDS.md: named queries first
+    // (they are winnable and cost the most when missed), then work names, then
+    // the long-tail role/tech combinations. Single-word head terms are omitted
+    // on purpose — this one page cannot outrank the media sites that hold them.
     keywords: [
-      'AIエンジニア',
+      'しよを',
+      'shiyow',
+      'shiyow.dev',
+      'shiyow5',
+      'しよを AIエンジニア',
+      'shiyow ポートフォリオ',
       'AIエンジニア ポートフォリオ',
-      'ポートフォリオ',
+      'Astralyx',
+      'FASTBEAR',
+      'DM-AI',
       '生成AI',
-      'LLM',
       'LLMアプリ開発',
       'AIエージェント',
       'RAG',
       '機械学習',
-      'Gemini',
-      'PyTorch',
-      '強化学習',
-      '会津大学',
-      'shiyow',
+      'クローンAI ポートフォリオ',
+      '会津大学 AIエンジニア',
+      '会津大学大学院 LLM 研究',
     ],
+    alternateNames: ['しよを', 'シヨヲ', 'shiyow', 'shiyow5', 'sshow14'],
     image: '/characters/shiyow.png',
-    sameAs: ['https://github.com/shiyow5', 'https://x.com/twinS_KNSN1415'],
+    sameAs: [
+      'https://github.com/shiyow5',
+      'https://x.com/twinS_KNSN1415',
+      'https://www.kaggle.com/sshow14',
+    ],
     knowsAbout: [
       'AIエンジニア',
       '生成AI',
@@ -269,7 +308,7 @@ export function renderJsonLd(site: SeoSite, works: Work[]): JsonLdNode {
     '@type': 'Person',
     '@id': personId,
     name: site.name,
-    alternateName: 'しよを',
+    alternateName: site.alternateNames,
     jobTitle: 'AIエンジニア / AI Engineer',
     description: site.about,
     url: site.url,
@@ -277,7 +316,22 @@ export function renderJsonLd(site: SeoSite, works: Work[]): JsonLdNode {
     knowsAbout,
     alumniOf: { '@type': 'CollegeOrUniversity', name: site.alumniOf },
     worksFor: { '@type': 'Organization', name: site.worksFor },
+    homeLocation: { '@type': 'Place', name: site.location },
     sameAs: site.sameAs,
+  };
+
+  // ProfilePage is what Google reads to treat this URL as "the page about this
+  // person" rather than one more page that merely mentions them — the entity
+  // signal the named queries (docs/SEO_KEYWORDS.md T0/T1) depend on.
+  const profilePage: JsonLdNode = {
+    '@type': 'ProfilePage',
+    '@id': `${site.url}#profilepage`,
+    url: site.url,
+    name: `${site.name}（しよを）— ${site.role} ポートフォリオ`,
+    inLanguage: 'ja',
+    mainEntity: { '@id': personId },
+    about: { '@id': personId },
+    isPartOf: { '@id': `${site.url}#website` },
   };
 
   const faqPage: JsonLdNode = {
@@ -342,7 +396,7 @@ export function renderJsonLd(site: SeoSite, works: Work[]): JsonLdNode {
 
   return {
     '@context': 'https://schema.org',
-    '@graph': [person, website, faqPage, breadcrumb, itemList, ...creativeWorks],
+    '@graph': [person, profilePage, website, faqPage, breadcrumb, itemList, ...creativeWorks],
   };
 }
 
@@ -378,6 +432,8 @@ export function renderLlmsTxt(site: SeoSite, works: Work[], activities: Activity
     `> ${site.tagline}`,
     '',
     site.about,
+    '',
+    `読み: しよを（シヨヲ）／ ハンドル: ${site.alternateNames.join(' · ')}／ 拠点: ${site.location}`,
     '',
     '## Works（作品）',
     ...works.map(

@@ -6,7 +6,8 @@ const LINKS = [
   { href: '#work', label: 'Work', n: '01' },
   { href: '#stack', label: 'Stack', n: '02' },
   { href: '#activity', label: 'Activity', n: '03' },
-  { href: '#contact', label: 'Contact', n: '04' },
+  { href: '#faq', label: 'FAQ', n: '04' },
+  { href: '#contact', label: 'Contact', n: '05' },
 ];
 
 const EASE = [0.22, 1, 0.36, 1] as const;

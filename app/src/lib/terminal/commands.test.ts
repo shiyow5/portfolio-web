@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { WORKS } from '../works';
 import { PROFILE } from '../profile';
 import { ACTIVITIES } from '../activity';
+import { FAQ } from '../seo/renderStatic';
 import { runCommand, type CmdCtx } from './commands';
 
 const ctx: CmdCtx = { works: WORKS, profile: PROFILE, activities: ACTIVITIES };
@@ -24,6 +25,14 @@ describe('runCommand', () => {
 
   it('whoami shows the profile name', () => {
     expect(flat('whoami')).toContain(PROFILE.name);
+  });
+
+  it('faq answers from the same source the SEO render uses', () => {
+    const out = flat('faq');
+    for (const entry of FAQ) {
+      expect(out).toContain(entry.q);
+      expect(out).toContain(entry.a);
+    }
   });
 
   it('unknown command errors with a hint', () => {
