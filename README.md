@@ -21,8 +21,8 @@ AI エンジニア shiyow のポートフォリオサイト。**editorial / term
 
 `src/lib/mode.tsx` の `ModeProvider` が `editorial`（既定）と `terminal` を保持し、localStorage に永続化します。
 
-- **editorial** — Atelier 配色の縦スクロール。`#work` / `#stack` / `#activity` / `#contact` のセクション構成
-- **terminal** — 疑似シェル REPL。`help` / `whoami` / `neofetch` / `ls` / `cat` / `projects` / `skills` / `activity` / `open` / `ask` / `chat` / `contact` / `social` / `editorial` / `clear` / `echo` ほか（`src/lib/terminal/commands.ts`）
+- **editorial** — Atelier 配色の縦スクロール。`#work` / `#stack` / `#activity` / `#faq` / `#contact` のセクション構成
+- **terminal** — 疑似シェル REPL。`help` / `whoami` / `neofetch` / `ls` / `cat` / `projects` / `skills` / `activity` / `faq` / `open` / `ask` / `chat` / `contact` / `social` / `editorial` / `clear` / `echo` ほか（`src/lib/terminal/commands.ts`）
 
 ### クローン AI チャット
 
@@ -36,15 +36,17 @@ AI エンジニア shiyow のポートフォリオサイト。**editorial / term
 
 ### API エンドポイント
 
-| Path | 内容 |
-| --- | --- |
-| `POST /api/chat` | Gemini への SSE ストリーミングプロキシ |
+| Path                | 内容                                                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `POST /api/chat`    | Gemini への SSE ストリーミングプロキシ                                                                     |
 | `POST /api/contact` | 問い合わせを `CONTACT_WEBHOOK_URL`（Discord / Slack / Zapier 互換）へ転送。未設定時は 503 で穏当に degrade |
-| `GET /api/health` | ヘルスチェック |
+| `GET /api/health`   | ヘルスチェック                                                                                             |
 
 ### LLMO / SEO
 
-`npm run build` の最終段（`scripts/prerender.mjs`）が、空の `#root` にセマンティック HTML を流し込み、JSON-LD `@graph` を差し替え、`sitemap.xml` と `llms.txt` を出力します。`public/_headers` で HSTS・`X-Content-Type-Options`・`X-Frame-Options`・`Referrer-Policy`・`Permissions-Policy` を全レスポンスに付与。
+`npm run build` の最終段（`scripts/prerender.mjs`）が、空の `#root` にセマンティック HTML を流し込み、JSON-LD `@graph`（Person / ProfilePage / WebSite / FAQPage / BreadcrumbList / ItemList / CreativeWork）を差し替え、`<meta name="keywords">` を同期し、`sitemap.xml` と `llms.txt` を出力します。`public/_headers` で HSTS・`X-Content-Type-Options`・`X-Frame-Options`・`Referrer-Policy`・`Permissions-Policy` を全レスポンスに付与。
+
+狙っている検索語と、それを担保しているコード上の場所は [`docs/SEO_KEYWORDS.md`](docs/SEO_KEYWORDS.md) にまとめています。文言の単一情報源は `src/lib/seo/renderStatic.ts` の `buildSite()` と `FAQ` で、静的 HTML・構造化データ・`llms.txt`・画面上の FAQ セクション・ターミナルの `faq` コマンドがすべてここから生成されます。
 
 ## Directory Layout
 
@@ -52,7 +54,8 @@ AI エンジニア shiyow のポートフォリオサイト。**editorial / term
 .
 ├── Templates/              参考資料（design + code reference, read-only）
 ├── docs/
-│   └── SETUP_CLOUDFLARE.md Cloudflare / GitHub の設定手順（唯一の運用ドキュメント）
+│   ├── SETUP_CLOUDFLARE.md Cloudflare / GitHub の設定手順
+│   └── SEO_KEYWORDS.md     想定検索語と、それを担保しているコード上の場所
 ├── app/                    本体アプリ（Pages プロジェクトのルート）
 │   ├── public/             _headers, robots.txt, og.png, characters/, works/, papers/
 │   ├── src/
@@ -85,21 +88,21 @@ AI エンジニア shiyow のポートフォリオサイト。**editorial / term
 
 ## Commands（`app/` 内で実行）
 
-| | |
-| --- | --- |
-| `npm install` | 依存をインストール |
-| `npm run dev` | Vite dev server（`http://localhost:3000`） |
-| `npm run dev:pages` | `wrangler pages dev dist` で Functions 込みの動作確認（先に `npm run build`） |
-| `npm run build` | typecheck → Vite build → prerender（`dist/` に HTML / sitemap.xml / llms.txt） |
-| `npm run preview` | ビルド成果物のプレビュー |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run lint` / `lint:fix` | ESLint |
-| `npm run format` / `format:check` | Prettier |
-| `npm run test` / `test:watch` | Vitest（unit） |
-| `npm run test:coverage` | カバレッジ付き Vitest |
-| `npm run e2e` / `e2e:ui` | Playwright smoke（`preview` を自動起動） |
-| `npm run eval` | クローンの接地 / 棄権 eval。**実 Gemini API を叩く**ため `GEMINI_API_KEY` が必要 |
-| `npm run clean` | `dist` / `coverage` / レポート類を削除 |
+|                                   |                                                                                  |
+| --------------------------------- | -------------------------------------------------------------------------------- |
+| `npm install`                     | 依存をインストール                                                               |
+| `npm run dev`                     | Vite dev server（`http://localhost:3000`）                                       |
+| `npm run dev:pages`               | `wrangler pages dev dist` で Functions 込みの動作確認（先に `npm run build`）    |
+| `npm run build`                   | typecheck → Vite build → prerender（`dist/` に HTML / sitemap.xml / llms.txt）   |
+| `npm run preview`                 | ビルド成果物のプレビュー                                                         |
+| `npm run typecheck`               | `tsc --noEmit`                                                                   |
+| `npm run lint` / `lint:fix`       | ESLint                                                                           |
+| `npm run format` / `format:check` | Prettier                                                                         |
+| `npm run test` / `test:watch`     | Vitest（unit）                                                                   |
+| `npm run test:coverage`           | カバレッジ付き Vitest                                                            |
+| `npm run e2e` / `e2e:ui`          | Playwright smoke（`preview` を自動起動）                                         |
+| `npm run eval`                    | クローンの接地 / 棄権 eval。**実 Gemini API を叩く**ため `GEMINI_API_KEY` が必要 |
+| `npm run clean`                   | `dist` / `coverage` / レポート類を削除                                           |
 
 ### ローカル開発の注意
 
@@ -118,16 +121,16 @@ Tailwind v4 の `@theme`（`app/src/index.css`）にトークンを集約。
 
 ## CI / CD
 
-| Workflow | Trigger | 内容 |
-| --- | --- | --- |
-| `format.yml` | PR / push to main / 手動（`app/**` パスフィルタ） | `prettier --check` |
-| `lint.yml` | 同上 | `tsc --noEmit` + `eslint` |
-| `test.yml` | 同上 | `vitest run --coverage`（カバレッジを artifact 化） |
-| `playwright-smoke.yml` | 同上 | Playwright smoke（失敗時にスクリーンショット / トレース） |
-| `eval.yml` | PR（`src/lib/persona/**`・`functions/api/chat.ts`・`src/data/**`）/ 手動 | クローンの接地・棄権 eval（実 Gemini API） |
-| `deploy-preflight.yml` | PR / 手動 | 必須シークレットの不足を早期警告 + 本番相当のドライビルド |
-| `deploy.yml` | push to main / 手動 | 同一 SHA で Format / Lint / Test の成功を確認 → build → Cloudflare Pages へ `--branch=main` でデプロイ |
-| `gemini-review.yml` | 全 PR（opened / synchronize）/ 手動 | Gemini による自動レビュー（`GEMINI_API_KEY` 未設定ならスキップ） |
+| Workflow               | Trigger                                                                  | 内容                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `format.yml`           | PR / push to main / 手動（`app/**` パスフィルタ）                        | `prettier --check`                                                                                     |
+| `lint.yml`             | 同上                                                                     | `tsc --noEmit` + `eslint`                                                                              |
+| `test.yml`             | 同上                                                                     | `vitest run --coverage`（カバレッジを artifact 化）                                                    |
+| `playwright-smoke.yml` | 同上                                                                     | Playwright smoke（失敗時にスクリーンショット / トレース）                                              |
+| `eval.yml`             | PR（`src/lib/persona/**`・`functions/api/chat.ts`・`src/data/**`）/ 手動 | クローンの接地・棄権 eval（実 Gemini API）                                                             |
+| `deploy-preflight.yml` | PR / 手動                                                                | 必須シークレットの不足を早期警告 + 本番相当のドライビルド                                              |
+| `deploy.yml`           | push to main / 手動                                                      | 同一 SHA で Format / Lint / Test の成功を確認 → build → Cloudflare Pages へ `--branch=main` でデプロイ |
+| `gemini-review.yml`    | 全 PR（opened / synchronize）/ 手動                                      | Gemini による自動レビュー（`GEMINI_API_KEY` 未設定ならスキップ）                                       |
 
 - 共通セットアップは `.github/actions/setup-frontend/`（Node 20 + `npm ci` + キャッシュ）。
 - PR 系ワークフローは**同一リポジトリの PR でのみ**動作します（fork にシークレットを渡さない）。
@@ -137,29 +140,29 @@ Tailwind v4 の `@theme`（`app/src/index.css`）にトークンを集約。
 
 **GitHub Actions Secrets**
 
-| 名前 | 用途 |
-| --- | --- |
-| `CLOUDFLARE_API_TOKEN` | Pages へのデプロイ |
-| `CLOUDFLARE_ACCOUNT_ID` | 同上 |
-| `GEMINI_API_KEY` | `eval.yml` / `gemini-review.yml` |
+| 名前                    | 用途                             |
+| ----------------------- | -------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | Pages へのデプロイ               |
+| `CLOUDFLARE_ACCOUNT_ID` | 同上                             |
+| `GEMINI_API_KEY`        | `eval.yml` / `gemini-review.yml` |
 
 **GitHub Actions Variables**
 
-| 名前 | 例 | 用途 |
-| --- | --- | --- |
-| `CF_DEPLOY_ENABLED` | `true` | **これが `true` でないと deploy job は丸ごとスキップ**（設定前に失敗させないためのゲート） |
-| `CF_PAGES_PROJECT` | `shiyow-portfolio` | デプロイ先の Pages プロジェクト |
-| `PRODUCTION_URL` | `https://shiyow.dev` | Environment の表示 URL |
-| `VITE_TURNSTILE_SITEKEY` | `0x...` | ビルド時にバンドルへ焼き込む Turnstile の公開サイトキー |
+| 名前                     | 例                   | 用途                                                                                       |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------ |
+| `CF_DEPLOY_ENABLED`      | `true`               | **これが `true` でないと deploy job は丸ごとスキップ**（設定前に失敗させないためのゲート） |
+| `CF_PAGES_PROJECT`       | `shiyow-portfolio`   | デプロイ先の Pages プロジェクト                                                            |
+| `PRODUCTION_URL`         | `https://shiyow.dev` | Environment の表示 URL                                                                     |
+| `VITE_TURNSTILE_SITEKEY` | `0x...`              | ビルド時にバンドルへ焼き込む Turnstile の公開サイトキー                                    |
 
 **Cloudflare Pages のランタイム secret**（GitHub 側ではなく Pages ダッシュボードに登録）
 
-| 名前 | 用途 |
-| --- | --- |
-| `GEMINI_API_KEY` | `/api/chat` |
-| `TURNSTILE_SECRET` | Turnstile のサーバー側検証 |
-| `CONTACT_WEBHOOK_URL` | `/api/contact` の転送先。未設定だとフォームは「未設定」表示になる |
-| `GEMINI_MODEL`（任意） | モデルの上書き。既定は `gemini-2.5-flash-lite` |
+| 名前                   | 用途                                                              |
+| ---------------------- | ----------------------------------------------------------------- |
+| `GEMINI_API_KEY`       | `/api/chat`                                                       |
+| `TURNSTILE_SECRET`     | Turnstile のサーバー側検証                                        |
+| `CONTACT_WEBHOOK_URL`  | `/api/contact` の転送先。未設定だとフォームは「未設定」表示になる |
+| `GEMINI_MODEL`（任意） | モデルの上書き。既定は `gemini-2.5-flash-lite`                    |
 
 **KV** — `wrangler kv namespace create RATE_LIMIT_KV` で作成し、`RATE_LIMIT_KV` としてバインド（`app/wrangler.toml` に記載済み）。
 

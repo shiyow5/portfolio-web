@@ -28,7 +28,7 @@ const dataDir = join(appRoot, 'src', 'data');
 const renderSrc = readFileSync(join(appRoot, 'src/lib/seo/renderStatic.ts'), 'utf8');
 const { code } = await transform(renderSrc, { loader: 'ts', format: 'esm' });
 const renderUrl = `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
-const { buildSite, renderBodyHtml, renderJsonLd, renderSitemap, renderLlmsTxt } = await import(
+const { buildSite, renderBodyHtml, renderJsonLd, renderSitemap, renderLlmsTxt, FAQ } = await import(
   renderUrl
 );
 
@@ -63,17 +63,38 @@ html = html.replace(
   `<script type="application/ld+json">\n${JSON.stringify(graph, null, 2)}\n    </script>`,
 );
 
+// 3. Sync <meta name="keywords"> from the curated target list so the shipped
+//    HTML can't drift from docs/SEO_KEYWORDS.md / buildSite().
+const kwRe = /<meta\s+name="keywords"\s+content="[\s\S]*?"\s*\/>/;
+if (!kwRe.test(html)) {
+  throw new Error('prerender: <meta name="keywords"> not found in dist/index.html');
+}
+html = html.replace(
+  kwRe,
+  `<meta name="keywords" content="${site.keywords.join(', ').replace(/"/g, '&quot;')}" />`,
+);
+
 writeFileSync(indexPath, html);
 
-// 3. Sitemap (single URL today; lastmod = build date) + llms.txt digest.
+// 4. Sitemap (single URL today; lastmod = build date) + llms.txt digest.
 const lastmod = new Date().toISOString().slice(0, 10);
 writeFileSync(join(distDir, 'sitemap.xml'), renderSitemap([{ loc: site.url, lastmod }]));
 writeFileSync(join(distDir, 'llms.txt'), renderLlmsTxt(site, works, activities));
 
-// 4. Sanity gate: the rendered HTML must actually contain every work title.
+// 5. Sanity gate: the rendered HTML must actually contain every work title, the
+//    name reading (the highest-value query), and every FAQ question — the
+//    answers Google and the AI answer engines quote.
 for (const w of works) {
   if (!html.includes(w.title)) {
     throw new Error(`prerender: work title missing from output HTML: ${w.title}`);
+  }
+}
+if (!html.includes('しよを')) {
+  throw new Error('prerender: name reading "しよを" missing from output HTML');
+}
+for (const f of FAQ) {
+  if (!html.includes(f.q)) {
+    throw new Error(`prerender: FAQ question missing from output HTML: ${f.q}`);
   }
 }
 

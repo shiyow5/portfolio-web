@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+// ?raw keeps this a browser-safe import — the src tsconfig has no node types.
+import indexHtml from '../../../index.html?raw';
 import {
   buildSite,
   escapeHtml,
@@ -77,6 +79,36 @@ describe('renderBodyHtml', () => {
   });
 });
 
+describe('buildSite target keywords', () => {
+  // The queries in docs/SEO_KEYWORDS.md T0 are the ones worth the most and the
+  // easiest to lose in a refactor — pin them.
+  it('covers the named queries verbatim', () => {
+    for (const kw of ['しよを', 'shiyow', 'shiyow.dev']) {
+      expect(site.keywords).toContain(kw);
+    }
+  });
+
+  it('lists the reading, katakana and handles as name variants', () => {
+    for (const alt of ['しよを', 'シヨヲ', 'shiyow5', 'sshow14']) {
+      expect(site.alternateNames).toContain(alt);
+    }
+  });
+
+  // prerender.mjs overwrites this tag at build time, so production can't drift —
+  // but the dev server serves the literal. Pin them together so the two copies
+  // can never disagree about what the site claims to target.
+  it('matches the <meta name="keywords"> literal in index.html', () => {
+    const literal = /<meta\s+name="keywords"\s+content="([\s\S]*?)"\s*\/>/.exec(indexHtml)?.[1];
+    expect(literal).toBe(site.keywords.join(', '));
+  });
+
+  it('points sameAs at every public profile that can carry a backlink', () => {
+    expect(site.sameAs.some((u) => u.includes('github.com'))).toBe(true);
+    expect(site.sameAs.some((u) => u.includes('x.com'))).toBe(true);
+    expect(site.sameAs.some((u) => u.includes('kaggle.com'))).toBe(true);
+  });
+});
+
 describe('renderJsonLd', () => {
   const graph = renderJsonLd(site, WORKS);
 
@@ -123,6 +155,21 @@ describe('renderJsonLd', () => {
     expect((questions[0]!.acceptedAnswer as Record<string, unknown>)['@type']).toBe('Answer');
   });
 
+  it('exposes every name variant as Person.alternateName', () => {
+    const person = (graph['@graph'] as Array<Record<string, unknown>>).find(
+      (n) => n['@type'] === 'Person',
+    )!;
+    expect(person.alternateName).toEqual(site.alternateNames);
+  });
+
+  it('declares the page as a ProfilePage whose mainEntity is the Person', () => {
+    const nodes = graph['@graph'] as Array<Record<string, unknown>>;
+    const person = nodes.find((n) => n['@type'] === 'Person')!;
+    const profile = nodes.find((n) => n['@type'] === 'ProfilePage');
+    expect(profile).toBeTruthy();
+    expect(profile!.mainEntity).toEqual({ '@id': person['@id'] });
+  });
+
   it('includes a BreadcrumbList', () => {
     const crumb = (graph['@graph'] as Array<Record<string, unknown>>).find(
       (n) => n['@type'] === 'BreadcrumbList',
@@ -140,6 +187,11 @@ describe('renderLlmsTxt', () => {
     for (const w of WORKS) expect(txt).toContain(w.title);
     for (const f of FAQ) expect(txt).toContain(f.q);
     for (const u of site.sameAs) expect(txt).toContain(u);
+  });
+
+  it('states the reading and handles so an answer engine can resolve the name', () => {
+    expect(txt).toContain('しよを');
+    for (const alt of site.alternateNames) expect(txt).toContain(alt);
   });
 });
 

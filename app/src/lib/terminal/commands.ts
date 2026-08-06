@@ -8,6 +8,7 @@ import type { Work } from '../works';
 import type { Profile } from '../profile';
 import type { Activity } from '../activity';
 import { formatDate } from '../activity';
+import { FAQ } from '../seo/renderStatic';
 
 export type Tone = 'default' | 'muted' | 'green' | 'accent' | 'orange' | 'purple' | 'error';
 
@@ -56,6 +57,7 @@ export const MANUAL: ManEntry[] = [
   { name: 'projects', usage: 'projects', desc: '作品一覧' },
   { name: 'skills', usage: 'skills', desc: '技術スタックを表示' },
   { name: 'activity', usage: 'activity', desc: 'タイムラインを表示' },
+  { name: 'faq', usage: 'faq', desc: 'よくある質問と回答を表示' },
   { name: 'open', usage: 'open <id>', desc: '作品のリンクを新規タブで開く' },
   { name: 'ask', usage: 'ask <質問>', desc: 'AIクローンに質問し、回答をここにストリーミング' },
   { name: 'chat', usage: 'chat', desc: 'クローンのチャットUIを開く' },
@@ -178,6 +180,11 @@ export function runCommand(input: string, ctx: CmdCtx): CmdResult {
     case 'activity':
       return {
         lines: ctx.activities.map((a) => t(`${formatDate(a.date)}  ${a.title}`)),
+      };
+
+    case 'faq':
+      return {
+        lines: FAQ.flatMap((f) => [t(`Q. ${f.q}`, 'accent'), t(`A. ${f.a}`), t('')]),
       };
 
     case 'cat': {

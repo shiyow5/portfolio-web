@@ -6,6 +6,7 @@ import { PROFILE } from '../../lib/profile';
 import { WORKS } from '../../lib/works';
 import { ACTIVITIES, CATEGORY_LABEL, formatDate } from '../../lib/activity';
 import { submitContact } from '../../lib/contact';
+import { FAQ } from '../../lib/seo/renderStatic';
 import { useTurnstile } from '../../lib/turnstile';
 import { ChatWidget } from '../chat/ChatWidget';
 import { WorkMedia } from '../media/WorkMedia';
@@ -54,7 +55,9 @@ export function EditorialSite() {
             variants={fadeUp}
             className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs uppercase tracking-widest text-on-surface-variant"
           >
-            <span>shiyow</span>
+            {/* The reading is here on purpose: "しよを" is how people search for
+                him, and a crawler only credits what the rendered page shows. */}
+            <span>shiyow（しよを）</span>
             <span className="text-outline">/</span>
             <span>{PROFILE.location}</span>
             <span className="text-outline">/</span>
@@ -73,6 +76,10 @@ export function EditorialSite() {
             className="mt-2 text-2xl md:text-4xl font-bold uppercase tracking-tight text-on-surface-variant"
           >
             AI Engineer
+          </motion.p>
+
+          <motion.p variants={fadeUp} className="mt-1 text-base md:text-lg text-on-surface-variant">
+            AIエンジニア — 生成AI・LLMアプリ・AIエージェント・機械学習
           </motion.p>
 
           <div className="mt-8 grid gap-6 md:grid-cols-12">
@@ -269,6 +276,9 @@ export function EditorialSite() {
           </ul>
         </motion.section>
 
+        {/* ===== faq ===== */}
+        <FaqSection />
+
         {/* ===== contact ===== */}
         <ContactSection askClone={askClone} />
       </main>
@@ -296,6 +306,29 @@ function SectionHead({ index, title, note }: { index: string; title: string; not
         {`// ${note}`}
       </span>
     </header>
+  );
+}
+
+/**
+ * FAQ — rendered from the same FAQ constant the prerender bakes into the static
+ * HTML and the FAQPage JSON-LD. Google evaluates the post-JS DOM, so shipping
+ * the structured data without these answers on screen would leave the markup
+ * unsupported by visible content (and the answers uncredited for the named
+ * queries in docs/SEO_KEYWORDS.md). One source, three surfaces, no drift.
+ */
+function FaqSection() {
+  return (
+    <motion.section id="faq" className="py-12 md:py-16" {...reveal}>
+      <SectionHead index="04" title="FAQ" note="よくある質問" />
+      <dl className="grid gap-x-10 gap-y-8 md:grid-cols-2">
+        {FAQ.map((entry) => (
+          <div key={entry.q}>
+            <dt className="font-black text-lg leading-snug">{entry.q}</dt>
+            <dd className="mt-2 text-on-surface-variant leading-relaxed">{entry.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </motion.section>
   );
 }
 
