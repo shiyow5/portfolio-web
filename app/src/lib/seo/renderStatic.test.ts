@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import {
   buildSite,
@@ -90,6 +92,16 @@ describe('buildSite target keywords', () => {
     for (const alt of ['しよを', 'シヨヲ', 'shiyow5', 'sshow14']) {
       expect(site.alternateNames).toContain(alt);
     }
+  });
+
+  // prerender.mjs overwrites this tag at build time, so production can't drift —
+  // but the dev server serves the literal. Pin them together so the two copies
+  // can never disagree about what the site claims to target.
+  it('matches the <meta name="keywords"> literal in index.html', () => {
+    // vitest runs with app/ as cwd (vitest.config.ts lives there).
+    const html = readFileSync(join(process.cwd(), 'index.html'), 'utf8');
+    const literal = /<meta\s+name="keywords"\s+content="([\s\S]*?)"\s*\/>/.exec(html)?.[1];
+    expect(literal).toBe(site.keywords.join(', '));
   });
 
   it('points sameAs at every public profile that can carry a backlink', () => {
